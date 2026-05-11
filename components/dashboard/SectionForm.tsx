@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Save, Loader2 } from "lucide-react";
 import { updateSingleton } from "@/app/dashboard/actions";
 import { ImageUploadField } from "@/components/dashboard/ImageUploadField";
+import { RichTextEditor } from "@/components/dashboard/RichTextEditor";
 
 export type FieldDef =
   | {
@@ -184,14 +185,22 @@ function Field({
     );
   }
 
-  if (field.type === "textarea" || field.type === "html") {
+  if (field.type === "html") {
+    return (
+      <RichTextEditor
+        label={field.label}
+        value={(value as string) ?? ""}
+        onChange={onChange}
+        help={field.help}
+      />
+    );
+  }
+
+  if (field.type === "textarea") {
     return (
       <label className="block space-y-1.5">
         <span className="text-xs font-medium text-[var(--text-secondary)]">
           {field.label}
-          {field.type === "html" && (
-            <span className="ml-2 text-[var(--text-muted)]">(HTML allowed)</span>
-          )}
         </span>
         <textarea
           value={(value as string) ?? ""}
