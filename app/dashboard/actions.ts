@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import sharp from "sharp";
 
 type Json = Record<string, unknown>;
 
@@ -99,8 +100,10 @@ export async function replaceCollection(
 }
 
 /**
- * Upload an image file to Supabase Storage → returns the public URL.
- * Bucket: "site-media"  (create it once in Supabase Storage → New bucket → public)
+ * Upload an image file to Supabase Storage.
+ * Every image is converted to WebP (quality 85) before upload for optimal
+ * file size and SEO performance. Returns the public URL.
+ * Bucket: "site-media" (public bucket in Supabase Storage)
  */
 export async function uploadImage(
   formData: FormData
@@ -112,14 +115,19 @@ export async function uploadImage(
     const file = formData.get("file") as File | null;
     if (!file || file.size === 0) return { ok: false, error: "No file provided." };
 
-    const ext = file.name.split(".").pop() ?? "jpg";
-    const path = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const buffer = Buffer.from(await file.arrayBuffer());
+    const raw = Buffer.from(await file.arrayBuffer());
+
+    // Convert to WebP with quality 85 — works for jpg, png, gif, avif, tiff, etc.
+    const webpBuffer = await sharp(raw)
+      .webp({ quality: 85 })
+      .toBuffer();
+
+    const path = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
 
     const sb = createSupabaseAdminClient();
     const { error } = await sb.storage
       .from("site-media")
-      .upload(path, buffer, { contentType: file.type, upsert: false });
+      .upload(path, webpBuffer, { contentType: "image/webp", upsert: false });
 
     if (error) return { ok: false, error: error.message };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 import type { HeroSlide, SectionHero } from "@/lib/types/site";
 
 export function Hero({
@@ -34,8 +35,16 @@ export function Hero({
         {slides.map((s, i) => (
           <div key={s.id ?? i} className={`cn-slide${i === active ? " active" : ""}`}>
             <div className="cn-slide-img">
-              <img src={s.image_url} alt={s.alt || s.label} loading={i === 0 ? "eager" : "lazy"} />
-            </div>
+                <Image
+                  src={s.image_url}
+                  alt={s.alt || s.label}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  priority={i === 0}
+                  loading={i === 0 ? "eager" : "lazy"}
+                />
+              </div>
           </div>
         ))}
       </div>
