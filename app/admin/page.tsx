@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
-export default function Home() {
+// /admin → /dashboard alias
+export default function AdminPage() {
   redirect("/dashboard");
 }

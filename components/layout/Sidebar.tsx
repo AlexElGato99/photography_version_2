@@ -12,24 +12,32 @@ import {
   Settings,
   ChevronDown,
   ChevronRight,
-  Globe,
+  Type,
   Layers,
-  Image,
+  Image as ImageIcon,
   AlignLeft,
   HelpCircle,
   Ticket,
-  BookOpen,
-  Gift,
   Star,
   FileText,
   Phone,
-  Link2,
   CreditCard,
   BarChart2,
   Sliders,
   Megaphone,
   Map,
   PanelLeft,
+  Camera,
+  Briefcase,
+  Tag,
+  TrendingUp,
+  Workflow,
+  Users2,
+  PiggyBank,
+  Quote,
+  Instagram,
+  Navigation as NavIcon,
+  Globe,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
@@ -52,67 +60,45 @@ const navSections: NavSection[] = [
     title: "Main",
     items: [
       { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-      {
-        label: "Analytics",
-        href: "/dashboard/analytics",
-        icon: BarChart2,
-      },
+      { label: "Analytics", href: "/dashboard/analytics", icon: BarChart2 },
     ],
   },
   {
-    title: "Frontend",
+    title: "Frontend — Site",
     items: [
-      { label: "Hero Section", href: "/dashboard/hero", icon: Image },
-      { label: "Quick Statistics", href: "/dashboard/quick-stats", icon: Sliders },
-      { label: "Sliders", href: "/dashboard/sliders", icon: Layers },
-      { label: "Features", href: "/dashboard/features", icon: Star },
-      { label: "Global Coverage", href: "/dashboard/coverage", icon: Globe },
-      { label: "Live Section", href: "/dashboard/live-section", icon: AlignLeft },
-      { label: "Pages", href: "/dashboard/pages", icon: FileText },
-      { label: "Footer Settings", href: "/dashboard/footer", icon: Map },
-      { label: "SEO Settings", href: "/dashboard/seo", icon: Globe },
-      { label: "Footer Links", href: "/dashboard/footer-links", icon: Link2 },
-      { label: "Contact Page", href: "/dashboard/contact", icon: Phone },
+      { label: "Brand & General", href: "/dashboard/site/general", icon: Type },
+      { label: "Navigation", href: "/dashboard/site/navigation", icon: NavIcon },
+      { label: "Marquee", href: "/dashboard/site/marquee", icon: AlignLeft },
+      { label: "Footer", href: "/dashboard/site/footer", icon: Map },
+      { label: "SEO", href: "/dashboard/site/seo", icon: Globe },
     ],
   },
   {
-    title: "Offers",
+    title: "Frontend — Sections",
     items: [
-      { label: "Coupons", href: "/dashboard/coupons", icon: Ticket },
-      { label: "FAQs", href: "/dashboard/faqs", icon: HelpCircle },
-      { label: "Tutorials", href: "/dashboard/tutorials", icon: BookOpen },
-      { label: "Free Trial", href: "/dashboard/free-trial", icon: Gift },
-      { label: "Testimonials", href: "/dashboard/testimonials", icon: Star },
-      { label: "Blog", href: "/dashboard/blog", icon: AlignLeft },
-      { label: "Promotions", href: "/dashboard/promotions", icon: Megaphone },
+      { label: "Hero", href: "/dashboard/sections/hero", icon: ImageIcon },
+      { label: "About", href: "/dashboard/sections/about", icon: FileText },
+      { label: "Services", href: "/dashboard/sections/services", icon: Briefcase },
+      { label: "Categories", href: "/dashboard/sections/categories", icon: Tag },
+      { label: "Portfolio", href: "/dashboard/sections/portfolio", icon: Camera },
+      { label: "Stats", href: "/dashboard/sections/stats", icon: TrendingUp },
+      { label: "Process", href: "/dashboard/sections/process", icon: Workflow },
+      { label: "Team", href: "/dashboard/sections/team", icon: Users2 },
+      { label: "Pricing", href: "/dashboard/sections/pricing", icon: PiggyBank },
+      { label: "Testimonials", href: "/dashboard/sections/testimonials", icon: Quote },
+      { label: "Instagram", href: "/dashboard/sections/instagram", icon: Instagram },
+      { label: "FAQ", href: "/dashboard/sections/faq", icon: HelpCircle },
+      { label: "Contact", href: "/dashboard/sections/contact", icon: Phone },
     ],
   },
   {
-    title: "Subscriptions",
+    title: "Customers",
     items: [
       { label: "Users", href: "/dashboard/users", icon: Users },
-      {
-        label: "Orders",
-        href: "/dashboard/orders",
-        icon: ShoppingCart,
-        badge: 3,
-      },
-      {
-        label: "Notifications",
-        href: "/dashboard/notifications",
-        icon: Bell,
-        badge: 1,
-      },
-      {
-        label: "Live Chat",
-        href: "/dashboard/live-chat",
-        icon: MessageSquare,
-      },
-      {
-        label: "Pricing Plans",
-        href: "/dashboard/pricing",
-        icon: CreditCard,
-      },
+      { label: "Orders", href: "/dashboard/orders", icon: ShoppingCart, badge: 3 },
+      { label: "Submissions", href: "/dashboard/notifications", icon: Bell, badge: 1 },
+      { label: "Live Chat", href: "/dashboard/live-chat", icon: MessageSquare },
+      { label: "Plans", href: "/dashboard/pricing", icon: CreditCard },
     ],
   },
   {
@@ -157,11 +143,7 @@ function NavItemComponent({
           {!collapsed && (
             <>
               <span className="flex-1 text-left">{item.label}</span>
-              {open ? (
-                <ChevronDown size={14} />
-              ) : (
-                <ChevronRight size={14} />
-              )}
+              {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </>
           )}
         </button>
@@ -188,7 +170,7 @@ function NavItemComponent({
         "sidebar-item",
         isActive && "active",
         collapsed && "justify-center px-2",
-        depth > 0 && "text-xs py-1.5"
+        depth > 0 && "text-[11px] py-1.5"
       )}
       title={collapsed ? item.label : undefined}
     >
@@ -197,7 +179,7 @@ function NavItemComponent({
         <>
           <span className="flex-1">{item.label}</span>
           {item.badge !== undefined && (
-            <span className="ml-auto min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-green-500 text-white text-[10px] font-bold px-1">
+            <span className="ml-auto min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-green-500 text-white text-[9px] font-bold px-1">
               {item.badge}
             </span>
           )}
@@ -215,7 +197,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         collapsed ? "w-[60px]" : "w-[220px]"
       )}
     >
-      {/* Logo + version */}
       <div
         className={cn(
           "flex shrink-0 border-b border-[var(--border)] bg-gradient-to-b from-[var(--bg-primary)] to-[var(--bg-sidebar)]",
@@ -243,13 +224,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         </span>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3 space-y-4">
         {navSections.map((section) => (
           <div key={section.title}>
-            {!collapsed && (
-              <p className="section-title">{section.title}</p>
-            )}
+            {!collapsed && <p className="section-title">{section.title}</p>}
             <div className={cn("space-y-0.5", collapsed ? "px-2" : "px-2")}>
               {section.items.map((item) => (
                 <NavItemComponent
@@ -263,17 +241,16 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         ))}
       </nav>
 
-      {/* Collapse toggle */}
       <div className="border-t border-[var(--border)] p-2 shrink-0">
         <button
           onClick={onToggle}
-          className={cn(
-            "sidebar-item w-full",
-            collapsed && "justify-center px-2"
-          )}
+          className={cn("sidebar-item w-full", collapsed && "justify-center px-2")}
           title="Toggle sidebar"
         >
-          <PanelLeft size={16} className={cn("shrink-0 transition-transform", collapsed && "rotate-180")} />
+          <PanelLeft
+            size={16}
+            className={cn("shrink-0 transition-transform", collapsed && "rotate-180")}
+          />
           {!collapsed && <span>Collapse</span>}
         </button>
       </div>

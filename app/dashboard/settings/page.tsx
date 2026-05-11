@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Eye, EyeOff, KeyRound, ShieldCheck } from "lucide-react";
+import { changePassword } from "./actions";
 
 type FieldKey = "current" | "next" | "confirm";
 
@@ -36,11 +37,13 @@ export default function SettingsPage() {
     | { kind: "loading" }
   >({ kind: "idle" });
 
+  const [, startTransition] = useTransition();
+
   const passedRules = RULES.map((r) => r.test(values.next));
   const allPassed = passedRules.every(Boolean);
   const matches = values.next.length > 0 && values.next === values.confirm;
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!values.current) {
       setStatus({ kind: "error", message: "Enter your current password." });
@@ -62,12 +65,18 @@ export default function SettingsPage() {
     }
 
     setStatus({ kind: "loading" });
-    await new Promise((r) => setTimeout(r, 600));
-    setStatus({
-      kind: "success",
-      message: "Password updated successfully.",
+    startTransition(async () => {
+      const res = await changePassword({
+        current: values.current,
+        next: values.next,
+      });
+      if (res.ok) {
+        setStatus({ kind: "success", message: res.message });
+        setValues({ current: "", next: "", confirm: "" });
+      } else {
+        setStatus({ kind: "error", message: res.error });
+      }
     });
-    setValues({ current: "", next: "", confirm: "" });
   };
 
   return (
