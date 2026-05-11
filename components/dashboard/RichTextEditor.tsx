@@ -35,6 +35,7 @@ export function RichTextEditor({
   const initialised = useRef(false);
 
   const editor = useEditor({
+    immediatelyRender: false,   // required in Next.js to avoid SSR hydration mismatch
     extensions: [
       StarterKit.configure({
         // We want br to work via Shift+Enter

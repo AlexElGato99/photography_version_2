@@ -7,15 +7,15 @@ export default async function MarqueePage() {
     <SectionForm
       table="site_marquee"
       title="Marquee"
-      description="The horizontally scrolling words below the hero section."
+      description="The horizontally scrolling words below the hero section. Type each word and press Enter."
       initialData={data}
       fields={[
         {
           key: "items",
           label: "Marquee words",
-          type: "json",
-          help: 'Array of strings, e.g. ["Wedding","Fashion","Editorial"].',
-          rows: 8,
+          type: "tags",
+          placeholder: "e.g. Wedding",
+          help: "Each word scrolls across the marquee strip.",
         },
       ]}
     />

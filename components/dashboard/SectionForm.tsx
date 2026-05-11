@@ -5,6 +5,9 @@ import { Save, Loader2 } from "lucide-react";
 import { updateSingleton } from "@/app/dashboard/actions";
 import { ImageUploadField } from "@/components/dashboard/ImageUploadField";
 import { RichTextEditor } from "@/components/dashboard/RichTextEditor";
+import { TagsField } from "@/components/dashboard/TagsField";
+import { NavItemsField } from "@/components/dashboard/NavItemsField";
+import { FooterColumnsField } from "@/components/dashboard/FooterColumnsField";
 
 export type FieldDef =
   | {
@@ -40,6 +43,24 @@ export type FieldDef =
       label: string;
       type: "image";
       help?: string;
+    }
+  | {
+      key: string;
+      label: string;
+      type: "tags";
+      placeholder?: string;
+      help?: string;
+    }
+  | {
+      key: string;
+      label: string;
+      type: "navitems";
+      help?: string;
+    }
+  | {
+      key: string;
+      label: string;
+      type: "footercolumns";
     };
 
 interface SectionFormProps<T extends Record<string, unknown>> {
@@ -149,6 +170,40 @@ function Field({
         value={(value as string) ?? ""}
         onChange={onChange}
         help={field.help}
+      />
+    );
+  }
+
+  if (field.type === "tags") {
+    const arr = Array.isArray(value) ? (value as string[]) : [];
+    return (
+      <TagsField
+        label={field.label}
+        value={arr}
+        onChange={onChange}
+        help={field.help}
+        placeholder={(field as { placeholder?: string }).placeholder}
+      />
+    );
+  }
+
+  if (field.type === "navitems") {
+    return (
+      <NavItemsField
+        label={field.label}
+        value={(value as { label: string; href: string }[]) ?? []}
+        onChange={onChange}
+        help={field.help}
+      />
+    );
+  }
+
+  if (field.type === "footercolumns") {
+    return (
+      <FooterColumnsField
+        label={field.label}
+        value={(value as { title: string; links: { label: string; href: string }[] }[]) ?? []}
+        onChange={onChange}
       />
     );
   }

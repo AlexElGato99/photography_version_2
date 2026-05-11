@@ -14,10 +14,9 @@ export default async function NavigationPage() {
         { key: "cta_href", label: "CTA button href", type: "text", placeholder: "#contact" },
         {
           key: "items",
-          label: "Navigation items",
-          type: "json",
-          help: 'Array of { "label": "...", "href": "..." }.',
-          rows: 10,
+          label: "Navigation links",
+          type: "navitems",
+          help: "Drag to reorder (coming soon). Each row is one nav link.",
         },
       ]}
     />

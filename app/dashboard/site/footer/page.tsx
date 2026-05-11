@@ -7,7 +7,7 @@ export default async function FooterPage() {
     <SectionForm
       table="site_footer"
       title="Footer"
-      description="Footer brand text, columns of links, copyright line and legal links."
+      description="Footer brand text, link columns, copyright line and legal links."
       initialData={data}
       fields={[
         { key: "brand_text", label: "Brand description", type: "textarea" },
@@ -15,16 +15,13 @@ export default async function FooterPage() {
         {
           key: "columns",
           label: "Link columns",
-          type: "json",
-          help: 'Array of { "title": "...", "links": [{ "label":"...","href":"..." }, ...] }.',
-          rows: 14,
+          type: "footercolumns",
         },
         {
           key: "legal",
           label: "Legal links",
-          type: "json",
-          help: 'Array of { "label":"...","href":"..." }.',
-          rows: 6,
+          type: "navitems",
+          help: "Bottom-of-footer links (Privacy Policy, Terms, etc.).",
         },
       ]}
     />
