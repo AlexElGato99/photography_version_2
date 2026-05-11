@@ -1,0 +1,208 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-sidebar: #ffffff;
+    --border: #e2e8f0;
+    --border-light: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --accent: #22c55e;
+    --accent-light: #dcfce7;
+    --accent-dark: #16a34a;
+    --purple: #a855f7;
+    --purple-light: #f3e8ff;
+    --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+    --scrollbar-thumb: #cbd5e1;
+    --scrollbar-track: #f1f5f9;
+  }
+
+  .dark {
+    --bg-primary: #0f1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #1c2333;
+    --bg-sidebar: #0d1117;
+    --border: #21262d;
+    --border-light: #30363d;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --text-muted: #484f58;
+    --accent: #22c55e;
+    --accent-light: rgba(34, 197, 94, 0.12);
+    --accent-dark: #16a34a;
+    --purple: #a855f7;
+    --purple-light: rgba(168, 85, 247, 0.12);
+    --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+    --scrollbar-thumb: #30363d;
+    --scrollbar-track: #161b22;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border bg-white dark:bg-[#161b22] shadow-[var(--card-shadow)];
+    border-color: var(--border);
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer;
+    color: var(--text-secondary);
+  }
+
+  .sidebar-item:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  .sidebar-item.active {
+    background-color: var(--accent-light);
+    color: var(--accent-dark);
+  }
+
+  .dark .sidebar-item.active {
+    background-color: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+  }
+
+  .stat-card {
+    @apply card p-5 flex flex-col gap-3 animate-fade-in;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-green {
+    @apply badge bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+  }
+
+  .badge-purple {
+    @apply badge bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400;
+  }
+
+  .badge-yellow {
+    @apply badge bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400;
+  }
+
+  .badge-red {
+    @apply badge bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
+  }
+
+  .badge-blue {
+    @apply badge bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-150 hover:opacity-90 active:scale-95;
+    background-color: var(--accent);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-150 hover:opacity-80 active:scale-95;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+  }
+
+  .input-base {
+    @apply w-full px-3 py-2 rounded-xl text-sm outline-none transition-all duration-150;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+  }
+
+  .input-base:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+  }
+
+  .input-base::placeholder {
+    color: var(--text-muted);
+  }
+
+  .table-header {
+    @apply text-xs font-semibold uppercase tracking-wider;
+    color: var(--text-muted);
+  }
+
+  .table-row {
+    @apply border-b transition-colors duration-100;
+    border-color: var(--border-light);
+  }
+
+  .table-row:hover {
+    background-color: var(--bg-secondary);
+  }
+
+  .table-row:last-child {
+    @apply border-0;
+  }
+
+  .section-title {
+    @apply text-xs font-semibold uppercase tracking-widest mb-2 px-3;
+    color: var(--text-muted);
+  }
+
+  .live-dot {
+    @apply w-2 h-2 rounded-full bg-green-500 animate-pulse-dot;
+  }
+}
+
+/* Chart tooltip overrides */
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+.recharts-default-tooltip {
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--card-shadow) !important;
+  font-size: 12px !important;
+}
+
+/* Sidebar transition */
+.sidebar-transition {
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
