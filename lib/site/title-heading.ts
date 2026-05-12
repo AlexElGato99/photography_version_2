@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { createElement, Fragment, type ReactNode } from "react";
 
 /** Structured section / category title (no raw HTML for admins). */
 export type TitleHeadingV1 = {
@@ -54,7 +54,7 @@ export function titleHeadingFromLegacyHtml(html: string): TitleHeadingV1 {
   const afterBr = segments.slice(1).join(" ").trim();
 
   const parseEm = (segment: string) => {
-    const m = segment.match(/^(.*?)<em>([^<]*)<\/em>(.*)$/is);
+    const m = segment.match(/^([\s\S]*?)<em>([^<]*)<\/em>([\s\S]*)$/i);
     if (!m) {
       return {
         before: segment.replace(/<[^>]+>/g, "").trim(),
@@ -133,23 +133,17 @@ export function titleHeadingFromLegacyHtml(html: string): TitleHeadingV1 {
 export function renderTitleHeadingNodes(h: TitleHeadingV1): ReactNode {
   const t = normalizeTitleHeading(h);
   const hasEm = Boolean(t.em?.trim());
-  const firstBlock = (
-    <>
-      {t.line1}
-      {t.breakAfterLine1 && (hasEm || t.mid || t.tail || t.line2) ? <br /> : null}
-      {t.mid}
-      {hasEm ? <em>{t.em}</em> : null}
-      {t.tail}
-    </>
+  const firstBlock = createElement(
+    Fragment,
+    null,
+    t.line1,
+    t.breakAfterLine1 && (hasEm || t.mid || t.tail || t.line2) ? createElement("br") : null,
+    t.mid,
+    hasEm ? createElement("em", null, t.em) : null,
+    t.tail
   );
 
   if (!t.line2?.trim()) return firstBlock;
 
-  return (
-    <>
-      {firstBlock}
-      <br />
-      {t.line2}
-    </>
-  );
+  return createElement(Fragment, null, firstBlock, createElement("br"), t.line2);
 }

@@ -37,6 +37,7 @@ export function InstagramEditor({
             <CollectionEditor<InstagramPost>
               table="instagram_posts"
               title="Instagram posts"
+              allowEmptySave
               initialRows={posts}
               blank={() => ({
                 position: 0,

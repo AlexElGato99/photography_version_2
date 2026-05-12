@@ -13,6 +13,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "db:check": "node scripts/db-check.cjs",
+    "db:migrate": "node scripts/run-migrations.cjs",
     "migrate:sql": "node scripts/run-sql-file.cjs",
     "migrate:categories": "node scripts/run-sql-file.cjs supabase/migrations/20260212_categories_page_fields.sql"
   },

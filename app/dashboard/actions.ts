@@ -89,22 +89,57 @@ export async function deleteRow(
 
 export async function replaceCollection(
   table: string,
-  rows: Array<Json & { id?: string }>
+  rows: Array<Json & { id?: string }>,
+  opts?: { allowEmpty?: boolean }
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!hasAdminEnv()) {
     return { ok: false, error: "Supabase admin not configured." };
   }
+  const allowEmpty = opts?.allowEmpty ?? false;
   try {
     const sb = createSupabaseAdminClient();
+
+    if (rows.length === 0 && !allowEmpty) {
+      const { count, error: cErr } = await sb.from(table).select("*", { count: "exact", head: true });
+      if (cErr) return { ok: false, error: cErr.message };
+      if (count != null && count > 0) {
+        return {
+          ok: false,
+          error:
+            "Refusing to save an empty list while the database still has rows (this would delete everything). Reload the page if the editor incorrectly shows no items.",
+        };
+      }
+    }
+
+    const { data: backup, error: backErr } = await sb.from(table).select("*");
+    if (backErr) return { ok: false, error: backErr.message };
+
     const { error: delErr } = await sb.from(table).delete().neq("id", "00000000-0000-0000-0000-000000000000");
     if (delErr) return { ok: false, error: delErr.message };
+
     if (rows.length > 0) {
       const stripped = rows.map(({ id: _, ...rest }, position) => ({
         ...rest,
         position,
       }));
       const { error: insErr } = await sb.from(table).insert(stripped);
-      if (insErr) return { ok: false, error: insErr.message };
+      if (insErr) {
+        const ordered = [...(backup ?? [])].sort(
+          (a, b) => Number(a.position ?? 0) - Number(b.position ?? 0)
+        );
+        if (ordered.length > 0) {
+          const { error: restoreErr } = await sb
+            .from(table)
+            .insert(ordered.map((row, position) => ({ ...row, position })));
+          if (restoreErr) {
+            return {
+              ok: false,
+              error: `Save failed (${insErr.message}) and restore failed (${restoreErr.message}). Check the "${table}" table in Supabase.`,
+            };
+          }
+        }
+        return { ok: false, error: insErr.message };
+      }
     }
     revalidatePath("/", "layout");
     return { ok: true };

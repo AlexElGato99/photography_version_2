@@ -109,7 +109,7 @@ export function normalizeHeroRow(row: Record<string, unknown>, fallback: Section
   const { line_2, ...rest } = merged;
 
   if (typeof line_2 === "string" && line_2.includes("<")) {
-    const m = line_2.match(/^(.*?)<em>([^<]*)<\/em>(.*)$/is);
+    const m = line_2.match(/^([\s\S]*?)<em>([^<]*)<\/em>([\s\S]*)$/i);
     if (m) {
       return {
         ...fallback,

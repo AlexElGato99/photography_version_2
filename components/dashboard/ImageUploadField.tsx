@@ -95,16 +95,16 @@ export function ImageUploadField({
   };
 
   return (
-    <div className={`block space-y-1.5 ${className}`}>
+    <div className={`block min-w-0 space-y-1.5 ${className}`}>
       {/* Label row */}
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-[var(--text-secondary)]">
+      <div className="flex w-full min-w-0 max-w-full flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <span className="min-w-0 flex-1 pr-2 text-xs font-medium text-[var(--text-secondary)]">
           {label}
         </span>
         <button
           type="button"
           onClick={() => setShowUrlInput((v) => !v)}
-          className="flex items-center gap-1 text-[10px] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+          className="flex shrink-0 items-center gap-1 text-[10px] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
           title="Paste URL instead"
         >
           <Link size={10} />

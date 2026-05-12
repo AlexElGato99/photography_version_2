@@ -80,7 +80,7 @@ export function CategoriesEditor({
                     alt: typeof x.alt === "string" ? x.alt : "",
                     caption: typeof x.caption === "string" ? x.caption : "",
                   }));
-                const out = { ...(row as Record<string, unknown>), slug, gallery_images };
+                const out: Record<string, unknown> = { ...row, slug, gallery_images };
                 delete out.page_title_html;
                 return out;
               }}

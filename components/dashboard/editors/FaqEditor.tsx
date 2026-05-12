@@ -35,6 +35,7 @@ export function FaqEditor({
             <CollectionEditor<Faq>
               table="faqs"
               title="FAQ items"
+              allowEmptySave
               initialRows={items}
               blank={() => ({
                 position: 0,

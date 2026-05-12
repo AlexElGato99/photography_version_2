@@ -25,6 +25,7 @@ export type ColFieldDef =
       label: string;
       type: "text" | "url" | "email" | "tel" | "number";
       placeholder?: string;
+      help?: string;
     }
   | {
       key: string;
@@ -32,6 +33,7 @@ export type ColFieldDef =
       type: "textarea" | "richtext";
       placeholder?: string;
       rows?: number;
+      help?: string;
     }
   | {
       key: string;
@@ -65,6 +67,8 @@ interface CollectionEditorProps<T extends { id?: string }> {
   blank: () => Omit<T, "id">;
   transformRow?: (row: T) => Record<string, unknown>;
   validateRows?: (rows: T[]) => string | null;
+  /** When true, saving zero rows is allowed (delete all). Default false to avoid wiping collections by mistake. */
+  allowEmptySave?: boolean;
 }
 
 export function CollectionEditor<T extends Record<string, unknown> & { id?: string }>({
@@ -76,9 +80,10 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
   blank,
   transformRow,
   validateRows,
+  allowEmptySave = false,
 }: CollectionEditorProps<T>) {
   const router = useRouter();
-  const [rows, setRows] = useState<T[]>(initialRows);
+  const [rows, setRows] = useState<T[]>(() => (Array.isArray(initialRows) ? initialRows : []));
   const [pending, startTransition] = useTransition();
   const [status, setStatus] = useState<
     { kind: "idle" } | { kind: "ok"; msg: string } | { kind: "err"; msg: string }
@@ -88,15 +93,17 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
   const initialSig = useRef<string>("");
 
   useEffect(() => {
+    const next = Array.isArray(initialRows) ? initialRows : [];
     let sig: string;
     try {
-      sig = JSON.stringify(initialRows);
+      const raw = JSON.stringify(next);
+      sig = raw === undefined ? "[]" : raw;
     } catch {
-      sig = "";
+      sig = `__len_${next.length}__`;
     }
     if (sig === initialSig.current) return;
     initialSig.current = sig;
-    setRows(initialRows);
+    setRows(next as T[]);
     setExpanded(new Set());
   }, [initialRows]);
 
@@ -146,7 +153,7 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
         setStatus({ kind: "err", msg: (e as Error).message });
         return;
       }
-      const res = await replaceCollection(table, prepared);
+      const res = await replaceCollection(table, prepared, { allowEmpty: allowEmptySave });
       if (res.ok) {
         setStatus({ kind: "ok", msg: "Saved." });
         router.refresh();
@@ -159,14 +166,14 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
 
   return (
     <div className="w-full space-y-6 animate-fade-in">
-      <header className="flex items-start justify-between gap-3">
-        <div className="space-y-1">
+      <header className="flex min-w-0 flex-wrap items-start justify-between gap-x-3 gap-y-2">
+        <div className="min-w-0 flex-1 space-y-1 pr-2">
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">{title}</h2>
           {description && (
             <p className="text-sm text-[var(--text-muted)]">{description}</p>
           )}
         </div>
-        <button type="button" onClick={add} className="btn-secondary">
+        <button type="button" onClick={add} className="btn-secondary shrink-0">
           <Plus size={14} /> Add item
         </button>
       </header>
@@ -180,9 +187,9 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
         {rows.map((row, idx) => {
           const isOpen = expanded.has(idx);
           return (
-            <div key={idx} className="card p-5 space-y-4">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1 min-w-0">
+            <div key={idx} className="card min-w-0 p-5 space-y-4">
+              <div className="flex min-w-0 flex-wrap items-center justify-between gap-x-2 gap-y-2">
+                <div className="flex min-w-0 flex-1 items-center gap-1 pr-2">
                   <IconBtn
                     label={isOpen ? "Collapse item" : "Expand item"}
                     aria-expanded={isOpen}
@@ -219,7 +226,7 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
               </div>
 
               {isOpen && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-[var(--border)]">
+                <div className="grid min-w-0 grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-[var(--border)]">
                   {fields.map((f) => (
                     <ColField
                       key={f.key}
@@ -231,7 +238,8 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
                         f.type === "richtext" ||
                         f.type === "image" ||
                         f.type === "gallery" ||
-                        f.type === "section_heading"
+                        f.type === "section_heading" ||
+                        f.type === "switch"
                       }
                     />
                   ))}
@@ -270,20 +278,20 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
 
 function remapExpandedAfterRemove(expanded: Set<number>, removedIdx: number): Set<number> {
   const next = new Set<number>();
-  for (const i of expanded) {
-    if (i === removedIdx) continue;
+  expanded.forEach((i) => {
+    if (i === removedIdx) return;
     next.add(i > removedIdx ? i - 1 : i);
-  }
+  });
   return next;
 }
 
 function remapExpandedAfterSwap(expanded: Set<number>, a: number, b: number): Set<number> {
   const next = new Set<number>();
-  for (const i of expanded) {
+  expanded.forEach((i) => {
     if (i === a) next.add(b);
     else if (i === b) next.add(a);
     else next.add(i);
-  }
+  });
   return next;
 }
 
@@ -333,7 +341,7 @@ function ColField({
   onChange: (v: unknown) => void;
   fullWidth?: boolean;
 }) {
-  const cls = fullWidth ? "sm:col-span-2" : "";
+  const cls = [fullWidth && "sm:col-span-2", "min-w-0"].filter(Boolean).join(" ");
   if (field.type === "image") {
     return (
       <ImageUploadField
@@ -348,14 +356,16 @@ function ColField({
   if (field.type === "switch") {
     const checked = value !== false && value !== "false";
     return (
-      <label className={`flex items-center justify-between gap-3 ${cls}`}>
-        <span className="text-xs font-medium text-[var(--text-secondary)]">
+      <label
+        className={`flex w-full min-w-0 max-w-full flex-wrap items-center justify-between gap-x-3 gap-y-2 ${cls}`}
+      >
+        <span className="min-w-0 flex-1 pr-2 text-xs font-medium text-[var(--text-secondary)]">
           {field.label}
         </span>
         <button
           type="button"
           onClick={() => onChange(!checked)}
-          className={`relative w-10 h-6 rounded-full transition-colors ${
+          className={`relative shrink-0 w-10 h-6 rounded-full transition-colors ${
             checked
               ? "bg-[var(--accent)]"
               : "bg-[var(--bg-tertiary)] border border-[var(--border)]"
@@ -398,6 +408,7 @@ function ColField({
         label={field.label}
         value={(value as string) ?? ""}
         onChange={onChange}
+        help={(field as { help?: string }).help}
         className={cls}
       />
     );

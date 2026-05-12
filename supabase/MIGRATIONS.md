@@ -3,48 +3,67 @@
 The project ships SQL in:
 
 - `supabase/schema.sql` — full schema for **new** projects (paste in Supabase SQL Editor once).
-- `supabase/migrations/*.sql` — **incremental** changes for existing databases (e.g. category page columns).
+- `supabase/migrations/*.sql` — **incremental** changes for existing databases.
 
-## 1) Supabase Dashboard (no terminal)
+## Easiest: terminal (hosted Supabase, no Docker)
 
-1. Open [Supabase](https://supabase.com) → your project → **SQL Editor**.
-2. Paste the contents of `supabase/migrations/20260212_categories_page_fields.sql`.
-3. Click **Run**.
+Uses your **cloud** database. You do **not** need `npx supabase migration up` (that command only talks to **local** Postgres on port 54322 and requires Docker).
 
-## 2) Terminal with npm script (recommended)
-
-1. In Supabase: **Project Settings → Database** copy the **URI** connection string (direct, port **5432**).
-2. Add to `.env.local` (same folder as `package.json`):
+1. Supabase → **Project Settings → Database** → copy the **URI** (direct connection, port **5432**).
+2. In `.env.local` (next to `package.json`):
 
    ```bash
    DATABASE_URL=postgresql://postgres.[REF]:[YOUR-PASSWORD]@db.[REF].supabase.co:5432/postgres
    ```
 
-3. Install the tiny Postgres client (once):
+3. From the project root:
 
    ```bash
-   npm install pg --save-dev
+   npm run db:check
    ```
 
-4. Run the migration file:
+   You should see `Connected OK: postgres as postgres`.
+
+4. Apply every migration file in `supabase/migrations/` that has not been applied yet (sorted by filename):
 
    ```bash
-   npm run migrate:categories
+   npm run db:migrate
    ```
 
-   Or any SQL file:
+   Applied filenames are stored in `public._pod_dashboard_migrations`. To **re-run one file** after you edited it:
+
+   ```sql
+   delete from public._pod_dashboard_migrations where filename = '20260212_categories_page_fields.sql';
+   ```
+
+   Then run `npm run db:migrate` again.
+
+5. Run a **single** SQL file (no ledger):
 
    ```bash
    npm run migrate:sql -- supabase/migrations/20260212_categories_page_fields.sql
    ```
 
-## 3) `psql` only (if you already use it)
+The `pg` package is already in **devDependencies**; run `npm install` if you have not yet.
+
+---
+
+## Supabase Dashboard (no terminal)
+
+1. Open [Supabase](https://supabase.com) → your project → **SQL Editor**.
+2. Paste a migration file’s contents and click **Run**.
+
+---
+
+## `psql` only
 
 ```bash
 psql "postgresql://postgres:[PASSWORD]@db.[REF].supabase.co:5432/postgres" -f supabase/migrations/20260212_categories_page_fields.sql
 ```
 
-## 4) Supabase CLI (linked project)
+---
+
+## Supabase CLI (linked project + Docker optional)
 
 If the repo is linked with `supabase link`:
 
@@ -52,7 +71,7 @@ If the repo is linked with `supabase link`:
 npx supabase db push
 ```
 
-(Uses everything under `supabase/migrations/` that is not yet applied — naming must follow Supabase migration conventions.)
+`npx supabase migration up` applies only to a **local** stack started with `supabase start` (Docker). For this repo, prefer **`npm run db:migrate`** with `DATABASE_URL` above.
 
 ---
 

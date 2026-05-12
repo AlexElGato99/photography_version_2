@@ -218,8 +218,8 @@ function Field({
   if (field.type === "switch") {
     const checked = Boolean(value);
     return (
-      <label className="flex items-center justify-between gap-3">
-        <span className="space-y-0.5">
+      <label className="flex w-full min-w-0 max-w-full flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <span className="min-w-0 flex-1 space-y-0.5 pr-2">
           <span className="block text-sm font-medium text-[var(--text-primary)]">
             {field.label}
           </span>
@@ -232,7 +232,7 @@ function Field({
         <button
           type="button"
           onClick={() => onChange(!checked)}
-          className={`relative w-10 h-6 rounded-full transition-colors ${
+          className={`relative shrink-0 w-10 h-6 rounded-full transition-colors ${
             checked ? "bg-[var(--accent)]" : "bg-[var(--bg-tertiary)] border border-[var(--border)]"
           }`}
           aria-pressed={checked}
@@ -340,12 +340,12 @@ function JsonField({
 
   return (
     <label className="block space-y-1.5">
-      <span className="text-xs font-medium text-[var(--text-secondary)] flex items-center justify-between">
-        {field.label}
+      <span className="flex min-w-0 w-full flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs font-medium text-[var(--text-secondary)]">
+        <span className="min-w-0">{field.label}</span>
         {error ? (
-          <span className="text-red-600 dark:text-red-400 text-[10px]">{error}</span>
+          <span className="shrink-0 text-red-600 dark:text-red-400 text-[10px]">{error}</span>
         ) : (
-          <span className="text-[10px] text-[var(--text-muted)]">JSON</span>
+          <span className="shrink-0 text-[10px] text-[var(--text-muted)]">JSON</span>
         )}
       </span>
       <textarea

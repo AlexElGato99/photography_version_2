@@ -53,32 +53,33 @@ VALUES (1, '["Wedding","Fashion","Editorial","Lifestyle","Commercial","Events"]'
 ON CONFLICT (id) DO UPDATE SET items = EXCLUDED.items, updated_at = now();
 
 -- SECTION HERO
-INSERT INTO public.section_hero (id, eyebrow, line_1, line_2, line_3, meta_text, cta_primary_label, cta_primary_href, cta_secondary_label, cta_secondary_href, autoplay_ms)
+INSERT INTO public.section_hero (id, eyebrow, line_1, line_2_prefix, line_2_em, line_2_suffix, line_3, meta_text, cta_primary_label, cta_primary_href, cta_secondary_label, cta_secondary_href, autoplay_ms)
 VALUES (1,
   'Photography Studio · Murcia, Spain',
-  'Stories told', 'through <em>light</em>', 'and emotion',
+  'Stories told', 'through ', 'light', '', 'and emotion',
   'A premium photography agency crafting timeless visual stories for brands, weddings, and editorial work since 2018.',
   'Explore portfolio', '#portfolio', 'Start a project', '#contact', 6000)
 ON CONFLICT (id) DO UPDATE SET
-  eyebrow = EXCLUDED.eyebrow, line_1 = EXCLUDED.line_1, line_2 = EXCLUDED.line_2,
+  eyebrow = EXCLUDED.eyebrow, line_1 = EXCLUDED.line_1,
+  line_2_prefix = EXCLUDED.line_2_prefix, line_2_em = EXCLUDED.line_2_em, line_2_suffix = EXCLUDED.line_2_suffix,
   line_3 = EXCLUDED.line_3, meta_text = EXCLUDED.meta_text,
   cta_primary_label = EXCLUDED.cta_primary_label, cta_primary_href = EXCLUDED.cta_primary_href,
   cta_secondary_label = EXCLUDED.cta_secondary_label, cta_secondary_href = EXCLUDED.cta_secondary_href,
   autoplay_ms = EXCLUDED.autoplay_ms, updated_at = now();
 
 -- SECTION ABOUT
-INSERT INTO public.section_about (id, eyebrow, title_html, quote, body_html, image_main, image_secondary, badge_title, badge_subtitle, signature_name, signature_role, signature_meta)
+INSERT INTO public.section_about (id, eyebrow, title_heading, quote, body_html, image_main, image_secondary, badge_title, badge_subtitle, signature_name, signature_role, signature_meta)
 VALUES (1,
   'About the studio',
-  'Crafting visual<br>stories with <em>soul</em>',
-  'Photography is not about capturing what you see — it''s about <em>revealing</em> what others feel.',
+  '{"v":1,"line1":"Crafting visual","mid":"stories with","em":"soul","tail":"","breakAfterLine1":true,"line2":""}'::jsonb,
+  '<p>Photography is not about capturing what you see — it''s about <em>revealing</em> what others feel.</p>',
   '<p>Cristina Navarro Studio is a creative photography agency based in Murcia, Spain. For over <b>8 years</b>, we''ve been creating timeless imagery for international brands, couples, and editorial publications.</p><p>Our approach blends classical composition with contemporary storytelling — every frame is intentional, every detail considered. We believe great photography starts with great relationships.</p>',
   'https://images.unsplash.com/photo-1554941426-cc88c91c9bbf?w=1200&q=80&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600&q=80&auto=format&fit=crop',
   '5.0 Rating', 'Based on 200+ projects',
   'Cristina N.', 'Founder & Lead Photographer', 'Estudio Murcia · est. 2018')
 ON CONFLICT (id) DO UPDATE SET
-  eyebrow = EXCLUDED.eyebrow, title_html = EXCLUDED.title_html, quote = EXCLUDED.quote,
+  eyebrow = EXCLUDED.eyebrow, title_heading = EXCLUDED.title_heading, quote = EXCLUDED.quote,
   body_html = EXCLUDED.body_html, image_main = EXCLUDED.image_main,
   image_secondary = EXCLUDED.image_secondary, badge_title = EXCLUDED.badge_title,
   badge_subtitle = EXCLUDED.badge_subtitle, signature_name = EXCLUDED.signature_name,
@@ -86,79 +87,79 @@ ON CONFLICT (id) DO UPDATE SET
   updated_at = now();
 
 -- SECTION SERVICES META
-INSERT INTO public.section_services_meta (id, eyebrow, title_html, lead)
-VALUES (1, 'Our services', 'What we<br><em>create</em>',
+INSERT INTO public.section_services_meta (id, eyebrow, title_heading, lead)
+VALUES (1, 'Our services', '{"v":1,"line1":"What we","mid":"","em":"create","tail":"","breakAfterLine1":true,"line2":""}'::jsonb,
   'From intimate weddings to international fashion editorials, we bring a refined eye and meticulous craft to every project.')
-ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, lead=EXCLUDED.lead, updated_at=now();
+ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, lead=EXCLUDED.lead, updated_at=now();
 
 -- SECTION CATEGORIES META
-INSERT INTO public.section_categories_meta (id, eyebrow, title_html)
-VALUES (1, 'Categories', 'Explore by <em>category</em>')
-ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, updated_at=now();
+INSERT INTO public.section_categories_meta (id, eyebrow, title_heading)
+VALUES (1, 'Categories', '{"v":1,"line1":"Explore by ","mid":"","em":"category","tail":"","breakAfterLine1":false,"line2":""}'::jsonb)
+ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, updated_at=now();
 
 -- SECTION PORTFOLIO META
-INSERT INTO public.section_portfolio_meta (id, eyebrow, title_html, lead, tabs)
-VALUES (1, 'Selected work', 'Featured <em>portfolio</em>',
+INSERT INTO public.section_portfolio_meta (id, eyebrow, title_heading, lead, tabs)
+VALUES (1, 'Selected work', '{"v":1,"line1":"Featured ","mid":"","em":"portfolio","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   'A curated selection of recent projects across weddings, fashion, and brand storytelling.',
   '["All","Wedding","Fashion","Commercial","Lifestyle"]'::jsonb)
 ON CONFLICT (id) DO UPDATE SET
-  eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, lead=EXCLUDED.lead,
+  eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, lead=EXCLUDED.lead,
   tabs=EXCLUDED.tabs, updated_at=now();
 
 -- SECTION STATS
-INSERT INTO public.section_stats (id, eyebrow, title_html, lead, items)
-VALUES (1, 'Achievements', 'Numbers that<br>tell a <em>story</em>',
+INSERT INTO public.section_stats (id, eyebrow, title_heading, lead, items)
+VALUES (1, 'Achievements', '{"v":1,"line1":"Numbers that","mid":"tell a ","em":"story","tail":"","breakAfterLine1":true,"line2":""}'::jsonb,
   'Eight years of dedicated craftsmanship, hundreds of stories told, and countless moments preserved.',
   '[{"count":240,"suffix":"+","label":"Projects completed across weddings, brands and editorials"},{"count":85,"suffix":"+","label":"Brands trusted us with their visual identity"},{"count":32,"suffix":"k","label":"Photographs delivered to satisfied clients"},{"count":8,"suffix":"yrs","label":"Of refining craft and creative vision"}]'::jsonb)
 ON CONFLICT (id) DO UPDATE SET
-  eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, lead=EXCLUDED.lead,
+  eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, lead=EXCLUDED.lead,
   items=EXCLUDED.items, updated_at=now();
 
 -- SECTION PROCESS
-INSERT INTO public.section_process (id, eyebrow, title_html, steps)
-VALUES (1, 'How we work', 'A <em>refined</em> process',
+INSERT INTO public.section_process (id, eyebrow, title_heading, steps)
+VALUES (1, 'How we work', '{"v":1,"line1":"A ","mid":"","em":"refined","tail":" process","breakAfterLine1":false,"line2":""}'::jsonb,
   '[{"num":"01","title":"Discovery","text":"We start with a conversation — understanding your vision, story, and the emotion you want captured."},{"num":"02","title":"Concept","text":"A tailored creative direction with mood boards, location scouting, and detailed shot planning."},{"num":"03","title":"Production","text":"The shoot day, executed with care, calm energy, and full attention to every meaningful detail."},{"num":"04","title":"Delivery","text":"Hand-edited, color-graded final images delivered through a private gallery within two weeks."}]'::jsonb)
 ON CONFLICT (id) DO UPDATE SET
-  eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, steps=EXCLUDED.steps, updated_at=now();
+  eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, steps=EXCLUDED.steps, updated_at=now();
 
 -- SECTION TEAM META
-INSERT INTO public.section_team_meta (id, eyebrow, title_html, lead)
-VALUES (1, 'The team', 'Meet the<br><em>creators</em>',
+INSERT INTO public.section_team_meta (id, eyebrow, title_heading, lead)
+VALUES (1, 'The team', '{"v":1,"line1":"Meet the","mid":"","em":"creators","tail":"","breakAfterLine1":true,"line2":""}'::jsonb,
   'A small, passionate team united by craft and an unwavering pursuit of beautiful imagery.')
-ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, lead=EXCLUDED.lead, updated_at=now();
+ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, lead=EXCLUDED.lead, updated_at=now();
 
 -- SECTION PRICING META
-INSERT INTO public.section_pricing_meta (id, eyebrow, title_html, lead)
-VALUES (1, 'Investment', 'Transparent <em>pricing</em>',
+INSERT INTO public.section_pricing_meta (id, eyebrow, title_heading, lead)
+VALUES (1, 'Investment', '{"v":1,"line1":"Transparent ","mid":"","em":"pricing","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   'Tailored packages designed for every story. Custom quotes available for unique projects.')
-ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, lead=EXCLUDED.lead, updated_at=now();
+ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, lead=EXCLUDED.lead, updated_at=now();
 
 -- SECTION TESTIMONIALS META
-INSERT INTO public.section_testimonials_meta (id, eyebrow, title_html)
-VALUES (1, 'Kind words', 'Trusted by <em>brands</em><br>and couples worldwide')
-ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, updated_at=now();
+INSERT INTO public.section_testimonials_meta (id, eyebrow, title_heading)
+VALUES (1, 'Kind words', '{"v":1,"line1":"Trusted by ","mid":"","em":"brands","tail":"","breakAfterLine1":false,"line2":"and couples worldwide"}'::jsonb)
+ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, updated_at=now();
 
 -- SECTION INSTAGRAM
-INSERT INTO public.section_instagram (id, handle, title_html, lead, profile_url)
-VALUES (1, '@cristinanavarro_studio', 'Follow our <em>journey</em>',
+INSERT INTO public.section_instagram (id, handle, title_heading, lead, profile_url)
+VALUES (1, '@cristinanavarro_studio', '{"v":1,"line1":"Follow our ","mid":"","em":"journey","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   'Behind-the-scenes, latest work and creative inspiration on Instagram.', '#')
 ON CONFLICT (id) DO UPDATE SET
-  handle=EXCLUDED.handle, title_html=EXCLUDED.title_html, lead=EXCLUDED.lead,
+  handle=EXCLUDED.handle, title_heading=EXCLUDED.title_heading, lead=EXCLUDED.lead,
   profile_url=EXCLUDED.profile_url, updated_at=now();
 
 -- SECTION FAQ META
-INSERT INTO public.section_faq_meta (id, eyebrow, title_html)
-VALUES (1, 'Frequently asked', 'Questions <em>answered</em>')
-ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, updated_at=now();
+INSERT INTO public.section_faq_meta (id, eyebrow, title_heading)
+VALUES (1, 'Frequently asked', '{"v":1,"line1":"Questions ","mid":"","em":"answered","tail":"","breakAfterLine1":false,"line2":""}'::jsonb)
+ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, updated_at=now();
 
 -- SECTION CONTACT
-INSERT INTO public.section_contact (id, eyebrow, title_html, lead, services, social)
-VALUES (1, 'Let''s talk', 'Begin your <em>story</em>',
+INSERT INTO public.section_contact (id, eyebrow, title_heading, lead, services, social)
+VALUES (1, 'Let''s talk', '{"v":1,"line1":"Begin your ","mid":"","em":"story","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   'Tell us about your project and we''ll get back to you within 24 hours.',
   '["Wedding photography","Fashion / Editorial","Commercial / Brand","Event coverage","Lifestyle / Family","Other"]'::jsonb,
   '[{"label":"Instagram","href":"#"},{"label":"LinkedIn","href":"#"},{"label":"Behance","href":"#"},{"label":"Pinterest","href":"#"}]'::jsonb)
 ON CONFLICT (id) DO UPDATE SET
-  eyebrow=EXCLUDED.eyebrow, title_html=EXCLUDED.title_html, lead=EXCLUDED.lead,
+  eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, lead=EXCLUDED.lead,
   services=EXCLUDED.services, social=EXCLUDED.social, updated_at=now();
 
 -- ============================================================
@@ -200,6 +201,28 @@ INSERT INTO public.categories (position, tag, name, image_url, link_href) VALUES
 (4,'Outdoors','Lifestyle', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80&auto=format&fit=crop','#'),
 (5,'Spaces',  'Interiors', 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80&auto=format&fit=crop','#'),
 (6,'Personal','Portraits', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80&auto=format&fit=crop','#');
+
+UPDATE public.categories SET slug = CASE trim(name)
+  WHEN 'Wedding' THEN 'wedding'
+  WHEN 'Fashion' THEN 'fashion'
+  WHEN 'Events' THEN 'events'
+  WHEN 'Commercial' THEN 'commercial'
+  WHEN 'Lifestyle' THEN 'lifestyle'
+  WHEN 'Interiors' THEN 'interiors'
+  WHEN 'Portraits' THEN 'portraits'
+  ELSE lower(regexp_replace(name, '[^a-zA-Z0-9]+', '-', 'g'))
+END;
+
+UPDATE public.categories SET page_heading = (CASE trim(name)
+  WHEN 'Wedding' THEN '{"v":1,"line1":"Timeless ","mid":"","em":"wedding","tail":" imagery","breakAfterLine1":false,"line2":""}'::jsonb
+  WHEN 'Fashion' THEN '{"v":1,"line1":"Editorial & ","mid":"","em":"fashion","tail":"","breakAfterLine1":false,"line2":""}'::jsonb
+  WHEN 'Events' THEN '{"v":1,"line1":"Live ","mid":"","em":"event","tail":" coverage","breakAfterLine1":false,"line2":""}'::jsonb
+  WHEN 'Commercial' THEN '{"v":1,"line1":"Brand & ","mid":"","em":"commercial","tail":"","breakAfterLine1":false,"line2":""}'::jsonb
+  WHEN 'Lifestyle' THEN '{"v":1,"line1":"Natural ","mid":"","em":"lifestyle","tail":"","breakAfterLine1":false,"line2":""}'::jsonb
+  WHEN 'Interiors' THEN '{"v":1,"line1":"Interior ","mid":"","em":"architecture","tail":"","breakAfterLine1":false,"line2":""}'::jsonb
+  WHEN 'Portraits' THEN '{"v":1,"line1":"Portrait ","mid":"","em":"sessions","tail":"","breakAfterLine1":false,"line2":""}'::jsonb
+  ELSE page_heading
+END);
 
 -- PORTFOLIO ITEMS
 DELETE FROM public.portfolio_items;

@@ -4,6 +4,7 @@
  * Usage:
  *   node scripts/run-sql-file.cjs supabase/migrations/20260212_categories_page_fields.sql
  *
+ * For all pending files in order, use: npm run db:migrate
  * Requires in .env.local (or env):
  *   DATABASE_URL=postgresql://postgres.[PROJECT-REF]:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
  *

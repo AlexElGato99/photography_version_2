@@ -25,10 +25,19 @@ export function GalleryField({
   const remove = (i: number) => onChange(items.filter((_, j) => j !== i));
 
   return (
-    <div className="block space-y-3 sm:col-span-2">
-      <span className="text-xs font-medium text-[var(--text-secondary)]">
-        {label}
-      </span>
+    <div className="flex flex-col gap-3 sm:col-span-2 min-w-0">
+      <div className="flex w-full min-w-0 max-w-full flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <span className="min-w-0 flex-1 pr-2 text-xs font-medium text-[var(--text-secondary)]">
+          {label}
+        </span>
+        <button
+          type="button"
+          onClick={add}
+          className="btn-secondary text-xs shrink-0"
+        >
+          <Plus size={14} /> Add gallery image
+        </button>
+      </div>
       {items.map((item, i) => (
         <div
           key={i}
@@ -72,9 +81,6 @@ export function GalleryField({
           </button>
         </div>
       ))}
-      <button type="button" onClick={add} className="btn-secondary text-xs">
-        <Plus size={14} /> Add gallery image
-      </button>
     </div>
   );
 }
