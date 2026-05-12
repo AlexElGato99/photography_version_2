@@ -35,15 +35,17 @@ export function Hero({
         {slides.map((s, i) => (
           <div key={s.id ?? i} className={`cn-slide${i === active ? " active" : ""}`}>
             <div className="cn-slide-img">
-                <Image
-                  src={s.image_url}
-                  alt={s.alt || s.label}
-                  fill
-                  sizes="100vw"
-                  className="object-cover"
-                  priority={i === 0}
-                  loading={i === 0 ? "eager" : "lazy"}
-                />
+                {s.image_url ? (
+                  <Image
+                    src={s.image_url}
+                    alt={s.alt || s.label}
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                    priority={i === 0}
+                    loading={i === 0 ? "eager" : "lazy"}
+                  />
+                ) : null}
               </div>
           </div>
         ))}
@@ -59,15 +61,13 @@ export function Hero({
         </div>
 
         <h1 className="cn-hero-title">
+          <span data-hero-title-line>{hero.line_1}</span>
           <span data-hero-title-line>
-            <span dangerouslySetInnerHTML={{ __html: hero.line_1 }} />
+            {hero.line_2_prefix}
+            {hero.line_2_em ? <em>{hero.line_2_em}</em> : null}
+            {hero.line_2_suffix}
           </span>
-          <span data-hero-title-line>
-            <span dangerouslySetInnerHTML={{ __html: hero.line_2 }} />
-          </span>
-          <span data-hero-title-line>
-            <span dangerouslySetInnerHTML={{ __html: hero.line_3 }} />
-          </span>
+          <span data-hero-title-line>{hero.line_3}</span>
         </h1>
 
         <div className="cn-hero-bottom">

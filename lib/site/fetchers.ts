@@ -28,6 +28,18 @@ import {
   defaultTestimonials,
   defaultTestimonialsMeta,
 } from "@/lib/site/defaults";
+import { normalizeCategoryRow } from "@/lib/site/category-helpers";
+import {
+  normalizeAboutRow,
+  normalizeContactRow,
+  normalizeHeroRow,
+  normalizeInstagramRow,
+  normalizePortfolioMetaRow,
+  normalizeProcessRow,
+  normalizeSectionMetaRow,
+  normalizeStatsRow,
+} from "@/lib/site/normalize-rows";
+import { slugify } from "@/lib/slug";
 import type {
   Category,
   Faq,
@@ -35,14 +47,6 @@ import type {
   InstagramPost,
   PortfolioItem,
   PricingTier,
-  SectionAbout,
-  SectionContact,
-  SectionHero,
-  SectionInstagram,
-  SectionMeta,
-  SectionPortfolioMeta,
-  SectionProcess,
-  SectionStats,
   Service,
   SiteFooter,
   SiteGeneral,
@@ -101,23 +105,132 @@ export const getNavigation = () => fetchSingleton<SiteNavigation>("site_navigati
 export const getFooter = () => fetchSingleton<SiteFooter>("site_footer", defaultFooter);
 export const getMarquee = () => fetchSingleton<SiteMarquee>("site_marquee", defaultMarquee);
 
-export const getHero = () => fetchSingleton<SectionHero>("section_hero", defaultHero);
-export const getAbout = () => fetchSingleton<SectionAbout>("section_about", defaultAbout);
-export const getServicesMeta = () => fetchSingleton<SectionMeta>("section_services_meta", defaultServicesMeta);
-export const getCategoriesMeta = () => fetchSingleton<SectionMeta>("section_categories_meta", defaultCategoriesMeta);
-export const getPortfolioMeta = () => fetchSingleton<SectionPortfolioMeta>("section_portfolio_meta", defaultPortfolioMeta);
-export const getStats = () => fetchSingleton<SectionStats>("section_stats", defaultStats);
-export const getProcess = () => fetchSingleton<SectionProcess>("section_process", defaultProcess);
-export const getTeamMeta = () => fetchSingleton<SectionMeta>("section_team_meta", defaultTeamMeta);
-export const getPricingMeta = () => fetchSingleton<SectionMeta>("section_pricing_meta", defaultPricingMeta);
-export const getTestimonialsMeta = () => fetchSingleton<SectionMeta>("section_testimonials_meta", defaultTestimonialsMeta);
-export const getInstagramMeta = () => fetchSingleton<SectionInstagram>("section_instagram", defaultInstagramMeta);
-export const getFaqMeta = () => fetchSingleton<SectionMeta>("section_faq_meta", defaultFaqMeta);
-export const getContactMeta = () => fetchSingleton<SectionContact>("section_contact", defaultContactMeta);
+export const getHero = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_hero").select("*").eq("id", 1).single();
+    return data ? normalizeHeroRow(data as Record<string, unknown>, defaultHero) : null;
+  }, defaultHero);
+
+export const getAbout = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_about").select("*").eq("id", 1).single();
+    return data ? normalizeAboutRow(data as Record<string, unknown>, defaultAbout) : null;
+  }, defaultAbout);
+
+export const getServicesMeta = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_services_meta").select("*").eq("id", 1).single();
+    return data ? normalizeSectionMetaRow(data as Record<string, unknown>, defaultServicesMeta) : null;
+  }, defaultServicesMeta);
+
+export const getCategoriesMeta = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_categories_meta").select("*").eq("id", 1).single();
+    return data ? normalizeSectionMetaRow(data as Record<string, unknown>, defaultCategoriesMeta) : null;
+  }, defaultCategoriesMeta);
+
+export const getPortfolioMeta = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_portfolio_meta").select("*").eq("id", 1).single();
+    return data ? normalizePortfolioMetaRow(data as Record<string, unknown>, defaultPortfolioMeta) : null;
+  }, defaultPortfolioMeta);
+
+export const getStats = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_stats").select("*").eq("id", 1).single();
+    return data ? normalizeStatsRow(data as Record<string, unknown>, defaultStats) : null;
+  }, defaultStats);
+
+export const getProcess = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_process").select("*").eq("id", 1).single();
+    return data ? normalizeProcessRow(data as Record<string, unknown>, defaultProcess) : null;
+  }, defaultProcess);
+
+export const getTeamMeta = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_team_meta").select("*").eq("id", 1).single();
+    return data ? normalizeSectionMetaRow(data as Record<string, unknown>, defaultTeamMeta) : null;
+  }, defaultTeamMeta);
+
+export const getPricingMeta = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_pricing_meta").select("*").eq("id", 1).single();
+    return data ? normalizeSectionMetaRow(data as Record<string, unknown>, defaultPricingMeta) : null;
+  }, defaultPricingMeta);
+
+export const getTestimonialsMeta = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_testimonials_meta").select("*").eq("id", 1).single();
+    return data ? normalizeSectionMetaRow(data as Record<string, unknown>, defaultTestimonialsMeta) : null;
+  }, defaultTestimonialsMeta);
+
+export const getInstagramMeta = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_instagram").select("*").eq("id", 1).single();
+    return data ? normalizeInstagramRow(data as Record<string, unknown>, defaultInstagramMeta) : null;
+  }, defaultInstagramMeta);
+
+export const getFaqMeta = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_faq_meta").select("*").eq("id", 1).single();
+    return data ? normalizeSectionMetaRow(data as Record<string, unknown>, defaultFaqMeta) : null;
+  }, defaultFaqMeta);
+
+export const getContactMeta = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("section_contact").select("*").eq("id", 1).single();
+    return data ? normalizeContactRow(data as Record<string, unknown>, defaultContactMeta) : null;
+  }, defaultContactMeta);
 
 export const getHeroSlides = () => fetchCollection<HeroSlide>("hero_slides", defaultHeroSlides);
 export const getServices = () => fetchCollection<Service>("services", defaultServices);
-export const getCategories = () => fetchCollection<Category>("categories", defaultCategories);
+export const getCategories = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb
+      .from("categories")
+      .select("*")
+      .order("position", { ascending: true });
+    if (!data) return null;
+    return (data as Record<string, unknown>[]).map((row) => normalizeCategoryRow(row));
+  }, defaultCategories);
+
+function categorySlugMatch(c: Category, slug: string): boolean {
+  const s = (c.slug ?? "").trim().toLowerCase();
+  const derived = (s || slugify(c.name)).toLowerCase();
+  return derived === slug;
+}
+
+export async function getCategoryBySlug(slug: string): Promise<Category | null> {
+  const normalized = slug.trim().toLowerCase();
+  if (!normalized) return null;
+  if (!hasSupabase()) {
+    return defaultCategories.find((c) => categorySlugMatch(c, normalized)) ?? null;
+  }
+  try {
+    const sb = createSupabaseServerClient();
+    let { data, error } = await sb
+      .from("categories")
+      .select("*")
+      .eq("slug", normalized)
+      .maybeSingle();
+    if (!data && !error) {
+      ({ data, error } = await sb
+        .from("categories")
+        .select("*")
+        .ilike("slug", normalized)
+        .limit(1)
+        .maybeSingle());
+    }
+    if (error || !data) {
+      return defaultCategories.find((c) => categorySlugMatch(c, normalized)) ?? null;
+    }
+    return normalizeCategoryRow(data as Record<string, unknown>);
+  } catch {
+    return defaultCategories.find((c) => categorySlugMatch(c, normalized)) ?? null;
+  }
+}
+
 export const getPortfolioItems = () => fetchCollection<PortfolioItem>("portfolio_items", defaultPortfolio);
 export const getTeam = () => fetchCollection<TeamMember>("team_members", defaultTeam);
 export const getPricing = () => fetchCollection<PricingTier>("pricing_tiers", defaultPricing);

@@ -103,7 +103,9 @@ create table if not exists public.section_hero (
   id smallint primary key default 1,
   eyebrow text not null default 'Photography Studio · Murcia, Spain',
   line_1 text not null default 'Stories told',
-  line_2 text not null default 'through <em>light</em>',
+  line_2_prefix text not null default 'through ',
+  line_2_em text not null default 'light',
+  line_2_suffix text not null default '',
   line_3 text not null default 'and emotion',
   meta_text text not null default 'A premium photography agency crafting timeless visual stories for brands, weddings, and editorial work since 2018.',
   cta_primary_label text not null default 'Explore portfolio',
@@ -118,7 +120,7 @@ create table if not exists public.section_hero (
 create table if not exists public.section_about (
   id smallint primary key default 1,
   eyebrow text not null default 'About the studio',
-  title_html text not null default 'Crafting visual<br>stories with <em>soul</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"Crafting visual","mid":"stories with","em":"soul","tail":"","breakAfterLine1":true,"line2":""}'::jsonb,
   quote text not null default 'Photography is not about capturing what you see — it''s about <em>revealing</em> what others feel.',
   body_html text not null default '<p>Cristina Navarro Studio is a creative photography agency based in Murcia, Spain. For over <b>8 years</b>, we''ve been creating timeless imagery for international brands, couples, and editorial publications.</p><p>Our approach blends classical composition with contemporary storytelling — every frame is intentional, every detail considered. We believe great photography starts with great relationships.</p>',
   image_main text not null default 'https://images.unsplash.com/photo-1554941426-cc88c91c9bbf?w=1200&q=80&auto=format&fit=crop',
@@ -135,7 +137,7 @@ create table if not exists public.section_about (
 create table if not exists public.section_services_meta (
   id smallint primary key default 1,
   eyebrow text not null default 'Our services',
-  title_html text not null default 'What we<br><em>create</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"What we","mid":"","em":"create","tail":"","breakAfterLine1":true,"line2":""}'::jsonb,
   lead text not null default 'From intimate weddings to international fashion editorials, we bring a refined eye and meticulous craft to every project.',
   updated_at timestamptz not null default now(),
   constraint section_services_meta_singleton check (id = 1)
@@ -144,7 +146,7 @@ create table if not exists public.section_services_meta (
 create table if not exists public.section_categories_meta (
   id smallint primary key default 1,
   eyebrow text not null default 'Categories',
-  title_html text not null default 'Explore by <em>category</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"Explore by ","mid":"","em":"category","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   updated_at timestamptz not null default now(),
   constraint section_categories_meta_singleton check (id = 1)
 );
@@ -152,7 +154,7 @@ create table if not exists public.section_categories_meta (
 create table if not exists public.section_portfolio_meta (
   id smallint primary key default 1,
   eyebrow text not null default 'Selected work',
-  title_html text not null default 'Featured <em>portfolio</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"Featured ","mid":"","em":"portfolio","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   lead text not null default 'A curated selection of recent projects across weddings, fashion, and brand storytelling.',
   tabs jsonb not null default '["All","Wedding","Fashion","Commercial","Lifestyle"]'::jsonb,
   updated_at timestamptz not null default now(),
@@ -162,7 +164,7 @@ create table if not exists public.section_portfolio_meta (
 create table if not exists public.section_stats (
   id smallint primary key default 1,
   eyebrow text not null default 'Achievements',
-  title_html text not null default 'Numbers that<br>tell a <em>story</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"Numbers that","mid":"tell a ","em":"story","tail":"","breakAfterLine1":true,"line2":""}'::jsonb,
   lead text not null default 'Eight years of dedicated craftsmanship, hundreds of stories told, and countless moments preserved.',
   items jsonb not null default '[
     {"count":240,"suffix":"+","label":"Projects completed across weddings, brands and editorials"},
@@ -177,7 +179,7 @@ create table if not exists public.section_stats (
 create table if not exists public.section_process (
   id smallint primary key default 1,
   eyebrow text not null default 'How we work',
-  title_html text not null default 'A <em>refined</em> process',
+  title_heading jsonb not null default '{"v":1,"line1":"A ","mid":"","em":"refined","tail":" process","breakAfterLine1":false,"line2":""}'::jsonb,
   steps jsonb not null default '[
     {"num":"01","title":"Discovery","text":"We start with a conversation — understanding your vision, story, and the emotion you want captured."},
     {"num":"02","title":"Concept","text":"A tailored creative direction with mood boards, location scouting, and detailed shot planning."},
@@ -191,7 +193,7 @@ create table if not exists public.section_process (
 create table if not exists public.section_team_meta (
   id smallint primary key default 1,
   eyebrow text not null default 'The team',
-  title_html text not null default 'Meet the<br><em>creators</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"Meet the","mid":"","em":"creators","tail":"","breakAfterLine1":true,"line2":""}'::jsonb,
   lead text not null default 'A small, passionate team united by craft and an unwavering pursuit of beautiful imagery.',
   updated_at timestamptz not null default now(),
   constraint section_team_meta_singleton check (id = 1)
@@ -200,7 +202,7 @@ create table if not exists public.section_team_meta (
 create table if not exists public.section_pricing_meta (
   id smallint primary key default 1,
   eyebrow text not null default 'Investment',
-  title_html text not null default 'Transparent <em>pricing</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"Transparent ","mid":"","em":"pricing","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   lead text not null default 'Tailored packages designed for every story. Custom quotes available for unique projects.',
   updated_at timestamptz not null default now(),
   constraint section_pricing_meta_singleton check (id = 1)
@@ -209,7 +211,7 @@ create table if not exists public.section_pricing_meta (
 create table if not exists public.section_testimonials_meta (
   id smallint primary key default 1,
   eyebrow text not null default 'Kind words',
-  title_html text not null default 'Trusted by <em>brands</em><br>and couples worldwide',
+  title_heading jsonb not null default '{"v":1,"line1":"Trusted by ","mid":"","em":"brands","tail":"","breakAfterLine1":false,"line2":"and couples worldwide"}'::jsonb,
   updated_at timestamptz not null default now(),
   constraint section_testimonials_meta_singleton check (id = 1)
 );
@@ -217,7 +219,7 @@ create table if not exists public.section_testimonials_meta (
 create table if not exists public.section_instagram (
   id smallint primary key default 1,
   handle text not null default '@cristinanavarro_studio',
-  title_html text not null default 'Follow our <em>journey</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"Follow our ","mid":"","em":"journey","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   lead text not null default 'Behind-the-scenes, latest work and creative inspiration on Instagram.',
   profile_url text not null default '#',
   updated_at timestamptz not null default now(),
@@ -227,7 +229,7 @@ create table if not exists public.section_instagram (
 create table if not exists public.section_faq_meta (
   id smallint primary key default 1,
   eyebrow text not null default 'Frequently asked',
-  title_html text not null default 'Questions <em>answered</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"Questions ","mid":"","em":"answered","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   updated_at timestamptz not null default now(),
   constraint section_faq_meta_singleton check (id = 1)
 );
@@ -235,7 +237,7 @@ create table if not exists public.section_faq_meta (
 create table if not exists public.section_contact (
   id smallint primary key default 1,
   eyebrow text not null default 'Let''s talk',
-  title_html text not null default 'Begin your <em>story</em>',
+  title_heading jsonb not null default '{"v":1,"line1":"Begin your ","mid":"","em":"story","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
   lead text not null default 'Tell us about your project and we''ll get back to you within 24 hours.',
   services jsonb not null default '["Wedding photography","Fashion / Editorial","Commercial / Brand","Event coverage","Lifestyle / Family","Other"]'::jsonb,
   social jsonb not null default '[
@@ -280,11 +282,23 @@ create table if not exists public.categories (
   position integer not null default 0,
   tag text not null default 'Featured',
   name text not null,
+  slug text not null default '',
   image_url text not null,
   link_href text not null default '#',
+  page_eyebrow text not null default '',
+  page_heading jsonb not null default '{}'::jsonb,
+  page_meta_title text not null default '',
+  page_meta_description text not null default '',
+  page_lead text not null default '',
+  page_body_html text not null default '',
+  gallery_images jsonb not null default '[]'::jsonb,
+  show_portfolio_related boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+create unique index if not exists categories_slug_unique on public.categories (slug)
+  where length(trim(slug)) > 0;
 
 create table if not exists public.portfolio_items (
   id uuid primary key default gen_random_uuid(),

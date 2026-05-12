@@ -1,4 +1,6 @@
+import Image from "next/image";
 import type { InstagramPost, SectionInstagram } from "@/lib/types/site";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 const IgIcon = () => (
   <svg viewBox="0 0 24 24">
@@ -19,10 +21,7 @@ export function Instagram({
     <section className="cn-section cn-instagram" aria-label="Instagram">
       <div className="cn-section-head-center" data-stagger>
         <div className="cn-section-eyebrow">{meta.handle}</div>
-        <h2
-          className="cn-section-title"
-          dangerouslySetInnerHTML={{ __html: meta.title_html }}
-        />
+        <SectionHeading heading={meta.title_heading} />
         {meta.lead && (
           <p className="cn-section-lead" style={{ margin: "1.5rem auto 0" }}>
             {meta.lead}
@@ -40,7 +39,16 @@ export function Instagram({
             rel="noopener noreferrer"
           >
             <div className="cn-insta-bg">
-              <img src={p.image_url} alt="" loading="lazy" />
+              {p.image_url ? (
+                <Image
+                  src={p.image_url}
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 33vw, 16vw"
+                  className="object-cover"
+                  loading="lazy"
+                />
+              ) : null}
             </div>
             <div className="cn-insta-overlay">
               <IgIcon />

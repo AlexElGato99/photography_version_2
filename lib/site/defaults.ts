@@ -24,6 +24,9 @@ import type {
   TeamMember,
   Testimonial,
 } from "@/lib/types/site";
+import { titleHeadingFromLegacyHtml } from "@/lib/site/title-heading";
+
+const th = (html: string) => titleHeadingFromLegacyHtml(html);
 
 export const defaultGeneral: SiteGeneral = {
   id: 1,
@@ -117,7 +120,9 @@ export const defaultHero: SectionHero = {
   id: 1,
   eyebrow: "Photography Studio · Murcia, Spain",
   line_1: "Stories told",
-  line_2: "through <em>light</em>",
+  line_2_prefix: "through ",
+  line_2_em: "light",
+  line_2_suffix: "",
   line_3: "and emotion",
   meta_text:
     "A premium photography agency crafting timeless visual stories for brands, weddings, and editorial work since 2018.",
@@ -131,9 +136,9 @@ export const defaultHero: SectionHero = {
 export const defaultAbout: SectionAbout = {
   id: 1,
   eyebrow: "About the studio",
-  title_html: "Crafting visual<br>stories with <em>soul</em>",
+  title_heading: th("Crafting visual<br>stories with <em>soul</em>"),
   quote:
-    "Photography is not about capturing what you see — it's about <em>revealing</em> what others feel.",
+    "<p>Photography is not about capturing what you see — it's about <em>revealing</em> what others feel.</p>",
   body_html:
     "<p>Cristina Navarro Studio is a creative photography agency based in Murcia, Spain. For over <b>8 years</b>, we've been creating timeless imagery for international brands, couples, and editorial publications.</p><p>Our approach blends classical composition with contemporary storytelling — every frame is intentional, every detail considered. We believe great photography starts with great relationships.</p>",
   image_main:
@@ -150,20 +155,20 @@ export const defaultAbout: SectionAbout = {
 export const defaultServicesMeta: SectionMeta = {
   id: 1,
   eyebrow: "Our services",
-  title_html: "What we<br><em>create</em>",
+  title_heading: th("What we<br><em>create</em>"),
   lead: "From intimate weddings to international fashion editorials, we bring a refined eye and meticulous craft to every project.",
 };
 
 export const defaultCategoriesMeta: SectionMeta = {
   id: 1,
   eyebrow: "Categories",
-  title_html: "Explore by <em>category</em>",
+  title_heading: th("Explore by <em>category</em>"),
 };
 
 export const defaultPortfolioMeta: SectionPortfolioMeta = {
   id: 1,
   eyebrow: "Selected work",
-  title_html: "Featured <em>portfolio</em>",
+  title_heading: th("Featured <em>portfolio</em>"),
   lead: "A curated selection of recent projects across weddings, fashion, and brand storytelling.",
   tabs: ["All", "Wedding", "Fashion", "Commercial", "Lifestyle"],
 };
@@ -171,7 +176,7 @@ export const defaultPortfolioMeta: SectionPortfolioMeta = {
 export const defaultStats: SectionStats = {
   id: 1,
   eyebrow: "Achievements",
-  title_html: "Numbers that<br>tell a <em>story</em>",
+  title_heading: th("Numbers that<br>tell a <em>story</em>"),
   lead:
     "Eight years of dedicated craftsmanship, hundreds of stories told, and countless moments preserved.",
   items: [
@@ -185,7 +190,7 @@ export const defaultStats: SectionStats = {
 export const defaultProcess: SectionProcess = {
   id: 1,
   eyebrow: "How we work",
-  title_html: "A <em>refined</em> process",
+  title_heading: th("A <em>refined</em> process"),
   steps: [
     { num: "01", title: "Discovery", text: "We start with a conversation — understanding your vision, story, and the emotion you want captured." },
     { num: "02", title: "Concept", text: "A tailored creative direction with mood boards, location scouting, and detailed shot planning." },
@@ -197,27 +202,27 @@ export const defaultProcess: SectionProcess = {
 export const defaultTeamMeta: SectionMeta = {
   id: 1,
   eyebrow: "The team",
-  title_html: "Meet the<br><em>creators</em>",
+  title_heading: th("Meet the<br><em>creators</em>"),
   lead: "A small, passionate team united by craft and an unwavering pursuit of beautiful imagery.",
 };
 
 export const defaultPricingMeta: SectionMeta = {
   id: 1,
   eyebrow: "Investment",
-  title_html: "Transparent <em>pricing</em>",
+  title_heading: th("Transparent <em>pricing</em>"),
   lead: "Tailored packages designed for every story. Custom quotes available for unique projects.",
 };
 
 export const defaultTestimonialsMeta: SectionMeta = {
   id: 1,
   eyebrow: "Kind words",
-  title_html: "Trusted by <em>brands</em><br>and couples worldwide",
+  title_heading: th("Trusted by <em>brands</em><br>and couples worldwide"),
 };
 
 export const defaultInstagramMeta: SectionInstagram = {
   id: 1,
   handle: "@cristinanavarro_studio",
-  title_html: "Follow our <em>journey</em>",
+  title_heading: th("Follow our <em>journey</em>"),
   lead: "Behind-the-scenes, latest work and creative inspiration on Instagram.",
   profile_url: "#",
 };
@@ -225,13 +230,13 @@ export const defaultInstagramMeta: SectionInstagram = {
 export const defaultFaqMeta: SectionMeta = {
   id: 1,
   eyebrow: "Frequently asked",
-  title_html: "Questions <em>answered</em>",
+  title_heading: th("Questions <em>answered</em>"),
 };
 
 export const defaultContactMeta: SectionContact = {
   id: 1,
   eyebrow: "Let's talk",
-  title_html: "Begin your <em>story</em>",
+  title_heading: th("Begin your <em>story</em>"),
   lead: "Tell us about your project and we'll get back to you within 24 hours.",
   services: [
     "Wedding photography",
@@ -274,13 +279,153 @@ export const defaultServices: Service[] = [
 ];
 
 export const defaultCategories: Category[] = [
-  { id: "1", position: 0, tag: "Featured", name: "Wedding", image_url: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200&q=80&auto=format&fit=crop", link_href: "#" },
-  { id: "2", position: 1, tag: "Editorial", name: "Fashion", image_url: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1200&q=80&auto=format&fit=crop", link_href: "#" },
-  { id: "3", position: 2, tag: "Live", name: "Events", image_url: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=600&q=80&auto=format&fit=crop", link_href: "#" },
-  { id: "4", position: 3, tag: "Brand", name: "Commercial", image_url: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=900&q=80&auto=format&fit=crop", link_href: "#" },
-  { id: "5", position: 4, tag: "Outdoors", name: "Lifestyle", image_url: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80&auto=format&fit=crop", link_href: "#" },
-  { id: "6", position: 5, tag: "Spaces", name: "Interiors", image_url: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80&auto=format&fit=crop", link_href: "#" },
-  { id: "7", position: 6, tag: "Personal", name: "Portraits", image_url: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80&auto=format&fit=crop", link_href: "#" },
+  {
+    id: "1",
+    position: 0,
+    tag: "Featured",
+    name: "Wedding",
+    slug: "wedding",
+    image_url:
+      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200&q=80&auto=format&fit=crop",
+    link_href: "#",
+    page_eyebrow: "Portfolio · Wedding",
+    page_heading: th("Timeless <em>wedding</em> imagery"),
+    page_meta_title: "",
+    page_meta_description: "",
+    page_lead:
+      "From intimate ceremonies to grand celebrations — editorial lighting, honest emotion, and artful composition.",
+    page_body_html:
+      '<p class="cn-about-body">Every couple receives a tailored experience: mood boards, timeline guidance, and a calm presence on the day. Our editing favours natural skin tones, rich blacks, and film-inspired softness.</p>',
+    gallery_images: [
+      {
+        image_url:
+          "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1200&q=80&auto=format&fit=crop",
+        caption: "Al fresco vows",
+        alt: "Outdoor wedding ceremony",
+      },
+      {
+        image_url:
+          "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80&auto=format&fit=crop",
+        caption: "Golden hour portraits",
+        alt: "Bride and groom portrait",
+      },
+      {
+        image_url:
+          "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1200&q=80&auto=format&fit=crop",
+        caption: "Reception light",
+        alt: "Wedding reception",
+      },
+    ],
+    show_portfolio_related: true,
+  },
+  {
+    id: "2",
+    position: 1,
+    tag: "Editorial",
+    name: "Fashion",
+    slug: "fashion",
+    image_url:
+      "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1200&q=80&auto=format&fit=crop",
+    link_href: "#",
+    page_eyebrow: "Portfolio · Fashion",
+    page_heading: th("Editorial & <em>fashion</em>"),
+    page_meta_title: "",
+    page_meta_description: "",
+    page_lead: "Campaigns, lookbooks, and magazine work with cinematic art direction.",
+    page_body_html: "",
+    gallery_images: [],
+    show_portfolio_related: true,
+  },
+  {
+    id: "3",
+    position: 2,
+    tag: "Live",
+    name: "Events",
+    slug: "events",
+    image_url:
+      "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=600&q=80&auto=format&fit=crop",
+    link_href: "#",
+    page_eyebrow: "Portfolio · Events",
+    page_heading: th("Live <em>event</em> coverage"),
+    page_meta_title: "",
+    page_meta_description: "",
+    page_lead: "Galas, launches, and celebrations captured with editorial polish.",
+    page_body_html: "",
+    gallery_images: [],
+    show_portfolio_related: true,
+  },
+  {
+    id: "4",
+    position: 3,
+    tag: "Brand",
+    name: "Commercial",
+    slug: "commercial",
+    image_url:
+      "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=900&q=80&auto=format&fit=crop",
+    link_href: "#",
+    page_eyebrow: "Portfolio · Commercial",
+    page_heading: th("Brand & <em>commercial</em>"),
+    page_meta_title: "",
+    page_meta_description: "",
+    page_lead: "Product, packaging, and campaign imagery for modern brands.",
+    page_body_html: "",
+    gallery_images: [],
+    show_portfolio_related: true,
+  },
+  {
+    id: "5",
+    position: 4,
+    tag: "Outdoors",
+    name: "Lifestyle",
+    slug: "lifestyle",
+    image_url:
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80&auto=format&fit=crop",
+    link_href: "#",
+    page_eyebrow: "Portfolio · Lifestyle",
+    page_heading: th("Natural <em>lifestyle</em>"),
+    page_meta_title: "",
+    page_meta_description: "",
+    page_lead: "Light-filled stories of people and places.",
+    page_body_html: "",
+    gallery_images: [],
+    show_portfolio_related: true,
+  },
+  {
+    id: "6",
+    position: 5,
+    tag: "Spaces",
+    name: "Interiors",
+    slug: "interiors",
+    image_url:
+      "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80&auto=format&fit=crop",
+    link_href: "#",
+    page_eyebrow: "Portfolio · Interiors",
+    page_heading: th("Interior <em>architecture</em>"),
+    page_meta_title: "",
+    page_meta_description: "",
+    page_lead: "Hotels, restaurants, and residential spaces with sensitivity to light.",
+    page_body_html: "",
+    gallery_images: [],
+    show_portfolio_related: true,
+  },
+  {
+    id: "7",
+    position: 6,
+    tag: "Personal",
+    name: "Portraits",
+    slug: "portraits",
+    image_url:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80&auto=format&fit=crop",
+    link_href: "#",
+    page_eyebrow: "Portfolio · Portraits",
+    page_heading: th("Portrait <em>sessions</em>"),
+    page_meta_title: "",
+    page_meta_description: "",
+    page_lead: "Editorial portraits with warmth and clarity.",
+    page_body_html: "",
+    gallery_images: [],
+    show_portfolio_related: true,
+  },
 ];
 
 export const defaultPortfolio: PortfolioItem[] = [

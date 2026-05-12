@@ -1,4 +1,5 @@
 import type { SectionMeta, Service } from "@/lib/types/site";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 export function Services({
   meta,
@@ -12,10 +13,7 @@ export function Services({
       <div className="cn-section-head" data-stagger>
         <div>
           <div className="cn-section-eyebrow">{meta.eyebrow}</div>
-          <h2
-            className="cn-section-title"
-            dangerouslySetInnerHTML={{ __html: meta.title_html }}
-          />
+          <SectionHeading heading={meta.title_heading} />
         </div>
         {meta.lead && <p className="cn-section-lead">{meta.lead}</p>}
       </div>

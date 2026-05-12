@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import type { SectionContact, SiteGeneral } from "@/lib/types/site";
 import { submitContact } from "@/app/(site)/actions";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 const PinIcon = () => (
   <svg viewBox="0 0 24 24">
@@ -97,10 +98,7 @@ export function Contact({
     <section className="cn-section cn-contact" id="contact" aria-label="Contact">
       <div className="cn-section-head-center" data-stagger>
         <div className="cn-section-eyebrow">{meta.eyebrow}</div>
-        <h2
-          className="cn-section-title"
-          dangerouslySetInnerHTML={{ __html: meta.title_html }}
-        />
+        <SectionHeading heading={meta.title_heading} />
         {meta.lead && (
           <p className="cn-section-lead" style={{ margin: "1.5rem auto 0" }}>
             {meta.lead}

@@ -1,4 +1,8 @@
+import Image from "next/image";
+import Link from "next/link";
 import type { Category, SectionMeta } from "@/lib/types/site";
+import { categoryPublicHref } from "@/lib/site/category-helpers";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 export function Categories({
   meta,
@@ -15,17 +19,28 @@ export function Categories({
     >
       <div className="cn-section-head-center" data-stagger>
         <div className="cn-section-eyebrow">{meta.eyebrow}</div>
-        <h2
-          className="cn-section-title"
-          dangerouslySetInnerHTML={{ __html: meta.title_html }}
-        />
+        <SectionHeading heading={meta.title_heading} />
       </div>
 
       <div className="cn-categories-grid" data-stagger-cards>
         {categories.map((c) => (
-          <a key={c.id} href={c.link_href} className="cn-category-card">
+          <Link
+            key={c.id}
+            href={categoryPublicHref(c)}
+            className="cn-category-card"
+            prefetch={false}
+          >
             <div className="cn-cat-bg">
-              <img src={c.image_url} alt={c.name} loading="lazy" />
+              {c.image_url ? (
+                <Image
+                  src={c.image_url}
+                  alt={c.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover"
+                  loading="lazy"
+                />
+              ) : null}
             </div>
             <div className="cn-cat-overlay" />
             <div className="cn-cat-arrow">
@@ -37,7 +52,7 @@ export function Categories({
               <small>{c.tag}</small>
               <h3>{c.name}</h3>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

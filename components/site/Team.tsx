@@ -1,4 +1,6 @@
+import Image from "next/image";
 import type { SectionMeta, TeamMember } from "@/lib/types/site";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 const IgIcon = () => (
   <svg viewBox="0 0 24 24">
@@ -28,10 +30,7 @@ export function Team({
       <div className="cn-section-head" data-stagger>
         <div>
           <div className="cn-section-eyebrow">{meta.eyebrow}</div>
-          <h2
-            className="cn-section-title"
-            dangerouslySetInnerHTML={{ __html: meta.title_html }}
-          />
+          <SectionHeading heading={meta.title_heading} />
         </div>
         {meta.lead && <p className="cn-section-lead">{meta.lead}</p>}
       </div>
@@ -41,7 +40,16 @@ export function Team({
           <div key={m.id} className="cn-team-member">
             <div className="cn-team-img">
               <div className="cn-team-img-bg">
-                <img src={m.image_url} alt={m.name} loading="lazy" />
+                {m.image_url ? (
+                  <Image
+                    src={m.image_url}
+                    alt={m.name}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover"
+                    loading="lazy"
+                  />
+                ) : null}
               </div>
               <div className="cn-team-social">
                 {m.instagram_url && (

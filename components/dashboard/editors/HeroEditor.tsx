@@ -25,9 +25,11 @@ export function HeroEditor({
               initialData={hero}
               fields={[
                 { key: "eyebrow", label: "Eyebrow", type: "text" },
-                { key: "line_1", label: "Headline · line 1", type: "text", help: "HTML allowed (<em>...</em>)." },
-                { key: "line_2", label: "Headline · line 2", type: "text", help: "HTML allowed (<em>...</em>)." },
-                { key: "line_3", label: "Headline · line 3", type: "text", help: "HTML allowed (<em>...</em>)." },
+                { key: "line_1", label: "Headline · line 1", type: "text" },
+                { key: "line_2_prefix", label: "Headline · line 2 — before italic", type: "text" },
+                { key: "line_2_em", label: "Headline · line 2 — italic word", type: "text" },
+                { key: "line_2_suffix", label: "Headline · line 2 — after italic", type: "text" },
+                { key: "line_3", label: "Headline · line 3", type: "text" },
                 { key: "meta_text", label: "Meta paragraph", type: "textarea" },
                 { key: "cta_primary_label", label: "Primary CTA label", type: "text" },
                 { key: "cta_primary_href", label: "Primary CTA href", type: "text" },

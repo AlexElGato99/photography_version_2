@@ -1,4 +1,5 @@
 import type { SectionStats } from "@/lib/types/site";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 export function Stats({ stats }: { stats: SectionStats }) {
   return (
@@ -6,10 +7,7 @@ export function Stats({ stats }: { stats: SectionStats }) {
       <div className="cn-section-head" style={{ marginBottom: "5rem" }} data-stagger>
         <div>
           <div className="cn-section-eyebrow">{stats.eyebrow}</div>
-          <h2
-            className="cn-section-title"
-            dangerouslySetInnerHTML={{ __html: stats.title_html }}
-          />
+          <SectionHeading heading={stats.title_heading} />
         </div>
         <p className="cn-section-lead">{stats.lead}</p>
       </div>

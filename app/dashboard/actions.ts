@@ -2,9 +2,23 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import sharp from "sharp";
+import { bufferToWebp } from "@/lib/images/to-webp";
+import { isSafePublicHttpsImageUrl } from "@/lib/images/remote-url";
 
 type Json = Record<string, unknown>;
+
+const MAX_REMOTE_IMAGE_BYTES = 20 * 1024 * 1024;
+
+async function uploadWebpBufferToSiteMedia(webpBuffer: Buffer): Promise<string> {
+  const path = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
+  const sb = createSupabaseAdminClient();
+  const { error } = await sb.storage
+    .from("site-media")
+    .upload(path, webpBuffer, { contentType: "image/webp", upsert: false });
+  if (error) throw new Error(error.message);
+  const { data } = sb.storage.from("site-media").getPublicUrl(path);
+  return data.publicUrl;
+}
 
 function hasAdminEnv() {
   return !!(
@@ -116,23 +130,54 @@ export async function uploadImage(
     if (!file || file.size === 0) return { ok: false, error: "No file provided." };
 
     const raw = Buffer.from(await file.arrayBuffer());
+    const webpBuffer = await bufferToWebp(raw);
+    const url = await uploadWebpBufferToSiteMedia(webpBuffer);
+    return { ok: true, url };
+  } catch (err) {
+    return { ok: false, error: (err as Error).message };
+  }
+}
 
-    // Convert to WebP with quality 85 — works for jpg, png, gif, avif, tiff, etc.
-    const webpBuffer = await sharp(raw)
-      .webp({ quality: 85 })
-      .toBuffer();
-
-    const path = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}.webp`;
-
-    const sb = createSupabaseAdminClient();
-    const { error } = await sb.storage
-      .from("site-media")
-      .upload(path, webpBuffer, { contentType: "image/webp", upsert: false });
-
-    if (error) return { ok: false, error: error.message };
-
-    const { data } = sb.storage.from("site-media").getPublicUrl(path);
-    return { ok: true, url: data.publicUrl };
+/**
+ * Fetch a remote image (AVIF, JPEG, PNG, …), convert to WebP, upload to site-media.
+ * Dashboard uses this when an editor pastes an image URL so stored assets are WebP.
+ */
+export async function ingestRemoteImageAsWebp(
+  url: string
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  if (!hasAdminEnv()) {
+    return { ok: false, error: "Supabase admin not configured." };
+  }
+  const trimmed = url.trim();
+  if (!trimmed) {
+    return { ok: false, error: "No URL provided." };
+  }
+  if (!isSafePublicHttpsImageUrl(trimmed)) {
+    return { ok: false, error: "This URL cannot be imported (invalid or blocked)." };
+  }
+  try {
+    const res = await fetch(trimmed, {
+      redirect: "follow",
+      cache: "no-store",
+      headers: {
+        Accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+      },
+      signal: AbortSignal.timeout(45_000),
+    });
+    if (!res.ok) {
+      return { ok: false, error: `Download failed (${res.status}).` };
+    }
+    const len = res.headers.get("content-length");
+    if (len && Number(len) > MAX_REMOTE_IMAGE_BYTES) {
+      return { ok: false, error: "Remote image is too large." };
+    }
+    const buf = Buffer.from(await res.arrayBuffer());
+    if (buf.length > MAX_REMOTE_IMAGE_BYTES) {
+      return { ok: false, error: "Remote image is too large." };
+    }
+    const webpBuffer = await bufferToWebp(buf);
+    const publicUrl = await uploadWebpBufferToSiteMedia(webpBuffer);
+    return { ok: true, url: publicUrl };
   } catch (err) {
     return { ok: false, error: (err as Error).message };
   }

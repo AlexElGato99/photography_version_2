@@ -5,6 +5,7 @@ import { Save, Loader2 } from "lucide-react";
 import { updateSingleton } from "@/app/dashboard/actions";
 import { ImageUploadField } from "@/components/dashboard/ImageUploadField";
 import { RichTextEditor } from "@/components/dashboard/RichTextEditor";
+import { SectionHeadingField } from "@/components/dashboard/SectionHeadingField";
 import { TagsField } from "@/components/dashboard/TagsField";
 import { NavItemsField } from "@/components/dashboard/NavItemsField";
 import { FooterColumnsField } from "@/components/dashboard/FooterColumnsField";
@@ -20,10 +21,16 @@ export type FieldDef =
   | {
       key: string;
       label: string;
-      type: "textarea" | "html";
+      type: "textarea" | "richtext";
       placeholder?: string;
       help?: string;
       rows?: number;
+    }
+  | {
+      key: string;
+      label: string;
+      type: "section_heading";
+      help?: string;
     }
   | {
       key: string;
@@ -240,7 +247,18 @@ function Field({
     );
   }
 
-  if (field.type === "html") {
+  if (field.type === "section_heading") {
+    return (
+      <SectionHeadingField
+        label={field.label}
+        value={value}
+        onChange={onChange}
+        help={field.help}
+      />
+    );
+  }
+
+  if (field.type === "richtext") {
     return (
       <RichTextEditor
         label={field.label}

@@ -1,3 +1,5 @@
+import type { TitleHeadingV1 } from "@/lib/site/title-heading";
+
 export type NavItem = { label: string; href: string };
 
 export type SiteGeneral = {
@@ -48,7 +50,9 @@ export type SectionHero = {
   id: number;
   eyebrow: string;
   line_1: string;
-  line_2: string;
+  line_2_prefix: string;
+  line_2_em: string;
+  line_2_suffix: string;
   line_3: string;
   meta_text: string;
   cta_primary_label: string;
@@ -61,7 +65,7 @@ export type SectionHero = {
 export type SectionAbout = {
   id: number;
   eyebrow: string;
-  title_html: string;
+  title_heading: TitleHeadingV1;
   quote: string;
   body_html: string;
   image_main: string;
@@ -76,7 +80,7 @@ export type SectionAbout = {
 export type SectionMeta = {
   id: number;
   eyebrow: string;
-  title_html: string;
+  title_heading: TitleHeadingV1;
   lead?: string;
 };
 
@@ -86,7 +90,7 @@ export type StatItem = { count: number; suffix: string; label: string };
 export type SectionStats = {
   id: number;
   eyebrow: string;
-  title_html: string;
+  title_heading: TitleHeadingV1;
   lead: string;
   items: StatItem[];
 };
@@ -95,14 +99,14 @@ export type ProcessStep = { num: string; title: string; text: string };
 export type SectionProcess = {
   id: number;
   eyebrow: string;
-  title_html: string;
+  title_heading: TitleHeadingV1;
   steps: ProcessStep[];
 };
 
 export type SectionInstagram = {
   id: number;
   handle: string;
-  title_html: string;
+  title_heading: TitleHeadingV1;
   lead: string;
   profile_url: string;
 };
@@ -110,7 +114,7 @@ export type SectionInstagram = {
 export type SectionContact = {
   id: number;
   eyebrow: string;
-  title_html: string;
+  title_heading: TitleHeadingV1;
   lead: string;
   services: string[];
   social: NavItem[];
@@ -135,13 +139,28 @@ export type Service = {
   link_href: string;
 };
 
+export type CategoryGalleryImage = {
+  image_url: string;
+  alt?: string;
+  caption?: string;
+};
+
 export type Category = {
   id: string;
   position: number;
   tag: string;
   name: string;
+  slug: string;
   image_url: string;
   link_href: string;
+  page_eyebrow: string;
+  page_heading: TitleHeadingV1;
+  page_meta_title: string;
+  page_meta_description: string;
+  page_lead: string;
+  page_body_html: string;
+  gallery_images: CategoryGalleryImage[];
+  show_portfolio_related: boolean;
 };
 
 export type PortfolioItem = {

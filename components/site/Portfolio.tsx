@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import type { PortfolioItem, SectionPortfolioMeta } from "@/lib/types/site";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 export function Portfolio({
   meta,
@@ -25,10 +27,7 @@ export function Portfolio({
     >
       <div className="cn-section-head-center" data-stagger>
         <div className="cn-section-eyebrow">{meta.eyebrow}</div>
-        <h2
-          className="cn-section-title"
-          dangerouslySetInnerHTML={{ __html: meta.title_html }}
-        />
+        <SectionHeading heading={meta.title_heading} />
         {meta.lead && (
           <p className="cn-section-lead" style={{ margin: "1.5rem auto 0" }}>
             {meta.lead}
@@ -53,7 +52,16 @@ export function Portfolio({
         {filtered.map((p) => (
           <a key={p.id} href={p.link_href} className="cn-port-item">
             <div className="cn-port-bg">
-              <img src={p.image_url} alt={p.title} loading="lazy" />
+              {p.image_url ? (
+                <Image
+                  src={p.image_url}
+                  alt={p.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                  loading="lazy"
+                />
+              ) : null}
             </div>
             <span className="cn-port-num">{p.number_label}</span>
             <div className="cn-port-veil" />

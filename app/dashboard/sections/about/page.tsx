@@ -11,9 +11,9 @@ export default async function AboutSectionPage() {
       initialData={data}
       fields={[
         { key: "eyebrow", label: "Eyebrow", type: "text" },
-        { key: "title_html", label: "Section title", type: "html", help: "Use <em> for emphasis and <br> for line breaks." },
-        { key: "quote", label: "Pull quote", type: "textarea" },
-        { key: "body_html", label: "Body (HTML)", type: "html", rows: 8 },
+        { key: "title_heading", label: "Section title", type: "section_heading" },
+        { key: "quote", label: "Pull quote", type: "richtext" },
+        { key: "body_html", label: "Body copy", type: "richtext", rows: 8 },
         { key: "image_main", label: "Main image", type: "image" },
         { key: "image_secondary", label: "Secondary image", type: "image" },
         { key: "badge_title", label: "Badge title", type: "text" },

@@ -24,7 +24,7 @@ export function InstagramEditor({
               initialData={meta}
               fields={[
                 { key: "handle", label: "Instagram handle", type: "text" },
-                { key: "title_html", label: "Title (HTML)", type: "html" },
+                { key: "title_heading", label: "Section title", type: "section_heading" },
                 { key: "lead", label: "Lead paragraph", type: "textarea" },
                 { key: "profile_url", label: "Profile URL", type: "url" },
               ]}

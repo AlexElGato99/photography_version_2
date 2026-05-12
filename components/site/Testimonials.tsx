@@ -1,4 +1,6 @@
+import Image from "next/image";
 import type { SectionMeta, Testimonial } from "@/lib/types/site";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 const Star = () => (
   <svg viewBox="0 0 24 24">
@@ -17,10 +19,7 @@ export function Testimonials({
     <section className="cn-section cn-testimonials" aria-label="Testimonials">
       <div className="cn-section-head-center" data-stagger>
         <div className="cn-section-eyebrow">{meta.eyebrow}</div>
-        <h2
-          className="cn-section-title"
-          dangerouslySetInnerHTML={{ __html: meta.title_html }}
-        />
+          <SectionHeading heading={meta.title_heading} />
       </div>
 
       <div className="cn-test-grid" data-stagger-cards>
@@ -37,7 +36,14 @@ export function Testimonials({
             <div className="cn-test-author">
               <div className="cn-test-avatar">
                 {t.author_avatar_url && (
-                  <img src={t.author_avatar_url} alt={t.author_name} loading="lazy" />
+                  <Image
+                    src={t.author_avatar_url}
+                    alt={t.author_name}
+                    width={44}
+                    height={44}
+                    className="object-cover"
+                    loading="lazy"
+                  />
                 )}
               </div>
               <div className="cn-test-author-info">

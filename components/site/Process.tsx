@@ -1,14 +1,12 @@
 import type { SectionProcess } from "@/lib/types/site";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 export function Process({ process }: { process: SectionProcess }) {
   return (
     <section className="cn-section cn-process" aria-label="Process">
       <div className="cn-section-head-center" data-stagger>
         <div className="cn-section-eyebrow">{process.eyebrow}</div>
-        <h2
-          className="cn-section-title"
-          dangerouslySetInnerHTML={{ __html: process.title_html }}
-        />
+        <SectionHeading heading={process.title_heading} />
       </div>
 
       <div className="cn-process-grid" data-stagger-cards>

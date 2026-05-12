@@ -1,19 +1,35 @@
+import Image from "next/image";
 import type { SectionAbout } from "@/lib/types/site";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 export function About({ about }: { about: SectionAbout }) {
   return (
     <section className="cn-section cn-about" id="about" aria-label="About">
       <div className="cn-about-visual" data-anim="fade-right">
         <div className="cn-about-img-main">
-          <img
-            src={about.image_main}
-            alt="Studio"
-            loading="lazy"
-            data-parallax="0.2"
-          />
+          {about.image_main ? (
+            <Image
+              src={about.image_main}
+              alt="Studio"
+              fill
+              sizes="(max-width: 900px) 100vw, 45vw"
+              className="object-cover"
+              loading="lazy"
+              data-parallax="0.2"
+            />
+          ) : null}
         </div>
         <div className="cn-about-img-secondary" data-float>
-          <img src={about.image_secondary} alt="Studio detail" loading="lazy" />
+          {about.image_secondary ? (
+            <Image
+              src={about.image_secondary}
+              alt="Studio detail"
+              fill
+              sizes="(max-width: 900px) 45vw, 22vw"
+              className="object-cover"
+              loading="lazy"
+            />
+          ) : null}
         </div>
         <div className="cn-about-badge" data-float>
           <div className="cn-badge-icon">
@@ -30,13 +46,10 @@ export function About({ about }: { about: SectionAbout }) {
 
       <div className="cn-about-content" data-stagger>
         <div className="cn-section-eyebrow">{about.eyebrow}</div>
-        <h2
-          className="cn-section-title"
-          dangerouslySetInnerHTML={{ __html: about.title_html }}
-        />
-        <p
+        <SectionHeading heading={about.title_heading} />
+        <div
           className="cn-about-quote"
-          dangerouslySetInnerHTML={{ __html: `\u201C${about.quote}\u201D` }}
+          dangerouslySetInnerHTML={{ __html: about.quote }}
         />
         <div
           className="cn-about-body-wrap"

@@ -31,7 +31,7 @@ export function PricingEditor({
               initialData={meta}
               fields={[
                 { key: "eyebrow", label: "Eyebrow", type: "text" },
-                { key: "title_html", label: "Title (HTML)", type: "html" },
+                { key: "title_heading", label: "Section title", type: "section_heading" },
                 { key: "lead", label: "Lead paragraph", type: "textarea" },
               ]}
             />

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Faq, SectionMeta } from "@/lib/types/site";
+import { SectionHeading } from "@/components/site/SectionHeading";
 
 export function FaqSection({
   meta,
@@ -16,10 +17,7 @@ export function FaqSection({
     <section className="cn-section cn-faq" aria-label="FAQ">
       <div className="cn-section-head-center" data-stagger>
         <div className="cn-section-eyebrow">{meta.eyebrow}</div>
-        <h2
-          className="cn-section-title"
-          dangerouslySetInnerHTML={{ __html: meta.title_html }}
-        />
+        <SectionHeading heading={meta.title_heading} />
       </div>
 
       <div className="cn-faq-wrap" data-stagger-cards>

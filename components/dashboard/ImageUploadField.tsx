@@ -2,7 +2,8 @@
 
 import { useRef, useState, useTransition } from "react";
 import { Upload, X, ImageIcon, Loader2, Link } from "lucide-react";
-import { uploadImage } from "@/app/dashboard/actions";
+import { ingestRemoteImageAsWebp, uploadImage } from "@/app/dashboard/actions";
+import { isAlreadySiteMediaWebp } from "@/lib/images/remote-url";
 
 interface ImageUploadFieldProps {
   label: string;
@@ -22,6 +23,7 @@ export function ImageUploadField({
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string>(value ?? "");
   const [uploading, startUpload] = useTransition();
+  const [ingestingUrl, setIngestingUrl] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showUrlInput, setShowUrlInput] = useState(false);
 
@@ -65,6 +67,27 @@ export function ImageUploadField({
     if (file) handleFile(file);
   };
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  const tryIngestUrlAsWebp = async (rawUrl: string) => {
+    const u = rawUrl.trim();
+    if (!u || !/^https?:\/\//i.test(u)) return;
+    if (isAlreadySiteMediaWebp(u, supabaseUrl)) return;
+    setIngestingUrl(true);
+    setError(null);
+    try {
+      const res = await ingestRemoteImageAsWebp(u);
+      if (res.ok) {
+        setPreview(res.url);
+        onChange(res.url);
+      } else {
+        setError(res.error);
+      }
+    } finally {
+      setIngestingUrl(false);
+    }
+  };
+
   const clearImage = () => {
     setPreview("");
     onChange("");
@@ -98,7 +121,11 @@ export function ImageUploadField({
             setPreview(e.target.value);
             onChange(e.target.value);
           }}
+          onBlur={() => {
+            void tryIngestUrlAsWebp(displayed);
+          }}
           placeholder="https://..."
+          disabled={ingestingUrl}
           className="input-base text-xs"
         />
       )}
@@ -125,7 +152,7 @@ export function ImageUploadField({
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
-                disabled={uploading}
+                disabled={uploading || ingestingUrl}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--accent)] text-white text-xs font-medium hover:opacity-90 transition-opacity"
               >
                 {uploading ? (
@@ -149,7 +176,7 @@ export function ImageUploadField({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            disabled={uploading}
+            disabled={uploading || ingestingUrl}
             className="w-full h-36 flex flex-col items-center justify-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
           >
             {uploading ? (
@@ -169,7 +196,7 @@ export function ImageUploadField({
         )}
 
         {/* Upload spinner overlay when replacing */}
-        {uploading && displayed && (
+        {(uploading || ingestingUrl) && displayed && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
             <Loader2 size={24} className="animate-spin text-white" />
           </div>
@@ -182,6 +209,12 @@ export function ImageUploadField({
       )}
 
       {/* Help */}
+      {showUrlInput && !error && (
+        <span className="block text-[11px] text-[var(--text-muted)]">
+          Pasted URLs are fetched and re-saved as WebP when you leave the field.
+        </span>
+      )}
+
       {help && !error && (
         <span className="block text-[11px] text-[var(--text-muted)]">{help}</span>
       )}

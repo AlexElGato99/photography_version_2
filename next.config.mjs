@@ -1,18 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Load sharp from node_modules at runtime (correct native binary per OS).
+  // Avoids webpack bundling issues; pair with `npm rebuild sharp` when switching WSL ↔ Windows.
+  experimental: {
+    serverComponentsExternalPackages: ["sharp"],
+  },
   images: {
     // Allow next/image to optimize from these external hosts
     remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "**.supabase.co" },       // Supabase Storage
-      { protocol: "https", hostname: "**.supabase.in" },
-      { protocol: "https", hostname: "**.pexels.com" },
-      { protocol: "https", hostname: "images.pexels.com" },
-      { protocol: "https", hostname: "**.cloudinary.com" },
-      { protocol: "https", hostname: "**.imgix.net" },
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "localhost" },
+      { protocol: "http", hostname: "127.0.0.1" },
     ],
-    // Prefer WebP, fallback to AVIF for browsers that support it
-    formats: ["image/avif", "image/webp"],
+    // Serve WebP from the optimizer (CMS may point at AVIF/JPEG URLs on any CDN)
+    formats: ["image/webp"],
     // Use sharp for the image optimisation pipeline (already installed)
     loader: "default",
     minimumCacheTTL: 60 * 60 * 24 * 30, // cache for 30 days
