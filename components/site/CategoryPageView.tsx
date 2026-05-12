@@ -6,8 +6,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
-import type { Category, PortfolioItem } from "@/lib/types/site";
+import { CategoryGalleryCarousel } from "@/components/site/CategoryGalleryCarousel";
 import { normalizeTitleHeading, renderTitleHeadingNodes } from "@/lib/site/title-heading";
+import type { Category, PortfolioItem } from "@/lib/types/site";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -24,46 +25,51 @@ export function CategoryPageView({
   useGSAP(
     () => {
       if (!root.current) return;
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
       const sel = gsap.utils.selector(root);
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      gsap.from(sel(".cn-cp-hero-inner"), {
-        opacity: 0,
-        y: 48,
-        duration: 1,
-        ease: "power3.out",
-      });
-
-      sel(".cn-cp-gallery-item").forEach((el, i) => {
-        gsap.from(el, {
+      if (!reduceMotion) {
+        gsap.from(sel(".cn-cp-hero-inner"), {
           opacity: 0,
-          y: 44,
-          duration: 0.72,
-          ease: "power2.out",
-          delay: i * 0.04,
-          scrollTrigger: {
-            trigger: el,
-            start: "top 90%",
-            once: true,
-          },
+          y: 48,
+          duration: 1,
+          ease: "power3.out",
         });
-      });
+      }
 
-      sel(".cn-cp-related-card").forEach((el, i) => {
-        gsap.from(el, {
-          opacity: 0,
+      const galleryHead = sel(".cn-cp-gallery-head")[0];
+
+      if (!reduceMotion && galleryHead) {
+        gsap.from(galleryHead, {
+          autoAlpha: 0,
           y: 32,
-          duration: 0.58,
-          ease: "power2.out",
-          delay: i * 0.06,
+          duration: 0.85,
+          ease: "power3.out",
           scrollTrigger: {
-            trigger: el,
+            trigger: galleryHead,
             start: "top 92%",
             once: true,
           },
         });
-      });
+      }
+
+      if (!reduceMotion) {
+        sel(".cn-cp-related-card").forEach((el, i) => {
+          gsap.from(el, {
+            opacity: 0,
+            y: 32,
+            duration: 0.58,
+            ease: "power2.out",
+            delay: i * 0.06,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 92%",
+              once: true,
+            },
+          });
+        });
+      }
     },
     { scope: root, dependencies: [category.id], revertOnUpdate: true }
   );
@@ -139,29 +145,7 @@ export function CategoryPageView({
               Selected <em>frames</em>
             </h2>
           </div>
-          <div className="cn-cp-gallery">
-            {gallery.map((g, i) => (
-              <figure
-                key={`${g.image_url}-${i}`}
-                className={`cn-cp-gallery-item cn-cp-gal-${(i % 5) + 1}`}
-              >
-                <div className="cn-cp-gallery-img">
-                  {g.image_url ? (
-                    <Image
-                      src={g.image_url}
-                      alt={g.alt || category.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 38vw"
-                      className="object-cover"
-                    />
-                  ) : null}
-                  {g.caption ? (
-                    <figcaption className="cn-cp-gallery-cap">{g.caption}</figcaption>
-                  ) : null}
-                </div>
-              </figure>
-            ))}
-          </div>
+          <CategoryGalleryCarousel items={gallery} categoryName={category.name} />
         </section>
       ) : null}
 

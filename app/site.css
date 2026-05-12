@@ -2737,74 +2737,249 @@
 }
 
 .cn-cp-gallery-section {
-  padding-top: 2rem;
-  padding-bottom: 3rem;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+  background: radial-gradient(
+      ellipse 90% 50% at 50% -10%,
+      rgba(34, 197, 94, 0.1) 0%,
+      transparent 58%
+    ),
+    linear-gradient(180deg, var(--cn-paper, #fff) 0%, var(--cn-linen, #faf8f5) 100%);
 }
 
 .cn-cp-gallery-head {
   text-align: center;
-  margin-bottom: 2.25rem;
+  margin-bottom: 2.5rem;
 }
 
-.cn-cp-gallery {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 0.85rem;
-  max-width: 1200px;
-  margin: 0 auto;
+/* --- Category gallery slider: same motion layout as MOVIE SECTION; colors/type match .cn-site --- */
+.cn-cp-mov-gallery {
+  position: relative;
+  width: 100%;
+  max-width: min(100vw, 1200px);
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--cn-ink);
+  /* Neighbor slides scale/translate outside the box; give air above the block and below before footer */
+  margin-top: clamp(1.75rem, 4.5vw, 3rem);
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
 }
 
-.cn-cp-gallery-item {
-  margin: 0;
-  border-radius: var(--cn-r-lg, 1rem);
+.cn-cp-mov-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
-  box-shadow: var(--cn-shadow-sm);
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.cn-cp-gal-1 {
-  grid-column: span 7;
-  grid-row: span 2;
-  min-height: 420px;
+.cn-cp-mov-showcase {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  border-radius: var(--cn-r-xl);
+  overflow: visible;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  transition: opacity 0.35s var(--cn-ease-out);
 }
 
-.cn-cp-gal-2 {
-  grid-column: span 5;
-  min-height: 200px;
+.cn-cp-mov-showcase:hover {
+  box-shadow: none;
+  transform: none;
 }
 
-.cn-cp-gal-3 {
-  grid-column: span 5;
-  min-height: 200px;
+.cn-cp-mov-showcase--solo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: min(58vh, 520px);
 }
 
-.cn-cp-gal-4 {
-  grid-column: span 4;
-  min-height: 240px;
-}
-
-.cn-cp-gal-5 {
-  grid-column: span 8;
-  min-height: 280px;
-}
-
-.cn-cp-gallery-img {
+.cn-cp-mov-slider-wrap {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 200px;
+  min-height: 480px;
+  overflow: visible;
+  display: flex;
+  align-items: center;
 }
 
-.cn-cp-gallery-cap {
+.cn-cp-mov-slider-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cn-cp-mov-slide {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0.75rem 1rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  left: 50%;
+  top: 50%;
+  width: 50%;
+  max-width: 380px;
+  flex-shrink: 0;
+  margin: 0;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transition:
+    transform 0.28s var(--cn-ease-out),
+    opacity 0.28s ease;
+}
+
+.cn-cp-mov-slide--active {
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.cn-cp-mov-slide--active .cn-cp-mov-card {
+  box-shadow: var(--cn-shadow-lg);
+}
+
+.cn-cp-mov-arr {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--cn-paper);
+  border: 1px solid var(--cn-hair);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: var(--cn-shadow-md);
+  color: var(--cn-ink);
+  transition:
+    background 0.25s var(--cn-ease-out),
+    color 0.25s var(--cn-ease-out),
+    border-color 0.25s var(--cn-ease-out),
+    box-shadow 0.25s var(--cn-ease-out);
+}
+
+.cn-cp-mov-arr:hover {
+  background: var(--cn-accent);
+  color: var(--cn-paper);
+  border-color: var(--cn-accent-d);
+  box-shadow: var(--cn-shadow-glow);
+}
+
+.cn-cp-mov-arr svg {
+  width: 14px;
+  height: 14px;
+}
+
+.cn-cp-mov-arr-l {
+  left: 6px;
+}
+
+.cn-cp-mov-arr-r {
+  right: 6px;
+}
+
+@media (max-width: 768px) {
+  .cn-cp-mov-showcase {
+    min-height: 400px;
+  }
+
+  .cn-cp-mov-slider-wrap {
+    min-height: 400px;
+  }
+
+  .cn-cp-mov-slide {
+    width: 54%;
+  }
+}
+
+@media (max-width: 480px) {
+  .cn-cp-mov-showcase {
+    min-height: 340px;
+  }
+
+  .cn-cp-mov-slider-wrap {
+    min-height: 340px;
+  }
+
+  .cn-cp-mov-slide {
+    width: 58%;
+  }
+}
+
+/* Gallery cards: warm neutrals + display title (aligned with .cn-cp-related-card) */
+.cn-cp-mov-card {
+  margin: 0;
+  width: 100%;
+  border-radius: var(--cn-r-lg);
+  overflow: hidden;
+  background: var(--cn-linen);
+  box-shadow: var(--cn-shadow-sm);
+  border: 1px solid var(--cn-hair);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.cn-cp-mov-poster {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--cn-sand);
+}
+
+.cn-cp-mov-poster img {
+  object-fit: contain;
+  object-position: center;
+}
+
+.cn-cp-mov-info {
+  padding: 0.85rem 1rem 1rem;
+  background: var(--cn-paper);
+  border-radius: 0 0 var(--cn-r-lg) var(--cn-r-lg);
+  border-top: 1px solid var(--cn-hair);
+}
+
+.cn-cp-mov-title {
+  font-family: var(--font-cn-display), "Times New Roman", serif;
+  font-size: clamp(0.98rem, 2.1vw, 1.12rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--cn-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cn-cp-mov-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+}
+
+.cn-cp-mov-type {
+  font-family: var(--font-cn-sans), -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #fff;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.65));
+  color: var(--cn-accent-d);
+}
+
+.cn-cp-mov-card--solo {
+  max-width: min(92vw, 400px);
+  margin: 0 auto;
 }
 
 .cn-cp-related {
@@ -2876,18 +3051,7 @@
   opacity: 0.92;
 }
 
-@media (max-width: 900px) {
-  .cn-cp-gallery {
-    grid-template-columns: 1fr;
-  }
-  .cn-cp-gal-1,
-  .cn-cp-gal-2,
-  .cn-cp-gal-3,
-  .cn-cp-gal-4,
-  .cn-cp-gal-5 {
-    grid-column: span 1;
-    min-height: 260px;
-  }
+@media (max-width: 640px) {
   .cn-cp-related-grid {
     grid-template-columns: 1fr;
   }
