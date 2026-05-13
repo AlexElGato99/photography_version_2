@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { NavItem, SiteGeneral, SiteNavigation } from "@/lib/types/site";
 
@@ -25,9 +26,9 @@ export function SiteNav({
       className={`cn-nav${scrolled ? " scrolled" : ""}`}
       aria-label="Main navigation"
     >
-      <a href="#hero" className="cn-nav-logo">
+      <Link href="/" className="cn-nav-logo">
         <i>{general.brand_italic}</i> <b>{general.brand_bold}</b>
-      </a>
+      </Link>
 
       <ul className="cn-nav-links">
         {navigation.items.map((item: NavItem) => (

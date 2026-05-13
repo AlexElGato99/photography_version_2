@@ -288,6 +288,7 @@
   color: var(--cn-ink);
   letter-spacing: -0.015em;
   transition: color 0.4s;
+  text-decoration: none;
 }
 
 .cn-nav-logo b {
@@ -2337,6 +2338,8 @@
   font-weight: 300;
   margin-bottom: 1.2rem;
   letter-spacing: -0.02em;
+  text-decoration: none;
+  color: inherit;
 }
 
 .cn-footer-logo b {
@@ -2789,7 +2792,6 @@
 .cn-cp-mov-showcase {
   position: relative;
   width: 100%;
-  min-height: 480px;
   border-radius: var(--cn-r-xl);
   overflow: visible;
   border: none;
@@ -2807,34 +2809,33 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: min(58vh, 520px);
+  padding: 0.5rem 0;
 }
 
 .cn-cp-mov-slider-wrap {
   position: relative;
   width: 100%;
-  height: 100%;
-  min-height: 480px;
   overflow: visible;
   display: flex;
   align-items: center;
+  padding: 0.75rem 0 1.25rem;
 }
 
 .cn-cp-mov-slider-track {
   position: relative;
   width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 260px;
 }
 
 .cn-cp-mov-slide {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 50%;
-  max-width: 380px;
+  width: max-content;
+  max-width: min(92vw, 420px);
   flex-shrink: 0;
   margin: 0;
   z-index: 1;
@@ -2899,37 +2900,24 @@
 }
 
 @media (max-width: 768px) {
-  .cn-cp-mov-showcase {
-    min-height: 400px;
-  }
-
-  .cn-cp-mov-slider-wrap {
-    min-height: 400px;
-  }
-
   .cn-cp-mov-slide {
-    width: 54%;
+    max-width: min(94vw, 400px);
   }
 }
 
 @media (max-width: 480px) {
-  .cn-cp-mov-showcase {
-    min-height: 340px;
-  }
-
-  .cn-cp-mov-slider-wrap {
-    min-height: 340px;
-  }
-
   .cn-cp-mov-slide {
-    width: 58%;
+    max-width: min(96vw, 380px);
   }
 }
 
-/* Gallery cards: warm neutrals + display title (aligned with .cn-cp-related-card) */
+/* Gallery cards: width/height follow image (capped); info strip matches card width */
 .cn-cp-mov-card {
+  display: inline-block;
+  width: max-content;
+  max-width: min(92vw, 420px);
   margin: 0;
-  width: 100%;
+  vertical-align: top;
   border-radius: var(--cn-r-lg);
   overflow: hidden;
   background: var(--cn-linen);
@@ -2941,18 +2929,26 @@
 
 .cn-cp-mov-poster {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  aspect-ratio: 2 / 3;
-  overflow: hidden;
   background: var(--cn-sand);
 }
 
-.cn-cp-mov-poster img {
+.cn-cp-mov-poster-img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(70vh, 560px);
   object-fit: contain;
-  object-position: center;
 }
 
 .cn-cp-mov-info {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 0.85rem 1rem 1rem;
   background: var(--cn-paper);
   border-radius: 0 0 var(--cn-r-lg) var(--cn-r-lg);
@@ -2988,7 +2984,7 @@
 }
 
 .cn-cp-mov-card--solo {
-  max-width: min(92vw, 400px);
+  max-width: min(92vw, 480px);
   margin: 0 auto;
 }
 

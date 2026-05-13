@@ -14,7 +14,11 @@ function slideKey(item: CategoryGalleryCarouselItem, index: number) {
   return `${item.image_url}-${index}`;
 }
 
-/** Movie-style card: poster frame + info strip (`mov-card`-like layout). */
+/** Default layout ratio before `onLoadingComplete` (replaced by intrinsic size). */
+const POSTER_PLACEHOLDER_W = 1600;
+const POSTER_PLACEHOLDER_H = 1067;
+
+/** Movie-style card: poster + info; poster height/width follow image aspect (capped in CSS). */
 function CategoryMovieStyleCard({
   item,
   categoryName,
@@ -31,16 +35,26 @@ function CategoryMovieStyleCard({
     (item.alt && item.alt.trim()) ||
     categoryName;
 
+  const [intrinsic, setIntrinsic] = useState<{ w: number; h: number } | null>(null);
+  const w = intrinsic?.w ?? POSTER_PLACEHOLDER_W;
+  const h = intrinsic?.h ?? POSTER_PLACEHOLDER_H;
+
   return (
     <figure className={`cn-cp-mov-card${className ? ` ${className}` : ""}`}>
       <div className="cn-cp-mov-poster">
         <Image
           src={item.image_url}
           alt={(item.alt && item.alt.trim()) || categoryName}
-          fill
+          width={w}
+          height={h}
           sizes={sizes}
-          className="object-contain"
+          className="cn-cp-mov-poster-img"
           draggable={false}
+          onLoadingComplete={(img) => {
+            if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+              setIntrinsic({ w: img.naturalWidth, h: img.naturalHeight });
+            }
+          }}
         />
       </div>
       <figcaption className="cn-cp-mov-info">
@@ -125,6 +139,28 @@ export function CategoryGalleryCarousel({
   const [cur, setCur] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
   const busyRef = useRef(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [trackMinH, setTrackMinH] = useState(260);
+
+  const gallerySig = items.map((g) => g.image_url).join("|");
+
+  useLayoutEffect(() => {
+    if (n < 2) return;
+    const track = trackRef.current;
+    if (!track) return;
+    const measure = () => {
+      const list = track.querySelectorAll(".cn-cp-mov-slide .cn-cp-mov-card");
+      let maxH = 0;
+      list.forEach((node) => {
+        maxH = Math.max(maxH, (node as HTMLElement).offsetHeight);
+      });
+      if (maxH > 0) setTrackMinH(maxH + 56);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    track.querySelectorAll(".cn-cp-mov-slide .cn-cp-mov-card").forEach((el) => ro.observe(el));
+    return () => ro.disconnect();
+  }, [n, cur, gallerySig]);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -193,7 +229,11 @@ export function CategoryGalleryCarousel({
           <button type="button" className="cn-cp-mov-arr cn-cp-mov-arr-r" aria-label="Next" onClick={() => step(1)}>
             {ARR_NEXT}
           </button>
-          <div className="cn-cp-mov-slider-track">
+          <div
+            ref={trackRef}
+            className="cn-cp-mov-slider-track"
+            style={{ minHeight: trackMinH }}
+          >
             {items.map((g, i) => {
               const { active, style } = slideMotion(i, cur, n);
               return (

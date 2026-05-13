@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { SiteFooter, SiteGeneral } from "@/lib/types/site";
 
 export function Footer({
@@ -11,9 +12,9 @@ export function Footer({
     <footer className="cn-footer">
       <div className="cn-footer-grid" data-stagger-cards>
         <div className="cn-footer-brand">
-          <div className="cn-footer-logo">
+          <Link href="/" className="cn-footer-logo">
             <i>{general.brand_italic}</i> <b>{general.brand_bold}</b>
-          </div>
+          </Link>
           <p>{footer.brand_text}</p>
         </div>
         {footer.columns.map((col) => (
