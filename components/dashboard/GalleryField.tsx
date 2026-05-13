@@ -1,28 +1,77 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { useRef, useState, useTransition } from "react";
+import { Plus, Upload, Loader2 } from "lucide-react";
 import { ImageUploadField } from "@/components/dashboard/ImageUploadField";
+import { uploadImage } from "@/app/dashboard/actions";
 import type { CategoryGalleryImage } from "@/lib/types/site";
 
 export function GalleryField({
   label,
   value,
   onChange,
+  help,
 }: {
   label: string;
   value: CategoryGalleryImage[];
   onChange: (v: CategoryGalleryImage[]) => void;
+  help?: string;
 }) {
   const items = Array.isArray(value) ? value : [];
+  const itemsRef = useRef(items);
+  itemsRef.current = items;
+  const multiInputRef = useRef<HTMLInputElement>(null);
+  const [multiError, setMultiError] = useState<string | null>(null);
+  const [multiProgress, setMultiProgress] = useState<string | null>(null);
+  const [isMultiUploading, startMultiUpload] = useTransition();
 
   const update = (i: number, patch: Partial<CategoryGalleryImage>) => {
     onChange(items.map((x, j) => (j === i ? { ...x, ...patch } : x)));
   };
 
-  const add = () =>
+  const addBlank = () =>
     onChange([...items, { image_url: "", alt: "", caption: "" }]);
 
   const remove = (i: number) => onChange(items.filter((_, j) => j !== i));
+
+  const handleMultiFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+    const imageFiles = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (!imageFiles.length) {
+      setMultiError("Please select one or more image files.");
+      e.target.value = "";
+      return;
+    }
+    setMultiError(null);
+    startMultiUpload(async () => {
+      const appended: CategoryGalleryImage[] = [];
+      let failed = 0;
+      for (let i = 0; i < imageFiles.length; i++) {
+        setMultiProgress(`Uploading ${i + 1} / ${imageFiles.length}…`);
+        const fd = new FormData();
+        fd.append("file", imageFiles[i]);
+        const res = await uploadImage(fd);
+        if (res.ok) {
+          appended.push({ image_url: res.url, alt: "", caption: "" });
+        } else {
+          failed += 1;
+        }
+      }
+      setMultiProgress(null);
+      if (appended.length) {
+        onChange([...itemsRef.current, ...appended]);
+      }
+      if (failed > 0) {
+        setMultiError(
+          failed === imageFiles.length
+            ? "Upload failed for all selected files."
+            : `${failed} file(s) failed to upload; others were added.`
+        );
+      }
+      e.target.value = "";
+    });
+  };
 
   return (
     <div className="flex flex-col gap-3 sm:col-span-2 min-w-0">
@@ -30,14 +79,45 @@ export function GalleryField({
         <span className="min-w-0 flex-1 pr-2 text-xs font-medium text-[var(--text-secondary)]">
           {label}
         </span>
-        <button
-          type="button"
-          onClick={add}
-          className="btn-secondary text-xs shrink-0"
-        >
-          <Plus size={14} /> Add gallery image
-        </button>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <input
+            ref={multiInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={handleMultiFileChange}
+          />
+          <button
+            type="button"
+            disabled={isMultiUploading}
+            onClick={() => multiInputRef.current?.click()}
+            className="btn-secondary text-xs inline-flex items-center gap-1.5"
+          >
+            {isMultiUploading ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <Upload size={14} />
+            )}
+            Add gallery image
+          </button>
+          <button
+            type="button"
+            disabled={isMultiUploading}
+            onClick={addBlank}
+            className="text-[11px] font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:underline"
+          >
+            <Plus size={12} className="inline align-text-bottom mr-0.5" />
+            Blank slide
+          </button>
+        </div>
       </div>
+      {multiProgress && (
+        <p className="text-[11px] text-[var(--text-muted)]">{multiProgress}</p>
+      )}
+      {multiError && (
+        <p className="text-[11px] text-red-500">{multiError}</p>
+      )}
       {items.map((item, i) => (
         <div
           key={i}
@@ -81,6 +161,9 @@ export function GalleryField({
           </button>
         </div>
       ))}
+      {help && (
+        <p className="text-[11px] text-[var(--text-muted)] pt-1">{help}</p>
+      )}
     </div>
   );
 }

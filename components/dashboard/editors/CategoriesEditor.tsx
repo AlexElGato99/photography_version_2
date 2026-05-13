@@ -137,7 +137,7 @@ export function CategoriesEditor({
                   type: "richtext",
                   rows: 6,
                 },
-                { key: "gallery_images", label: "Page · gallery", type: "gallery" },
+                { key: "gallery_images", label: "Page · gallery", type: "gallery", help: "Use “Add gallery image” to upload one or many files at once, or “Blank slide” for a row you fill manually." },
                 {
                   key: "show_portfolio_related",
                   label: "Show portfolio projects that match this category name",

@@ -56,6 +56,7 @@ export type ColFieldDef =
       key: string;
       label: string;
       type: "gallery";
+      help?: string;
     };
 
 interface CollectionEditorProps<T extends { id?: string }> {
@@ -383,11 +384,14 @@ function ColField({
   }
   if (field.type === "gallery") {
     return (
-      <GalleryField
-        label={field.label}
-        value={(value as CategoryGalleryImage[]) ?? []}
-        onChange={onChange}
-      />
+      <div className={cls}>
+        <GalleryField
+          label={field.label}
+          value={(value as CategoryGalleryImage[]) ?? []}
+          onChange={onChange}
+          help={field.help}
+        />
+      </div>
     );
   }
   if (field.type === "section_heading") {
