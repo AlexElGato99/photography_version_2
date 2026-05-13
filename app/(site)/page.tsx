@@ -8,7 +8,6 @@ import { Portfolio } from "@/components/site/Portfolio";
 import { Stats } from "@/components/site/Stats";
 import { Process } from "@/components/site/Process";
 import { Team } from "@/components/site/Team";
-import { Pricing } from "@/components/site/Pricing";
 import { Testimonials } from "@/components/site/Testimonials";
 import { Instagram } from "@/components/site/Instagram";
 import { FaqSection } from "@/components/site/Faq";
@@ -34,8 +33,6 @@ import {
   getNavigation,
   getPortfolioItems,
   getPortfolioMeta,
-  getPricing,
-  getPricingMeta,
   getProcess,
   getServices,
   getServicesMeta,
@@ -67,8 +64,6 @@ export default async function HomePage() {
     processData,
     teamMeta,
     team,
-    pricingMeta,
-    pricing,
     testimonialsMeta,
     testimonials,
     instagramMeta,
@@ -94,8 +89,6 @@ export default async function HomePage() {
     getProcess(),
     getTeamMeta(),
     getTeam(),
-    getPricingMeta(),
-    getPricing(),
     getTestimonialsMeta(),
     getTestimonials(),
     getInstagramMeta(),
@@ -119,7 +112,6 @@ export default async function HomePage() {
       <Stats stats={stats} />
       <Process process={processData} />
       <Team meta={teamMeta} members={team} />
-      <Pricing meta={pricingMeta} tiers={pricing} />
       <Testimonials meta={testimonialsMeta} items={testimonials} />
       <Instagram meta={instagramMeta} posts={instagramPosts} />
       <FaqSection meta={faqMeta} items={faqs} />

@@ -184,20 +184,6 @@ export type TeamMember = {
   linkedin_url: string | null;
 };
 
-export type PricingTier = {
-  id: string;
-  position: number;
-  name: string;
-  currency: string;
-  amount: string;
-  period: string;
-  badge: string | null;
-  features: string[];
-  cta_label: string;
-  cta_href: string;
-  featured: boolean;
-};
-
 export type Testimonial = {
   id: string;
   position: number;

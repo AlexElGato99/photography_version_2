@@ -48,7 +48,6 @@ create table if not exists public.site_navigation (
     {"label":"Services","href":"#services"},
     {"label":"Categories","href":"#categories"},
     {"label":"Portfolio","href":"#portfolio"},
-    {"label":"Pricing","href":"#pricing"},
     {"label":"Contact","href":"#contact"}
   ]'::jsonb,
   updated_at timestamptz not null default now(),
@@ -63,8 +62,7 @@ create table if not exists public.site_footer (
     {"title":"Studio","links":[
       {"label":"About us","href":"#about"},
       {"label":"Services","href":"#services"},
-      {"label":"Portfolio","href":"#portfolio"},
-      {"label":"Pricing","href":"#pricing"}
+      {"label":"Portfolio","href":"#portfolio"}
     ]},
     {"title":"Categories","links":[
       {"label":"Wedding","href":"#"},
@@ -199,15 +197,6 @@ create table if not exists public.section_team_meta (
   constraint section_team_meta_singleton check (id = 1)
 );
 
-create table if not exists public.section_pricing_meta (
-  id smallint primary key default 1,
-  eyebrow text not null default 'Investment',
-  title_heading jsonb not null default '{"v":1,"line1":"Transparent ","mid":"","em":"pricing","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
-  lead text not null default 'Tailored packages designed for every story. Custom quotes available for unique projects.',
-  updated_at timestamptz not null default now(),
-  constraint section_pricing_meta_singleton check (id = 1)
-);
-
 create table if not exists public.section_testimonials_meta (
   id smallint primary key default 1,
   eyebrow text not null default 'Kind words',
@@ -325,22 +314,6 @@ create table if not exists public.team_members (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.pricing_tiers (
-  id uuid primary key default gen_random_uuid(),
-  position integer not null default 0,
-  name text not null,
-  currency text not null default '€',
-  amount text not null,
-  period text not null default 'From / per session',
-  badge text,
-  features jsonb not null default '[]'::jsonb,
-  cta_label text not null default 'Get started',
-  cta_href text not null default '#contact',
-  featured boolean not null default false,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
-);
-
 create table if not exists public.testimonials (
   id uuid primary key default gen_random_uuid(),
   position integer not null default 0,
@@ -394,10 +367,10 @@ begin
     'site_general','site_seo','site_navigation','site_footer','site_marquee',
     'section_hero','section_about','section_services_meta','section_categories_meta',
     'section_portfolio_meta','section_stats','section_process','section_team_meta',
-    'section_pricing_meta','section_testimonials_meta','section_instagram',
+    'section_testimonials_meta','section_instagram',
     'section_faq_meta','section_contact',
     'hero_slides','services','categories','portfolio_items','team_members',
-    'pricing_tiers','testimonials','faqs','instagram_posts'
+    'testimonials','faqs','instagram_posts'
   ]) loop
     execute format('drop trigger if exists trg_updated_at on public.%I', t);
     execute format(
@@ -422,7 +395,6 @@ insert into public.section_portfolio_meta (id) values (1) on conflict (id) do no
 insert into public.section_stats (id) values (1) on conflict (id) do nothing;
 insert into public.section_process (id) values (1) on conflict (id) do nothing;
 insert into public.section_team_meta (id) values (1) on conflict (id) do nothing;
-insert into public.section_pricing_meta (id) values (1) on conflict (id) do nothing;
 insert into public.section_testimonials_meta (id) values (1) on conflict (id) do nothing;
 insert into public.section_instagram (id) values (1) on conflict (id) do nothing;
 insert into public.section_faq_meta (id) values (1) on conflict (id) do nothing;
@@ -439,10 +411,10 @@ begin
     'site_general','site_seo','site_navigation','site_footer','site_marquee',
     'section_hero','section_about','section_services_meta','section_categories_meta',
     'section_portfolio_meta','section_stats','section_process','section_team_meta',
-    'section_pricing_meta','section_testimonials_meta','section_instagram',
+    'section_testimonials_meta','section_instagram',
     'section_faq_meta','section_contact',
     'hero_slides','services','categories','portfolio_items','team_members',
-    'pricing_tiers','testimonials','faqs','instagram_posts'
+    'testimonials','faqs','instagram_posts'
   ]) loop
     execute format('alter table public.%I enable row level security', t);
     execute format('drop policy if exists "public read" on public.%I', t);

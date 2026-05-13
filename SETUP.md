@@ -57,12 +57,12 @@ This creates:
   `site_general`, `site_seo`, `site_navigation`, `site_footer`, `site_marquee`,
   `section_hero`, `section_about`, `section_services_meta`, `section_categories_meta`,
   `section_portfolio_meta`, `section_stats`, `section_process`, `section_team_meta`,
-  `section_pricing_meta`, `section_testimonials_meta`, `section_instagram`,
+  `section_testimonials_meta`, `section_instagram`,
   `section_faq_meta`, `section_contact`.
 
 - **Collection tables** (many rows, sortable):
   `hero_slides`, `services`, `categories`, `portfolio_items`, `team_members`,
-  `pricing_tiers`, `testimonials`, `faqs`, `instagram_posts`.
+  `testimonials`, `faqs`, `instagram_posts`.
 
 - **`contact_submissions`** — populated by the public contact form.
 
@@ -103,11 +103,10 @@ The dashboard sidebar has two new groups: **Frontend — Site** and **Frontend �
 | `/dashboard/sections/about`         | About block (images, quote, body, signature)       |
 | `/dashboard/sections/services`      | Heading **+** service cards (icon SVG, copy)       |
 | `/dashboard/sections/categories`    | Heading **+** category tiles                       |
-| `/dashboard/sections/portfolio`     | Heading, filter tabs **+** portfolio items         |
+| `/dashboard/sections/portfolio`     | Heading, filter tabs (tags) **+** portfolio items  |
 | `/dashboard/sections/stats`         | The four counters under "Numbers that tell a story"|
 | `/dashboard/sections/process`       | The 4-step Discovery → Concept → Production → Delivery |
 | `/dashboard/sections/team`          | Heading **+** team members (photos, socials)       |
-| `/dashboard/sections/pricing`       | Heading **+** pricing tiers (features as JSON)     |
 | `/dashboard/sections/testimonials`  | Heading **+** quote cards                          |
 | `/dashboard/sections/instagram`     | Handle, lead **+** Instagram post grid             |
 | `/dashboard/sections/faq`           | Heading **+** Q&A pairs                            |
@@ -123,13 +122,13 @@ Each editor is a typed form (text / textarea / HTML / URL / number / switch / JS
 app/
   (site)/                # Public photography site (URL = /)
     layout.tsx           # Wraps in .cn-site + loads SEO from Supabase
-    page.tsx             # Composes all 14 sections
+    page.tsx             # Composes all homepage sections
     actions.ts           # Contact form submission server action
   dashboard/             # Admin (URL = /dashboard/*)
     layout.tsx           # Persistent sidebar + topbar
     actions.ts           # Generic upsert / replaceCollection actions
     site/...             # 5 site-settings editors
-    sections/...         # 13 section editors
+    sections/...         # Section editors (hero, about, services, …)
   site.css               # All photography styles, scoped to .cn-site
   globals.css            # Dashboard styles (unchanged)
   layout.tsx             # Root: loads Cormorant Garamond + Inter Tight
@@ -178,7 +177,6 @@ When you edit something in the dashboard:
 ## Adding more content
 
 - **Reorder items in a collection**: use the up/down chevrons in the editor. Position is set automatically on save.
-- **Add a new pricing tier**: open `/dashboard/sections/pricing` → Tiers tab → **Add item** → fill in fields (features is a JSON array of strings).
 - **Change SEO**: `/dashboard/site/seo` → edit title/description.
 - **Change the marquee**: `/dashboard/site/marquee` → edit the JSON array of strings.
 

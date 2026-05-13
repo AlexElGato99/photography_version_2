@@ -44,10 +44,24 @@ export function normalizePortfolioMetaRow(
   row: Record<string, unknown>,
   fallback: SectionPortfolioMeta
 ): SectionPortfolioMeta {
-  const { title_html: _t, ...rest } = row;
+  const { title_html: _t, tabs: rawTabs, ...rest } = row;
+  let tabs = fallback.tabs;
+  if (Array.isArray(rawTabs)) {
+    tabs = rawTabs.map((x) => String(x)).filter((s) => s.length > 0);
+  } else if (typeof rawTabs === "string" && rawTabs.trim()) {
+    try {
+      const parsed = JSON.parse(rawTabs) as unknown;
+      if (Array.isArray(parsed)) {
+        tabs = parsed.map((x) => String(x)).filter((s) => s.length > 0);
+      }
+    } catch {
+      /* keep fallback */
+    }
+  }
   return {
     ...fallback,
     ...rest,
+    tabs,
     title_heading: sectionHeadingFromRow(row),
   } as SectionPortfolioMeta;
 }

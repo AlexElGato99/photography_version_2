@@ -7,10 +7,14 @@ import { isAlreadySiteMediaWebp } from "@/lib/images/remote-url";
 
 interface ImageUploadFieldProps {
   label: string;
-  value: string;           // current URL (from DB)
+  value: string; // current URL (from DB)
   onChange: (url: string) => void;
   help?: string;
   className?: string;
+  /** Smaller preview (e.g. dense gallery grid). */
+  compact?: boolean;
+  /** Preview scaling: `contain` shows the full image; `cover` fills the box (default). */
+  previewFit?: "cover" | "contain";
 }
 
 export function ImageUploadField({
@@ -19,6 +23,8 @@ export function ImageUploadField({
   onChange,
   help,
   className = "",
+  compact = false,
+  previewFit = "cover",
 }: ImageUploadFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string>(value ?? "");
@@ -94,6 +100,9 @@ export function ImageUploadField({
     if (inputRef.current) inputRef.current.value = "";
   };
 
+  const previewBox = compact ? "h-20 min-h-[5rem]" : "h-36 min-h-[9rem]";
+  const dropMin = compact ? "min-h-[5rem]" : "min-h-[9rem]";
+
   return (
     <div className={`block min-w-0 space-y-1.5 ${className}`}>
       {/* Label row */}
@@ -134,21 +143,30 @@ export function ImageUploadField({
       <div
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
-        className="relative group rounded-xl border-2 border-dashed border-[var(--border)] hover:border-[var(--accent)] transition-colors overflow-hidden"
-        style={{ minHeight: "9rem" }}
+        className={`relative group rounded-xl border-2 border-dashed border-[var(--border)] hover:border-[var(--accent)] transition-colors overflow-hidden ${dropMin}`}
       >
         {/* Preview */}
         {displayed ? (
-          <div className="relative w-full h-36">
+          <div
+            className={`relative w-full ${previewBox} ${
+              previewFit === "contain"
+                ? "flex items-center justify-center bg-[var(--bg-tertiary)]"
+                : ""
+            }`}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={displayed}
               alt="preview"
-              className="w-full h-full object-cover"
+              className={
+                previewFit === "contain"
+                  ? "relative z-0 max-h-full max-w-full object-contain"
+                  : "relative z-0 h-full w-full object-cover"
+              }
               onError={() => setPreview("")}
             />
             {/* Overlay on hover */}
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+            <div className="absolute inset-0 z-10 flex items-center justify-center gap-2 bg-black/40 opacity-0 pointer-events-none transition-opacity group-hover:opacity-100 group-hover:pointer-events-auto">
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
@@ -177,7 +195,9 @@ export function ImageUploadField({
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading || ingestingUrl}
-            className="w-full h-36 flex flex-col items-center justify-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+            className={`w-full flex flex-col items-center justify-center gap-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors ${
+              compact ? "min-h-[5rem] py-3" : "min-h-[9rem]"
+            }`}
           >
             {uploading ? (
               <>

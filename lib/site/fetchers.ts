@@ -16,8 +16,6 @@ import {
   defaultNavigation,
   defaultPortfolio,
   defaultPortfolioMeta,
-  defaultPricing,
-  defaultPricingMeta,
   defaultProcess,
   defaultSeo,
   defaultServices,
@@ -46,7 +44,6 @@ import type {
   HeroSlide,
   InstagramPost,
   PortfolioItem,
-  PricingTier,
   Service,
   SiteFooter,
   SiteGeneral,
@@ -153,12 +150,6 @@ export const getTeamMeta = () =>
     return data ? normalizeSectionMetaRow(data as Record<string, unknown>, defaultTeamMeta) : null;
   }, defaultTeamMeta);
 
-export const getPricingMeta = () =>
-  safeFetch(async (sb) => {
-    const { data } = await sb.from("section_pricing_meta").select("*").eq("id", 1).single();
-    return data ? normalizeSectionMetaRow(data as Record<string, unknown>, defaultPricingMeta) : null;
-  }, defaultPricingMeta);
-
 export const getTestimonialsMeta = () =>
   safeFetch(async (sb) => {
     const { data } = await sb.from("section_testimonials_meta").select("*").eq("id", 1).single();
@@ -233,7 +224,6 @@ export async function getCategoryBySlug(slug: string): Promise<Category | null> 
 
 export const getPortfolioItems = () => fetchCollection<PortfolioItem>("portfolio_items", defaultPortfolio);
 export const getTeam = () => fetchCollection<TeamMember>("team_members", defaultTeam);
-export const getPricing = () => fetchCollection<PricingTier>("pricing_tiers", defaultPricing);
 export const getTestimonials = () => fetchCollection<Testimonial>("testimonials", defaultTestimonials);
 export const getFaqs = () => fetchCollection<Faq>("faqs", defaultFaqs);
 export const getInstagramPosts = () => fetchCollection<InstagramPost>("instagram_posts", defaultInstagramPosts);

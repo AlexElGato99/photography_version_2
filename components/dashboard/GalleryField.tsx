@@ -118,49 +118,53 @@ export function GalleryField({
       {multiError && (
         <p className="text-[11px] text-red-500">{multiError}</p>
       )}
-      {items.map((item, i) => (
-        <div
-          key={i}
-          className="rounded-xl border border-[var(--border)] p-4 space-y-3 bg-[var(--bg-primary)]"
-        >
-          <ImageUploadField
-            label={`Image ${i + 1}`}
-            value={item.image_url}
-            onChange={(url) => update(i, { image_url: url })}
-          />
-          <label className="block space-y-1">
-            <span className="text-[10px] font-medium text-[var(--text-muted)]">
-              Alt text
-            </span>
-            <input
-              type="text"
-              value={item.alt ?? ""}
-              onChange={(e) => update(i, { alt: e.target.value })}
-              className="input-base text-xs"
-              placeholder="Describe the image for accessibility"
-            />
-          </label>
-          <label className="block space-y-1">
-            <span className="text-[10px] font-medium text-[var(--text-muted)]">
-              Caption (optional)
-            </span>
-            <input
-              type="text"
-              value={item.caption ?? ""}
-              onChange={(e) => update(i, { caption: e.target.value })}
-              className="input-base text-xs"
-              placeholder="Short label shown on hover"
-            />
-          </label>
-          <button
-            type="button"
-            onClick={() => remove(i)}
-            className="text-[11px] font-medium text-red-600 hover:underline"
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 min-w-0">
+        {items.map((item, i) => (
+          <div
+            key={i}
+            className="rounded-xl border border-[var(--border)] p-3 space-y-2 bg-[var(--bg-primary)] min-w-0"
           >
-            Remove this slide
-          </button>
-        </div>
-      ))}
+            <ImageUploadField
+              label={`Image ${i + 1}`}
+              value={item.image_url}
+              onChange={(url) => update(i, { image_url: url })}
+              compact
+              previewFit="contain"
+            />
+            <label className="block space-y-1">
+              <span className="text-[10px] font-medium text-[var(--text-muted)]">
+                Alt text
+              </span>
+              <input
+                type="text"
+                value={item.alt ?? ""}
+                onChange={(e) => update(i, { alt: e.target.value })}
+                className="input-base text-xs"
+                placeholder="Describe the image for accessibility"
+              />
+            </label>
+            <label className="block space-y-1">
+              <span className="text-[10px] font-medium text-[var(--text-muted)]">
+                Caption (optional)
+              </span>
+              <input
+                type="text"
+                value={item.caption ?? ""}
+                onChange={(e) => update(i, { caption: e.target.value })}
+                className="input-base text-xs"
+                placeholder="Short label shown on hover"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() => remove(i)}
+              className="text-[11px] font-medium text-red-600 hover:underline"
+            >
+              Remove this slide
+            </button>
+          </div>
+        ))}
+      </div>
       {help && (
         <p className="text-[11px] text-[var(--text-muted)] pt-1">{help}</p>
       )}

@@ -7,17 +7,16 @@ export default async function ProcessPage() {
     <SectionForm
       table="section_process"
       title="Process Section"
-      description="The four-step Discovery → Concept → Production → Delivery flow."
+      description="How-we-work headline and timeline steps — edit each step with plain text; no JSON or HTML required."
       initialData={data}
       fields={[
         { key: "eyebrow", label: "Eyebrow", type: "text" },
         { key: "title_heading", label: "Section title", type: "section_heading" },
         {
           key: "steps",
-          label: "Steps",
-          type: "json",
-          help: 'Array of { "num": "01", "title": "...", "text": "..." }.',
-          rows: 12,
+          label: "Process steps",
+          type: "process_steps",
+          help: "Each step shows a badge (e.g. 01), a title, and a short paragraph on the public site. Reorder with the arrows.",
         },
       ]}
     />

@@ -31,7 +31,7 @@ ON CONFLICT (id) DO UPDATE SET
 -- SITE NAVIGATION
 INSERT INTO public.site_navigation (id, cta_label, cta_href, items)
 VALUES (1, 'Book a session', '#contact',
-  '[{"label":"About","href":"#about"},{"label":"Services","href":"#services"},{"label":"Categories","href":"#categories"},{"label":"Portfolio","href":"#portfolio"},{"label":"Pricing","href":"#pricing"},{"label":"Contact","href":"#contact"}]'::jsonb)
+  '[{"label":"About","href":"#about"},{"label":"Services","href":"#services"},{"label":"Categories","href":"#categories"},{"label":"Portfolio","href":"#portfolio"},{"label":"Contact","href":"#contact"}]'::jsonb)
 ON CONFLICT (id) DO UPDATE SET
   cta_label = EXCLUDED.cta_label, cta_href = EXCLUDED.cta_href,
   items = EXCLUDED.items, updated_at = now();
@@ -41,7 +41,7 @@ INSERT INTO public.site_footer (id, brand_text, copyright, columns, legal)
 VALUES (1,
   'A premium photography agency based in Murcia, Spain. Crafting timeless visual stories since 2018.',
   '© 2026 Cristina Navarro Studio · All rights reserved',
-  '[{"title":"Studio","links":[{"label":"About us","href":"#about"},{"label":"Services","href":"#services"},{"label":"Portfolio","href":"#portfolio"},{"label":"Pricing","href":"#pricing"}]},{"title":"Categories","links":[{"label":"Wedding","href":"#"},{"label":"Fashion","href":"#"},{"label":"Commercial","href":"#"},{"label":"Lifestyle","href":"#"}]},{"title":"Contact","links":[{"label":"hola@cristinanavarro.studio","href":"mailto:hola@cristinanavarro.studio"},{"label":"+34 600 000 000","href":"tel:+34600000000"},{"label":"Calle de la Luna 14, Murcia","href":"#"},{"label":"Instagram","href":"#"}]}]'::jsonb,
+  '[{"title":"Studio","links":[{"label":"About us","href":"#about"},{"label":"Services","href":"#services"},{"label":"Portfolio","href":"#portfolio"}]},{"title":"Categories","links":[{"label":"Wedding","href":"#"},{"label":"Fashion","href":"#"},{"label":"Commercial","href":"#"},{"label":"Lifestyle","href":"#"}]},{"title":"Contact","links":[{"label":"hola@cristinanavarro.studio","href":"mailto:hola@cristinanavarro.studio"},{"label":"+34 600 000 000","href":"tel:+34600000000"},{"label":"Calle de la Luna 14, Murcia","href":"#"},{"label":"Instagram","href":"#"}]}]'::jsonb,
   '[{"label":"Privacy","href":"#"},{"label":"Terms","href":"#"},{"label":"Cookies","href":"#"}]'::jsonb)
 ON CONFLICT (id) DO UPDATE SET
   brand_text = EXCLUDED.brand_text, copyright = EXCLUDED.copyright,
@@ -126,12 +126,6 @@ ON CONFLICT (id) DO UPDATE SET
 INSERT INTO public.section_team_meta (id, eyebrow, title_heading, lead)
 VALUES (1, 'The team', '{"v":1,"line1":"Meet the","mid":"","em":"creators","tail":"","breakAfterLine1":true,"line2":""}'::jsonb,
   'A small, passionate team united by craft and an unwavering pursuit of beautiful imagery.')
-ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, lead=EXCLUDED.lead, updated_at=now();
-
--- SECTION PRICING META
-INSERT INTO public.section_pricing_meta (id, eyebrow, title_heading, lead)
-VALUES (1, 'Investment', '{"v":1,"line1":"Transparent ","mid":"","em":"pricing","tail":"","breakAfterLine1":false,"line2":""}'::jsonb,
-  'Tailored packages designed for every story. Custom quotes available for unique projects.')
 ON CONFLICT (id) DO UPDATE SET eyebrow=EXCLUDED.eyebrow, title_heading=EXCLUDED.title_heading, lead=EXCLUDED.lead, updated_at=now();
 
 -- SECTION TESTIMONIALS META
@@ -241,19 +235,6 @@ INSERT INTO public.team_members (position, name, role, image_url, instagram_url,
 (1,'Marco Velez',     'Senior Photographer',        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80&auto=format&fit=crop','#','#'),
 (2,'Lucia Reyes',     'Art Director',               'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&q=80&auto=format&fit=crop','#','#'),
 (3,'Diego Ortiz',     'Post-Production Lead',       'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&q=80&auto=format&fit=crop','#','#');
-
--- PRICING TIERS
-DELETE FROM public.pricing_tiers;
-INSERT INTO public.pricing_tiers (position, name, currency, amount, period, badge, features, cta_label, cta_href, featured) VALUES
-(0,'Essential','€','890','From / per session', null,
-  '["Up to 2 hours of coverage","40+ edited high-res photos","Online private gallery","Color grading included","Delivery in 14 days"]'::jsonb,
-  'Get started','#contact',false),
-(1,'Signature','€','1,890','From / per project','Most popular',
-  '["Full day coverage (8h)","120+ edited photos","Mood board + planning call","Premium color grading","Print release license","Delivery in 10 days"]'::jsonb,
-  'Book signature','#contact',true),
-(2,'Atelier','€','3,490','From / custom project', null,
-  '["Multi-day shoots","250+ edited photos","Full creative direction","Location scouting","Team of 2-3 photographers","Commercial usage rights"]'::jsonb,
-  'Request quote','#contact',false);
 
 -- TESTIMONIALS
 DELETE FROM public.testimonials;

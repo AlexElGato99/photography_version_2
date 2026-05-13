@@ -46,9 +46,17 @@ alter table public.section_team_meta add column if not exists title_heading json
 update public.section_team_meta set title_heading = '{"v":1,"line1":"Meet the","mid":"","em":"creators","tail":"","breakAfterLine1":true,"line2":""}'::jsonb where id = 1;
 alter table public.section_team_meta drop column if exists title_html;
 
-alter table public.section_pricing_meta add column if not exists title_heading jsonb not null default '{}'::jsonb;
-update public.section_pricing_meta set title_heading = '{"v":1,"line1":"Transparent ","mid":"","em":"pricing","tail":"","breakAfterLine1":false,"line2":""}'::jsonb where id = 1;
-alter table public.section_pricing_meta drop column if exists title_html;
+do $$
+begin
+  if exists (
+    select 1 from information_schema.tables
+    where table_schema = 'public' and table_name = 'section_pricing_meta'
+  ) then
+    alter table public.section_pricing_meta add column if not exists title_heading jsonb not null default '{}'::jsonb;
+    update public.section_pricing_meta set title_heading = '{"v":1,"line1":"Transparent ","mid":"","em":"pricing","tail":"","breakAfterLine1":false,"line2":""}'::jsonb where id = 1;
+    alter table public.section_pricing_meta drop column if exists title_html;
+  end if;
+end $$;
 
 alter table public.section_testimonials_meta add column if not exists title_heading jsonb not null default '{}'::jsonb;
 update public.section_testimonials_meta set title_heading = '{"v":1,"line1":"Trusted by ","mid":"","em":"brands","tail":"","breakAfterLine1":false,"line2":"and couples worldwide"}'::jsonb where id = 1;

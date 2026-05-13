@@ -38,7 +38,6 @@ const TITLES: Record<string, string> = {
   "/dashboard/sections/stats": "Stats",
   "/dashboard/sections/process": "Process",
   "/dashboard/sections/team": "Team",
-  "/dashboard/sections/pricing": "Pricing Tiers",
   "/dashboard/sections/testimonials": "Testimonials",
   "/dashboard/sections/instagram": "Instagram",
   "/dashboard/sections/faq": "FAQ",
@@ -48,7 +47,6 @@ const TITLES: Record<string, string> = {
   "/dashboard/orders": "Orders",
   "/dashboard/notifications": "Submissions",
   "/dashboard/live-chat": "Live Chat",
-  "/dashboard/pricing": "Subscription Plans",
   "/dashboard/settings": "Settings",
 };
 

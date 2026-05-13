@@ -7,18 +7,17 @@ export default async function StatsPage() {
     <SectionForm
       table="section_stats"
       title="Stats Section"
-      description="The four animated counters."
+      description="Eyebrow, title, lead, and stat counters — edit each number, suffix, and label without JSON."
       initialData={data}
       fields={[
         { key: "eyebrow", label: "Eyebrow", type: "text" },
         { key: "title_heading", label: "Section title", type: "section_heading" },
-        { key: "lead", label: "Lead paragraph", type: "textarea" },
+        { key: "lead", label: "Lead paragraph", type: "textarea", rows: 4 },
         {
           key: "items",
-          label: "Stat items",
-          type: "json",
-          help: 'Array of { "count": 240, "suffix": "+", "label": "..." }.',
-          rows: 10,
+          label: "Counter blocks",
+          type: "stat_items",
+          help: "Each row is one stat on the site: the animated number, an optional suffix (e.g. +, k, yrs), and the line of text underneath.",
         },
       ]}
     />

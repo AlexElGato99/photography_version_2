@@ -9,6 +9,8 @@ import { SectionHeadingField } from "@/components/dashboard/SectionHeadingField"
 import { TagsField } from "@/components/dashboard/TagsField";
 import { NavItemsField } from "@/components/dashboard/NavItemsField";
 import { FooterColumnsField } from "@/components/dashboard/FooterColumnsField";
+import { StatsItemsField } from "@/components/dashboard/StatsItemsField";
+import { ProcessStepsField } from "@/components/dashboard/ProcessStepsField";
 
 export type FieldDef =
   | {
@@ -68,6 +70,18 @@ export type FieldDef =
       key: string;
       label: string;
       type: "footercolumns";
+    }
+  | {
+      key: string;
+      label: string;
+      type: "stat_items";
+      help?: string;
+    }
+  | {
+      key: string;
+      label: string;
+      type: "process_steps";
+      help?: string;
     };
 
 interface SectionFormProps<T extends Record<string, unknown>> {
@@ -211,6 +225,28 @@ function Field({
         label={field.label}
         value={(value as { title: string; links: { label: string; href: string }[] }[]) ?? []}
         onChange={onChange}
+      />
+    );
+  }
+
+  if (field.type === "stat_items") {
+    return (
+      <StatsItemsField
+        label={field.label}
+        value={value}
+        onChange={onChange}
+        help={field.help}
+      />
+    );
+  }
+
+  if (field.type === "process_steps") {
+    return (
+      <ProcessStepsField
+        label={field.label}
+        value={value}
+        onChange={onChange}
+        help={field.help}
       />
     );
   }

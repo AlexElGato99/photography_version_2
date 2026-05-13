@@ -29,9 +29,9 @@ export function PortfolioEditor({
                 {
                   key: "tabs",
                   label: "Filter tabs",
-                  type: "json",
-                  help: 'Array of strings, e.g. ["All","Wedding","Fashion"].',
-                  rows: 6,
+                  type: "tags",
+                  placeholder: "e.g. All",
+                  help: 'One label per chip (left to right). Usually start with "All" if you use it as the catch-all. Each portfolio item\'s "Tab (filter)" must match one of these labels.',
                 },
               ]}
             />
