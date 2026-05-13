@@ -105,9 +105,14 @@ const ARR_NEXT = (
   </svg>
 );
 
+/** Interval between automatic slides (ms). */
+const AUTO_ADVANCE_MS = 900;
+/** Must stay in sync with `.cn-cp-mov-slide` transition duration in `app/site.css` (~0.23s). */
+const STEP_DEBOUNCE_MS = 230;
+
 /**
- * Laravel Movie Section slider: stacked absolute cards, prev/next peek, arrows,
- * auto-advance (paused on hover); `prefers-reduced-motion` disables auto only.
+ * Movie Section–style slider: stacked cards, arrows, auto-advance (runs while hovering).
+ * `prefers-reduced-motion` disables auto-advance only.
  */
 export function CategoryGalleryCarousel({
   items,
@@ -119,7 +124,6 @@ export function CategoryGalleryCarousel({
   const n = items.length;
   const [cur, setCur] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
-  const [hoverPause, setHoverPause] = useState(false);
   const busyRef = useRef(false);
 
   useEffect(() => {
@@ -137,23 +141,23 @@ export function CategoryGalleryCarousel({
       setCur((c) => ((c + delta) % n + n) % n);
       window.setTimeout(() => {
         busyRef.current = false;
-      }, 280);
+      }, STEP_DEBOUNCE_MS);
     },
     [n]
   );
 
   useEffect(() => {
-    if (n < 2 || reduceMotion || hoverPause) return;
+    if (n < 2 || reduceMotion) return;
     const id = window.setInterval(() => {
       if (busyRef.current) return;
       busyRef.current = true;
       setCur((c) => ((c + 1) % n + n) % n);
       window.setTimeout(() => {
         busyRef.current = false;
-      }, 280);
-    }, 2200);
+      }, STEP_DEBOUNCE_MS);
+    }, AUTO_ADVANCE_MS);
     return () => window.clearInterval(id);
-  }, [n, reduceMotion, hoverPause]);
+  }, [n, reduceMotion]);
 
   if (n === 0) return null;
 
@@ -176,17 +180,13 @@ export function CategoryGalleryCarousel({
 
   const srSummary = reduceMotion
     ? `Image gallery of ${n} photographs. Use arrow buttons for previous and next.`
-    : `Image gallery of ${n} photographs. Slides advance automatically; hover to pause. Use arrow buttons for previous and next.`;
+    : `Image gallery of ${n} photographs. Slides advance automatically. Use arrow buttons for previous and next.`;
 
   return (
     <div className="cn-cp-mov-gallery">
       <p className="cn-cp-mov-sr">{srSummary}</p>
       <div className="cn-cp-mov-showcase">
-        <div
-          className="cn-cp-mov-slider-wrap"
-          onMouseEnter={reduceMotion ? undefined : () => setHoverPause(true)}
-          onMouseLeave={reduceMotion ? undefined : () => setHoverPause(false)}
-        >
+        <div className="cn-cp-mov-slider-wrap">
           <button type="button" className="cn-cp-mov-arr cn-cp-mov-arr-l" aria-label="Previous" onClick={() => step(-1)}>
             {ARR_PREV}
           </button>

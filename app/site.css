@@ -2752,6 +2752,15 @@
   margin-bottom: 2.5rem;
 }
 
+/* Extra air under the gallery title — slider cards translate above center and read as overlapping */
+.cn-cp-gallery-section > .cn-cp-gallery-head {
+  margin-bottom: clamp(4rem, 9vw, 6.5rem);
+}
+
+.cn-cp-gallery-section .cn-cp-mov-gallery {
+  margin-top: clamp(3.25rem, 7vw, 5.25rem);
+}
+
 /* --- Category gallery slider: same motion layout as MOVIE SECTION; colors/type match .cn-site --- */
 .cn-cp-mov-gallery {
   position: relative;
@@ -2831,9 +2840,10 @@
   z-index: 1;
   pointer-events: none;
   will-change: transform, opacity;
+  /* Duration ~ `STEP_DEBOUNCE_MS` in CategoryGalleryCarousel.tsx */
   transition:
-    transform 0.28s var(--cn-ease-out),
-    opacity 0.28s ease;
+    transform 0.23s var(--cn-ease-out),
+    opacity 0.23s ease;
 }
 
 .cn-cp-mov-slide--active {
@@ -3049,6 +3059,10 @@
   font-weight: 400;
   margin-bottom: 1.25rem;
   opacity: 0.92;
+}
+
+.cn-cp-cta .cn-btn-light {
+  color: var(--cn-ink);
 }
 
 @media (max-width: 640px) {
