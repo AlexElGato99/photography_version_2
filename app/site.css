@@ -5,33 +5,34 @@
    ============================================================ */
 
 :root {
-  --cn-white: #FFFFFF;
-  --cn-paper: #FAFAF7;
-  --cn-bone: #F5F2EC;
-  --cn-linen: #EFEAE0;
-  --cn-sand: #E5DDD0;
-  --cn-stone: #C9BFB0;
-  --cn-ink: #1A1A1A;
-  --cn-ink-2: #2D2A26;
-  --cn-slate: #5C5851;
-  --cn-muted: #8A857C;
-  --cn-hair: #E5E0D6;
+  /* Mist & Ink — cool mist gray + soft black + warm copper */
+  --cn-white: #ffffff;
+  --cn-paper: #f4f6f5;
+  --cn-bone: #ecefee;
+  --cn-linen: #e0e4e3;
+  --cn-sand: #d2d7d5;
+  --cn-stone: #a8afad;
+  --cn-ink: #1f2222;
+  --cn-ink-2: #2e3232;
+  --cn-slate: #5f6863;
+  --cn-muted: #8b928f;
+  --cn-hair: #dfe3e1;
 
-  --cn-accent: #B89968;
-  --cn-accent-l: #D4B98A;
-  --cn-accent-d: #8E7548;
+  --cn-accent: #c77952;
+  --cn-accent-l: #e8b894;
+  --cn-accent-d: #9d5b3a;
 
-  --cn-grad-cream: linear-gradient(180deg, #FAFAF7 0%, #F5F2EC 100%);
-  --cn-grad-warm: linear-gradient(135deg, #FAFAF7 0%, #EFEAE0 50%, #E5DDD0 100%);
-  --cn-grad-accent: linear-gradient(135deg, #D4B98A 0%, #B89968 50%, #8E7548 100%);
-  --cn-grad-radial: radial-gradient(circle at 50% 0%, rgba(184, 153, 104, 0.08) 0%, transparent 60%);
+  --cn-grad-cream: linear-gradient(180deg, #f4f6f5 0%, #ecefee 100%);
+  --cn-grad-warm: linear-gradient(135deg, #f4f6f5 0%, #e0e4e3 50%, #d2d7d5 100%);
+  --cn-grad-accent: linear-gradient(135deg, #e8b894 0%, #c77952 50%, #9d5b3a 100%);
+  --cn-grad-radial: radial-gradient(circle at 50% 0%, rgba(199, 121, 82, 0.08) 0%, transparent 60%);
 
-  --cn-shadow-xs: 0 1px 2px rgba(26, 26, 26, 0.04);
-  --cn-shadow-sm: 0 2px 8px rgba(26, 26, 26, 0.04), 0 1px 2px rgba(26, 26, 26, 0.04);
-  --cn-shadow-md: 0 8px 24px rgba(26, 26, 26, 0.06), 0 2px 6px rgba(26, 26, 26, 0.04);
-  --cn-shadow-lg: 0 24px 60px rgba(26, 26, 26, 0.08), 0 6px 14px rgba(26, 26, 26, 0.04);
-  --cn-shadow-xl: 0 40px 90px rgba(26, 26, 26, 0.12), 0 12px 24px rgba(26, 26, 26, 0.06);
-  --cn-shadow-glow: 0 20px 60px rgba(184, 153, 104, 0.25);
+  --cn-shadow-xs: 0 1px 2px rgba(31, 34, 34, 0.04);
+  --cn-shadow-sm: 0 2px 8px rgba(31, 34, 34, 0.04), 0 1px 2px rgba(31, 34, 34, 0.04);
+  --cn-shadow-md: 0 8px 24px rgba(31, 34, 34, 0.06), 0 2px 6px rgba(31, 34, 34, 0.04);
+  --cn-shadow-lg: 0 24px 60px rgba(31, 34, 34, 0.09), 0 6px 14px rgba(31, 34, 34, 0.04);
+  --cn-shadow-xl: 0 40px 90px rgba(31, 34, 34, 0.13), 0 12px 24px rgba(31, 34, 34, 0.06);
+  --cn-shadow-glow: 0 20px 60px rgba(199, 121, 82, 0.28);
 
   --cn-r-sm: 8px;
   --cn-r-md: 14px;
@@ -264,10 +265,10 @@
 
 .cn-nav.scrolled {
   height: 68px;
-  background: rgba(250, 250, 247, 0.78);
+  background: rgba(244, 246, 245, 0.78);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-bottom: 1px solid rgba(229, 224, 214, 0.5);
+  border-bottom: 1px solid rgba(223, 227, 225, 0.55);
 }
 
 .cn-nav:not(.scrolled) .cn-nav-logo,
@@ -493,10 +494,10 @@
 @keyframes cnPulseDot {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(212, 185, 138, 0.7);
+    box-shadow: 0 0 0 0 rgba(232, 184, 148, 0.7);
   }
   50% {
-    box-shadow: 0 0 0 10px rgba(212, 185, 138, 0);
+    box-shadow: 0 0 0 10px rgba(232, 184, 148, 0);
   }
 }
 
@@ -1044,7 +1045,7 @@
 .cn-service-card:hover {
   transform: translateY(-8px);
   box-shadow: var(--cn-shadow-xl);
-  border-color: rgba(184, 153, 104, 0.2);
+  border-color: rgba(199, 121, 82, 0.22);
 }
 
 .cn-service-card:hover::before {
@@ -1816,7 +1817,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(250, 250, 247, 0.95);
+  background: rgba(244, 246, 245, 0.95);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -1883,7 +1884,7 @@
 .cn-test-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--cn-shadow-lg);
-  border-color: rgba(184, 153, 104, 0.3);
+  border-color: rgba(199, 121, 82, 0.3);
 }
 
 .cn-test-stars {
@@ -1982,7 +1983,7 @@
 .cn-insta-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(26, 26, 26, 0.6);
+  background: rgba(31, 34, 34, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2178,7 +2179,7 @@
   outline: none;
   background: var(--cn-paper);
   border-color: var(--cn-accent);
-  box-shadow: 0 0 0 4px rgba(184, 153, 104, 0.1);
+  box-shadow: 0 0 0 4px rgba(199, 121, 82, 0.12);
 }
 
 .cn-form-field textarea {
@@ -2256,9 +2257,9 @@
 }
 
 .cn-form-status.ok {
-  background: rgba(184, 153, 104, 0.12);
+  background: rgba(199, 121, 82, 0.12);
   color: var(--cn-accent-d);
-  border: 1px solid rgba(184, 153, 104, 0.3);
+  border: 1px solid rgba(199, 121, 82, 0.3);
 }
 
 .cn-form-status.err {
@@ -2679,9 +2680,9 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(26, 26, 26, 0.35) 0%,
-    rgba(26, 26, 26, 0.55) 45%,
-    rgba(26, 26, 26, 0.88) 100%
+    rgba(31, 34, 34, 0.35) 0%,
+    rgba(31, 34, 34, 0.55) 45%,
+    rgba(31, 34, 34, 0.88) 100%
   );
 }
 
@@ -2790,7 +2791,7 @@
       rgba(34, 197, 94, 0.1) 0%,
       transparent 58%
     ),
-    linear-gradient(180deg, var(--cn-paper, #fff) 0%, var(--cn-linen, #faf8f5) 100%);
+    linear-gradient(180deg, var(--cn-paper, #fff) 0%, var(--cn-linen, #e0e4e3) 100%);
 }
 
 .cn-cp-gallery-head {
@@ -3032,7 +3033,7 @@
 }
 
 .cn-cp-related {
-  background: var(--cn-linen, #faf8f5);
+  background: var(--cn-linen, #e0e4e3);
   padding-top: 3rem;
   padding-bottom: 3.5rem;
 }
