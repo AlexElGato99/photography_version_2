@@ -12,7 +12,11 @@ export function Stats({ stats }: { stats: SectionStats }) {
         <p className="cn-section-lead">{stats.lead}</p>
       </div>
 
-      <div className="cn-stats-grid" data-stagger-cards>
+      <div
+        className="cn-stats-grid"
+        data-stagger-cards
+        style={{ "--cn-stats-n": stats.items.length } as React.CSSProperties}
+      >
         {stats.items.map((item, i) => {
           const numericCount = parseInt(String(item.count).replace(/\D/g, ""), 10);
           const canCount = !Number.isNaN(numericCount) && numericCount > 0;

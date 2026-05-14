@@ -71,15 +71,7 @@ export function SiteNav({
           onClick={() => setMobileOpen(false)}
         >
           {navigation.items.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              style={{
-                fontFamily: "var(--font-cn-display), serif",
-                fontSize: "1.8rem",
-                color: "var(--cn-ink)",
-              }}
-            >
+            <a key={item.label} href={item.href} className="cn-nav-mobile-link">
               {item.label}
             </a>
           ))}
