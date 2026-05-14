@@ -68,6 +68,8 @@ interface CollectionEditorProps<T extends { id?: string }> {
   blank: () => Omit<T, "id">;
   transformRow?: (row: T) => Record<string, unknown>;
   validateRows?: (rows: T[]) => string | null;
+  /** When set, non-empty return value replaces the collapsed-row label (default: `Item #n`). */
+  getRowLabel?: (row: T, index: number) => string | null | undefined;
   /** When true, saving zero rows is allowed (delete all). Default false to avoid wiping collections by mistake. */
   allowEmptySave?: boolean;
 }
@@ -81,6 +83,7 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
   blank,
   transformRow,
   validateRows,
+  getRowLabel,
   allowEmptySave = false,
 }: CollectionEditorProps<T>) {
   const router = useRouter();
@@ -187,6 +190,11 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
         )}
         {rows.map((row, idx) => {
           const isOpen = expanded.has(idx);
+          const fromLabel = getRowLabel?.(row, idx);
+          const rowSummary =
+            typeof fromLabel === "string" && fromLabel.trim() !== ""
+              ? fromLabel.trim()
+              : `Item #${idx + 1}`;
           return (
             <div key={idx} className="card min-w-0 p-5 space-y-4">
               <div className="flex min-w-0 flex-wrap items-center justify-between gap-x-2 gap-y-2">
@@ -206,7 +214,7 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
                     {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                   </IconBtn>
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)] truncate">
-                    Item #{idx + 1}
+                    {rowSummary}
                   </span>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">

@@ -39,6 +39,12 @@ export function CategoriesEditor({
               table="categories"
               title="Categories · Cards & detail pages"
               initialRows={categories}
+              getRowLabel={(row) => {
+                const n = String(row.name ?? "").trim();
+                if (!n) return null;
+                if (n.toLowerCase() === "new category") return null;
+                return n;
+              }}
               blank={() => ({
                 position: 0,
                 tag: "Featured",
