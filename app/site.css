@@ -1123,7 +1123,7 @@
 
 /* CATEGORIES — pinned scroll-tell (desktop) + fallback grid */
 .cn-categories-scroll {
-  --cn-cat-stage-max: min(1320px, 100%);
+  --cn-cat-stage-max: min(1380px, 100%);
   background: var(--cn-paper);
 }
 
@@ -1203,7 +1203,7 @@
   max-width: var(--cn-cat-stage-max);
   margin-inline: auto;
   display: grid;
-  grid-template-columns: minmax(280px, 1fr) minmax(340px, 1.14fr);
+  grid-template-columns: minmax(300px, 1fr) minmax(352px, 1.14fr);
   gap: clamp(2.25rem, 4.5vw, 4.75rem);
   align-items: center;
   min-height: 0;
@@ -1333,9 +1333,9 @@
   width: 100%;
   max-width: 100%;
   justify-self: stretch;
-  aspect-ratio: 4 / 5;
-  min-height: min(520px, 62vh);
-  max-height: min(820px, 78vh);
+  aspect-ratio: 8 / 9;
+  min-height: min(320px, 36vh);
+  max-height: min(520px, 52vh);
   border-radius: var(--cn-r-lg);
   box-shadow: var(--cn-shadow-lg);
   overflow: hidden;
@@ -1441,8 +1441,8 @@
   .cn-cat-scroll-stage {
     width: min(100%, 520px);
     max-width: 520px;
-    min-height: min(480px, 50vh);
-    max-height: 58vh;
+    min-height: min(280px, 34vh);
+    max-height: min(440px, 46vh);
   }
 }
 
