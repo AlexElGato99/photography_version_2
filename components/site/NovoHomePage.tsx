@@ -24,6 +24,7 @@ import type {
 } from "@/lib/types/site";
 import { FooterGallerySliders } from "@/components/site/FooterGallerySliders";
 import { NovoCategoriesPinnedShowcase } from "@/components/site/NovoCategoriesPinnedShowcase";
+import { NovoPortfolioPinnedShowcase } from "@/components/site/NovoPortfolioPinnedShowcase";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { slugify } from "@/lib/slug";
 
@@ -70,7 +71,6 @@ export function NovoHomePage({
   const [menuOpen, setMenuOpen] = useState(false);
   const [navScrolled, setNavScrolled] = useState(false);
   const [activeFilter, setActiveFilter] = useState(portfolioMeta.tabs[0] ?? "All");
-  const [visibleMasonryIds, setVisibleMasonryIds] = useState<string[]>([]);
   const categoryTabs = useMemo(() => {
     const tags = new Set<string>();
     categories.forEach((c) => {
@@ -163,14 +163,6 @@ export function NovoHomePage({
       cancelled = true;
     };
   }, [statsVisible, statSlice]);
-
-  useEffect(() => {
-    setVisibleMasonryIds([]);
-    const id = window.setTimeout(() => {
-      setVisibleMasonryIds(filteredPortfolio.map((p) => p.id));
-    }, 120);
-    return () => window.clearTimeout(id);
-  }, [filteredPortfolio]);
 
   const instaUrls = useMemo(
     () => instagramPosts.filter((p) => p.image_url).map((p) => p),
@@ -492,37 +484,11 @@ export function NovoHomePage({
             </div>
           ) : null}
 
-          <div className="cn-novo-portfolio__grid">
-            {filteredPortfolio.length > 0 ? (
-              <div className="cn-novo-masonry cn-novo-masonry--portfolio">
-                {filteredPortfolio.map((item, idx) => (
-                  <article
-                    key={item.id}
-                    className={`cn-novo-masonry-item${
-                      visibleMasonryIds.includes(item.id) ? " cn-novo-masonry-item--visible" : ""
-                    }`}
-                    style={{ transitionDelay: `${idx * 35}ms` }}
-                  >
-                    <a href={item.link_href || "#"} className="cn-novo-masonry-link">
-                      {item.image_url ? (
-                        <img src={item.image_url} alt={item.title} loading="lazy" decoding="async" />
-                      ) : (
-                        <span className="cn-novo-masonry-placeholder" aria-hidden />
-                      )}
-                      <span className="cn-novo-masonry-overlay">
-                        <span className="cn-novo-masonry-title">{item.title}</span>
-                        {item.tab?.trim() && activeFilter === "All" ? (
-                          <span className="cn-novo-masonry-tag">{item.tab.trim()}</span>
-                        ) : null}
-                      </span>
-                    </a>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <p className="cn-novo-portfolio__empty">No work in this category yet.</p>
-            )}
-          </div>
+          {filteredPortfolio.length > 0 ? (
+            <NovoPortfolioPinnedShowcase items={filteredPortfolio} />
+          ) : (
+            <p className="cn-novo-portfolio__empty">No work in this category yet.</p>
+          )}
 
           <div className="cn-novo-portfolio__actions">
             <a href="/#portfolio" className="cn-novo-btn-gold">

@@ -702,7 +702,17 @@
 }
 
 .cn-novo-home .cn-novo-portfolio--work {
+  background: var(--nv-light);
   border-top: 1px solid var(--nv-border);
+}
+
+/* Portfolio showcase — same treatment as categories, image column first (left). */
+.cn-novo-home .cn-novo-cat-showcase-root.cn-novo-cat-showcase-root--portfolio .cn-novo-cat-showcase-stage {
+  grid-template-columns: minmax(300px, 1.08fr) minmax(260px, 1fr);
+}
+
+.cn-novo-home .cn-novo-portfolio--work .cn-novo-cat-showcase-root {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
 }
 
 .cn-novo-home .cn-novo-section-intro {
@@ -1131,6 +1141,10 @@
     grid-template-columns: 1fr;
     max-width: 560px;
     gap: 2rem;
+  }
+
+  .cn-novo-home .cn-novo-cat-showcase-root.cn-novo-cat-showcase-root--portfolio .cn-novo-cat-showcase-copy {
+    order: -1;
   }
 
   .cn-novo-home .cn-novo-cat-showcase-viewport {

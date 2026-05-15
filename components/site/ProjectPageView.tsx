@@ -8,20 +8,13 @@ import Link from "next/link";
 import { useRef } from "react";
 import { CategoryGalleryCarousel } from "@/components/site/CategoryGalleryCarousel";
 import { normalizeTitleHeading, renderTitleHeadingNodes } from "@/lib/site/title-heading";
-import { portfolioPublicHref } from "@/lib/site/portfolio-helpers";
-import type { Category, PortfolioItem } from "@/lib/types/site";
+import type { PortfolioItem } from "@/lib/types/site";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export function CategoryPageView({
-  category,
-  relatedPortfolio,
-}: {
-  category: Category;
-  relatedPortfolio: PortfolioItem[];
-}) {
+export function ProjectPageView({ project }: { project: PortfolioItem }) {
   const root = useRef<HTMLDivElement>(null);
-  const gallery = (category.gallery_images ?? []).filter((g) => g.image_url?.trim());
+  const gallery = (project.gallery_images ?? []).filter((g) => g.image_url?.trim());
 
   useGSAP(
     () => {
@@ -54,28 +47,11 @@ export function CategoryPageView({
           },
         });
       }
-
-      if (!reduceMotion) {
-        sel(".cn-cp-related-card").forEach((el, i) => {
-          gsap.from(el, {
-            opacity: 0,
-            y: 32,
-            duration: 0.58,
-            ease: "power2.out",
-            delay: i * 0.06,
-            scrollTrigger: {
-              trigger: el,
-              start: "top 92%",
-              once: true,
-            },
-          });
-        });
-      }
     },
-    { scope: root, dependencies: [category.id], revertOnUpdate: true }
+    { scope: root, dependencies: [project.id], revertOnUpdate: true }
   );
 
-  const heading = normalizeTitleHeading(category.page_heading);
+  const heading = normalizeTitleHeading(project.page_heading);
   const hasCustomTitle =
     heading.line1 ||
     heading.mid ||
@@ -88,10 +64,10 @@ export function CategoryPageView({
     <article ref={root} className="cn-category-page">
       <header className="cn-cp-hero">
         <div className="cn-cp-hero-media">
-          {category.image_url ? (
+          {project.image_url ? (
             <Image
-              src={category.image_url}
-              alt={category.name}
+              src={project.image_url}
+              alt={project.title}
               fill
               className="object-cover"
               sizes="100vw"
@@ -106,34 +82,34 @@ export function CategoryPageView({
             <span className="cn-cp-bc-sep" aria-hidden>
               /
             </span>
-            <Link href="/#categories">Categories</Link>
+            <Link href="/#portfolio">Portfolio</Link>
             <span className="cn-cp-bc-sep" aria-hidden>
               /
             </span>
-            <span>{category.name}</span>
+            <span>{project.title}</span>
           </nav>
-          {category.page_eyebrow ? (
-            <div className="cn-section-eyebrow cn-cp-eyebrow">{category.page_eyebrow}</div>
+          {project.page_eyebrow?.trim() ? (
+            <div className="cn-section-eyebrow cn-cp-eyebrow">{project.page_eyebrow.trim()}</div>
           ) : null}
           <h1 className="cn-cp-title">
             {hasCustomTitle ? (
               renderTitleHeadingNodes(heading)
             ) : (
-              <span className="cn-cp-title-fallback">{category.name}</span>
+              <span className="cn-cp-title-fallback">{project.title}</span>
             )}
           </h1>
-          {category.page_lead ? <p className="cn-cp-lead">{category.page_lead}</p> : null}
+          {project.page_lead?.trim() ? <p className="cn-cp-lead">{project.page_lead.trim()}</p> : null}
           <div className="cn-cp-meta">
-            <span className="cn-cp-badge">{category.tag}</span>
+            <span className="cn-cp-badge">{project.tag}</span>
           </div>
         </div>
       </header>
 
-      {category.page_body_html?.trim() ? (
-        <section className="cn-section cn-cp-bodywrap" aria-label="Introduction">
+      {project.page_body_html?.trim() ? (
+        <section className="cn-section cn-cp-bodywrap" aria-label="Project details">
           <div
             className="cn-cp-body cn-cp-reveal"
-            dangerouslySetInnerHTML={{ __html: category.page_body_html }}
+            dangerouslySetInnerHTML={{ __html: project.page_body_html }}
           />
         </section>
       ) : null}
@@ -146,39 +122,7 @@ export function CategoryPageView({
               Selected <em>frames</em>
             </h2>
           </div>
-          <CategoryGalleryCarousel items={gallery} categoryName={category.name} />
-        </section>
-      ) : null}
-
-      {relatedPortfolio.length > 0 ? (
-        <section className="cn-section cn-cp-related" aria-label="Related work">
-          <div className="cn-cp-gallery-head">
-            <div className="cn-section-eyebrow">Portfolio</div>
-            <h2 className="cn-section-title">
-              Related <em>projects</em>
-            </h2>
-          </div>
-          <div className="cn-cp-related-grid">
-            {relatedPortfolio.map((p) => (
-              <a key={p.id} href={portfolioPublicHref(p)} className="cn-cp-related-card">
-                <div className="cn-cp-related-img">
-                  {p.image_url ? (
-                    <Image
-                      src={p.image_url}
-                      alt={p.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover"
-                    />
-                  ) : null}
-                </div>
-                <div className="cn-cp-related-meta">
-                  <small>{p.tag}</small>
-                  <h3>{p.title}</h3>
-                </div>
-              </a>
-            ))}
-          </div>
+          <CategoryGalleryCarousel items={gallery} categoryName={project.title} />
         </section>
       ) : null}
 

@@ -14,7 +14,7 @@ export function CategoriesEditor({
 }: {
   meta: SectionMeta;
   categories: Category[];
-  /** Shown in form headings (e.g. "Explore by category" on the dedicated dashboard route). */
+  /** Shown in form headings (e.g. "Category" on the dedicated dashboard route). */
   sectionTitle?: string;
 }) {
   return (

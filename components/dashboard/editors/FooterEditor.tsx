@@ -146,7 +146,7 @@ export function FooterEditor({
                 fields={[
                   {
                     key: "use_category_pages",
-                    label: "List categories from Explore by category",
+                    label: "List categories from Category",
                     type: "switch",
                     help: "When on, the Pages column shows your published categories. When off, use custom links below.",
                   },

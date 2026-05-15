@@ -28,6 +28,10 @@ import {
   defaultTestimonialsMeta,
 } from "@/lib/site/defaults";
 import { normalizeCategoryRow } from "@/lib/site/category-helpers";
+import {
+  findPortfolioBySlug,
+  normalizePortfolioRow,
+} from "@/lib/site/portfolio-helpers";
 import { normalizeFooterRow } from "@/lib/site/normalize-footer";
 import {
   normalizeAboutRow,
@@ -244,7 +248,37 @@ export async function getCategoryBySlug(slug: string): Promise<Category | null> 
   }
 }
 
-export const getPortfolioItems = () => fetchCollection<PortfolioItem>("portfolio_items", defaultPortfolio);
+export const getPortfolioItems = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb
+      .from("portfolio_items")
+      .select("*")
+      .order("position", { ascending: true });
+    if (!data) return null;
+    return (data as Record<string, unknown>[]).map((row) => normalizePortfolioRow(row));
+  }, defaultPortfolio);
+
+export async function getPortfolioBySlug(slug: string): Promise<PortfolioItem | null> {
+  const normalized = slug.trim().toLowerCase();
+  if (!normalized) return null;
+  if (!hasSupabase()) {
+    return findPortfolioBySlug(defaultPortfolio, normalized);
+  }
+  try {
+    const sb = createSupabaseServerClient();
+    const { data, error } = await sb
+      .from("portfolio_items")
+      .select("*")
+      .order("position", { ascending: true });
+    if (error || !data) {
+      return findPortfolioBySlug(defaultPortfolio, normalized);
+    }
+    const items = (data as Record<string, unknown>[]).map((row) => normalizePortfolioRow(row));
+    return findPortfolioBySlug(items, normalized) ?? findPortfolioBySlug(defaultPortfolio, normalized);
+  } catch {
+    return findPortfolioBySlug(defaultPortfolio, normalized);
+  }
+}
 export const getTeam = () => fetchCollection<TeamMember>("team_members", defaultTeam);
 export const getTestimonials = () => fetchCollection<Testimonial>("testimonials", defaultTestimonials);
 export const getFaqs = () => fetchCollection<Faq>("faqs", defaultFaqs);

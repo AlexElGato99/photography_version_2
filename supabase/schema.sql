@@ -316,9 +316,21 @@ create table if not exists public.portfolio_items (
   image_url text not null,
   tab text not null default 'All',
   link_href text not null default '#',
+  slug text not null default '',
+  page_eyebrow text not null default '',
+  page_heading jsonb not null default '{}'::jsonb,
+  page_meta_title text not null default '',
+  page_meta_description text not null default '',
+  page_lead text not null default '',
+  page_body_html text not null default '',
+  gallery_images jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+create unique index if not exists portfolio_items_slug_unique
+  on public.portfolio_items (lower(trim(slug)))
+  where length(trim(slug)) > 0;
 
 create table if not exists public.team_members (
   id uuid primary key default gen_random_uuid(),

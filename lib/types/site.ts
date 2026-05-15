@@ -188,6 +188,16 @@ export type PortfolioItem = {
   image_url: string;
   tab: string;
   link_href: string;
+  /** Optional URL segment; when empty, derived from `title` for `/project/[slug]`. */
+  slug: string;
+  page_eyebrow: string;
+  page_heading: TitleHeadingV1;
+  page_meta_title: string;
+  page_meta_description: string;
+  /** Shown under the title on the homepage portfolio slider and on the project page. */
+  page_lead: string;
+  page_body_html: string;
+  gallery_images: CategoryGalleryImage[];
 };
 
 export type TeamMember = {
