@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { getSeo } from "@/lib/site/fetchers";
-import "../site.css";
-import "../novo-home.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getSeo();

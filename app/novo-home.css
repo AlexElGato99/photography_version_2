@@ -168,6 +168,8 @@
   overflow: hidden;
   background: var(--nv-dark);
   isolation: isolate;
+  /* Same horizontal inset as hero copy (see .cn-novo-hero-content, .cn-novo-slide-dots, .cn-novo-slide-social) */
+  --cn-novo-hero-gutter: clamp(1.5rem, 5vw, 3.75rem);
 }
 
 /* Extra scrims above slides, below copy / dots / social (z-index 3+) */
@@ -229,7 +231,7 @@
   left: 0;
   right: 0;
   z-index: 3;
-  padding: 0 clamp(1.5rem, 5vw, 3.75rem);
+  padding: 0 var(--cn-novo-hero-gutter);
 }
 
 .cn-novo-home .cn-novo-slide-tag {
@@ -303,7 +305,7 @@
 .cn-novo-home .cn-novo-slide-dots {
   position: absolute;
   bottom: 2.5rem;
-  left: clamp(1.5rem, 5vw, 3.75rem);
+  left: var(--cn-novo-hero-gutter);
   z-index: 3;
   display: flex;
   gap: 1rem;
@@ -368,9 +370,11 @@
   right: 0;
   left: auto;
   top: 50%;
-  padding-right: max(0.65rem, env(safe-area-inset-right, 0px));
+  /* Mirror hero text inset on the right + safe area on notched devices */
+  padding-right: calc(var(--cn-novo-hero-gutter) + env(safe-area-inset-right, 0px));
   transform: translateY(-50%) rotate(-90deg);
-  transform-origin: center center;
+  /* Pivot on the right so rotation doesn't leave a dead band on the viewport side */
+  transform-origin: right center;
   z-index: 3;
   display: flex;
   gap: 1.5rem;
@@ -1235,10 +1239,10 @@
     grid-column: 1 / -1;
   }
 
-  /* Social rail: flush to right edge (padding keeps text off the rim) */
+  /* Social rail: same horizontal inset as hero copy (inherited gutter + safe area) */
   .cn-novo-home .cn-novo-slide-social {
     right: 0;
-    padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+    padding-right: calc(var(--cn-novo-hero-gutter) + env(safe-area-inset-right, 0px));
     gap: 1.1rem;
   }
 
@@ -1372,7 +1376,8 @@
 .cn-site .cn-novo-home .cn-novo-slide-social {
   right: 0;
   left: auto;
-  padding-right: max(0.65rem, env(safe-area-inset-right, 0px));
+  transform-origin: right center;
+  padding-right: calc(var(--cn-novo-hero-gutter) + env(safe-area-inset-right, 0px));
 }
 
 .cn-site .cn-novo-home .cn-novo-slide-social a {

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Roboto, Roboto_Slab } from "next/font/google";
 import "./globals.css";
+/* Public marketing styles: rules are scoped to .cn-site / .cn-novo-home (plus :root tokens). */
+import "./site.css";
+import "./novo-home.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 
 const robotoSlab = Roboto_Slab({
