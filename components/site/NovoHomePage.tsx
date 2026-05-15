@@ -23,6 +23,7 @@ import type {
   StatItem,
 } from "@/lib/types/site";
 import { FooterGallerySliders } from "@/components/site/FooterGallerySliders";
+import { NovoCategoriesPinnedShowcase } from "@/components/site/NovoCategoriesPinnedShowcase";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { slugify } from "@/lib/slug";
 
@@ -79,7 +80,6 @@ export function NovoHomePage({
     return ["All", ...Array.from(tags).sort((a, b) => a.localeCompare(b))];
   }, [categories]);
   const [activeCategoryTag, setActiveCategoryTag] = useState("All");
-  const [visibleCategoryIds, setVisibleCategoryIds] = useState<string[]>([]);
   const statsRef = useRef<HTMLDivElement>(null);
   const [statsVisible, setStatsVisible] = useState(false);
   const [statCounts, setStatCounts] = useState<number[]>([]);
@@ -171,14 +171,6 @@ export function NovoHomePage({
     }, 120);
     return () => window.clearTimeout(id);
   }, [filteredPortfolio]);
-
-  useEffect(() => {
-    setVisibleCategoryIds([]);
-    const id = window.setTimeout(() => {
-      setVisibleCategoryIds(filteredCategories.map((c) => c.id));
-    }, 120);
-    return () => window.clearTimeout(id);
-  }, [filteredCategories]);
 
   const instaUrls = useMemo(
     () => instagramPosts.filter((p) => p.image_url).map((p) => p),
@@ -460,31 +452,14 @@ export function NovoHomePage({
               </div>
             ) : null}
 
-            <div className="cn-novo-portfolio__grid">
-              <div className="cn-novo-masonry cn-novo-masonry--portfolio">
-                {filteredCategories.map((c, idx) => (
-                  <article
-                    key={c.id}
-                    className={`cn-novo-masonry-item${
-                      visibleCategoryIds.includes(c.id) ? " cn-novo-masonry-item--visible" : ""
-                    }`}
-                    style={{ transitionDelay: `${idx * 35}ms` }}
-                  >
-                    <a href={categoryHref(c)} className="cn-novo-masonry-link">
-                      {c.image_url ? (
-                        <img src={c.image_url} alt={c.name} loading="lazy" decoding="async" />
-                      ) : (
-                        <span className="cn-novo-masonry-placeholder" aria-hidden />
-                      )}
-                      <span className="cn-novo-masonry-overlay">
-                        <span className="cn-novo-masonry-title">{c.name}</span>
-                        {c.tag?.trim() ? <span className="cn-novo-masonry-tag">{c.tag.trim()}</span> : null}
-                      </span>
-                    </a>
-                  </article>
-                ))}
-              </div>
-            </div>
+            {filteredCategories.length > 0 ? (
+              <NovoCategoriesPinnedShowcase
+                categories={filteredCategories}
+                categoryHref={categoryHref}
+              />
+            ) : (
+              <p className="cn-novo-portfolio__empty">No categories match this filter.</p>
+            )}
 
             <div className="cn-novo-portfolio__actions">
               <a href={categoryHref(categories[0])} className="cn-novo-btn-gold">

@@ -4,17 +4,15 @@ import { useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import type { Category, SectionMeta } from "@/lib/types/site";
 import { categoryPublicHref } from "@/lib/site/category-helpers";
 import { SectionHeading } from "@/components/site/SectionHeading";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP);
 
 /** Horizontal slide + short text crossfade */
 const SLIDE_DURATION = 0.42;
-const AUTOPLAY_INTERVAL_MS = 4500;
 
 function categoryDesc(c: Category): string {
   const lead = (c.page_lead ?? "").trim();
@@ -83,10 +81,8 @@ export function CategoriesScrollExperience({
           return () => {};
         }
 
-        let currentCat = 0;
-        let autoplayInterval: number | null = null;
-        const triggers: ScrollTrigger[] = [];
         const wPad = Math.max(2, String(n).length);
+        let currentCat = 0;
 
         const slideWidth = () => viewport.clientWidth;
 
@@ -140,24 +136,6 @@ export function CategoriesScrollExperience({
           );
         };
 
-        const nextCategory = () => {
-          if (n <= 1) return;
-          goTo((currentCat + 1) % n, true);
-        };
-
-        const stopAutoplay = () => {
-          if (autoplayInterval !== null) {
-            window.clearInterval(autoplayInterval);
-            autoplayInterval = null;
-          }
-        };
-
-        const startAutoplay = () => {
-          stopAutoplay();
-          if (n <= 1) return;
-          autoplayInterval = window.setInterval(nextCategory, AUTOPLAY_INTERVAL_MS);
-        };
-
         gsap.set(track, { x: 0 });
         applyTexts(0);
         setBars(0);
@@ -170,39 +148,14 @@ export function CategoriesScrollExperience({
           bar.addEventListener("click", onBarClick(i));
         });
 
-        triggers.push(
-          ScrollTrigger.create({
-            trigger: stageEl,
-            start: "top 80%",
-            end: "bottom top",
-            onEnter: () => {
-              startAutoplay();
-            },
-            onEnterBack: () => {
-              startAutoplay();
-            },
-            onLeave: () => {
-              stopAutoplay();
-            },
-            onLeaveBack: () => {
-              stopAutoplay();
-            },
-          })
-        );
-
         const onResize = () => {
           gsap.set(track, { x: -currentCat * slideWidth() });
         };
         window.addEventListener("resize", onResize);
 
-        const refresh = () => ScrollTrigger.refresh();
-        requestAnimationFrame(refresh);
-
         return () => {
           window.removeEventListener("resize", onResize);
           catBars.forEach((bar, i) => bar.removeEventListener("click", onBarClick(i)));
-          stopAutoplay();
-          triggers.forEach((t) => t.kill());
         };
       });
 
@@ -279,7 +232,7 @@ export function CategoriesScrollExperience({
                 />
               ))}
             </div>
-            <p className="cn-cat-scroll-hint">Slides automatically</p>
+            <p className="cn-cat-scroll-hint">Select a category with the bar above</p>
           </div>
 
           <div className="cn-cat-scroll-stage">
