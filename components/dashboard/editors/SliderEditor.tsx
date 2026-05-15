@@ -8,9 +8,16 @@ export function SliderEditor({ slides }: { slides: InstagramPost[] }) {
     <CollectionEditor<InstagramPost>
       table="instagram_posts"
       title="Slider"
-      description="Images for the homepage horizontal photo strip. Footer gallery images are managed under Site → Footer."
+      description="Images for the homepage horizontal photo strip. Upload several at once, reorder, then save. Footer gallery is under Site → Footer."
       allowEmptySave
       initialRows={slides}
+      bulkImageUpload={{
+        imageFieldKey: "image_url",
+        buttonLabel: "Upload multiple images",
+      }}
+      getRowLabel={(row, idx) =>
+        row.image_url ? `Slide ${idx + 1}` : `New slide ${idx + 1}`
+      }
       blank={() => ({
         position: 0,
         image_url: "",

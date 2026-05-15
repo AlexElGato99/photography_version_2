@@ -47,7 +47,7 @@
 
   /* Next.js injects --font-cn-sans (Roboto) and --font-cn-display (Roboto Slab) on <html>. */
   --cn-font-sans: var(--font-cn-sans), "Roboto", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-  --cn-font-display: var(--cn-font-display), "Roboto Slab", "Times New Roman", serif;
+  --cn-font-display: var(--font-cn-display), "Roboto Slab", "Times New Roman", serif;
 
   /* Elementor-style typography tokens */
   --e-global-typography-primary-font-family: var(--cn-font-sans);
@@ -80,6 +80,14 @@
    Applied server-side so there's no FOUC before GSAP runs.
    Reduced-motion users get an automatic reset (media query below).
    ============================================================ */
+html:not(.cn-anim-ready) .cn-site [data-anim],
+html:not(.cn-anim-ready) .cn-site [data-stagger] > *,
+html:not(.cn-anim-ready) .cn-site [data-stagger-cards] > *,
+html:not(.cn-anim-ready) .cn-site [data-hero-hide] {
+  opacity: 1;
+  transform: none;
+}
+
 .cn-anim-ready .cn-site [data-anim="fade"],
 .cn-anim-ready .cn-site [data-anim="fade-up"],
 .cn-anim-ready .cn-site [data-anim="fade-left"],

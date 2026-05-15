@@ -1,13 +1,16 @@
 import { notFound } from "next/navigation";
 import { BackTop } from "@/components/site/BackTop";
 import { CategoryPageView } from "@/components/site/CategoryPageView";
-import { Footer } from "@/components/site/Footer";
-import { SiteAnimations } from "@/components/site/SiteAnimations";
-import { SiteNav } from "@/components/site/SiteNav";
+import { NovoHomeAnimations } from "@/components/site/NovoHomeAnimations";
+import { NovoSiteFooter } from "@/components/site/NovoSiteFooter";
+import { NovoSiteNav } from "@/components/site/NovoSiteNav";
 import { portfolioForCategory } from "@/lib/site/category-helpers";
 import {
+  getCategories,
   getCategoryBySlug,
+  getContactMeta,
   getFooter,
+  getFooterGalleryImages,
   getGeneral,
   getNavigation,
   getPortfolioItems,
@@ -49,12 +52,16 @@ export default async function CategorySlugPage({
   const category = await getCategoryBySlug(params.slug);
   if (!category) notFound();
 
-  const [general, navigation, footer, portfolio] = await Promise.all([
-    getGeneral(),
-    getNavigation(),
-    getFooter(),
-    getPortfolioItems(),
-  ]);
+  const [general, navigation, footer, portfolio, categories, footerGalleryImages, contact] =
+    await Promise.all([
+      getGeneral(),
+      getNavigation(),
+      getFooter(),
+      getPortfolioItems(),
+      getCategories(),
+      getFooterGalleryImages(),
+      getContactMeta(),
+    ]);
 
   const relatedPortfolio = category.show_portfolio_related
     ? portfolioForCategory(portfolio, category.name)
@@ -62,10 +69,18 @@ export default async function CategorySlugPage({
 
   return (
     <>
-      <SiteAnimations />
-      <SiteNav general={general} navigation={navigation} />
-      <CategoryPageView category={category} relatedPortfolio={relatedPortfolio} />
-      <Footer general={general} footer={footer} />
+      <NovoHomeAnimations />
+      <div className="cn-novo-home">
+        <NovoSiteNav general={general} navigation={navigation} />
+        <CategoryPageView category={category} relatedPortfolio={relatedPortfolio} />
+        <NovoSiteFooter
+          general={general}
+          footer={footer}
+          categories={categories}
+          footerGalleryImages={footerGalleryImages}
+          contact={contact}
+        />
+      </div>
       <BackTop />
     </>
   );

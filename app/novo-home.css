@@ -2,6 +2,14 @@
 
 .cn-novo-home {
   /* Reference (Novo): warm tan gold + clean neutrals — scoped so dashboard / :root stay unchanged */
+  --e-global-typography-primary-font-family: var(--font-cn-sans), "Roboto", sans-serif;
+  --e-global-typography-primary-font-weight: 700;
+  --e-global-typography-secondary-font-family: var(--font-cn-display), "Roboto Slab", serif;
+  --e-global-typography-secondary-font-weight: 400;
+  --e-global-typography-text-font-family: var(--font-cn-sans), "Roboto", sans-serif;
+  --e-global-typography-text-font-weight: 400;
+  --e-global-typography-accent-font-family: var(--font-cn-sans), "Roboto", sans-serif;
+  --e-global-typography-accent-font-weight: 500;
   --nv-gold: #c48f56;
   --nv-gold-light: #d4a574;
   --nv-gold-deep: #9d6b3a;
@@ -675,84 +683,108 @@
 }
 
 .cn-novo-home .cn-novo-portfolio {
-  padding: clamp(3.5rem, 8vw, 5.5rem) clamp(1.5rem, 4vw, 2.5rem) 3.75rem;
+  padding: clamp(3.5rem, 8vw, 5.5rem) clamp(1.25rem, 4vw, 2.5rem);
   background: var(--nv-white);
 }
 
-.cn-novo-home .cn-novo-portfolio .cn-novo-about-text {
+.cn-novo-home .cn-novo-portfolio__inner {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.cn-novo-home .cn-novo-portfolio--categories {
+  background: var(--nv-light);
+  border-top: 1px solid var(--nv-border);
+}
+
+.cn-novo-home .cn-novo-portfolio--work {
+  border-top: 1px solid var(--nv-border);
+}
+
+.cn-novo-home .cn-novo-section-intro {
+  text-align: center;
+  max-width: 42rem;
+  margin: 0 auto clamp(2rem, 4vw, 3rem);
+}
+
+.cn-novo-home .cn-novo-section-intro__tag {
+  display: block;
+  margin-bottom: 0.85rem;
+}
+
+.cn-novo-home .cn-novo-section-intro__divider {
+  margin: 0 auto 1.35rem;
+}
+
+.cn-novo-home .cn-novo-section-intro__lead {
+  margin: 1.15rem auto 0;
+  max-width: 36rem;
   font-size: 1.0625rem;
   color: var(--nv-muted);
   line-height: 1.8;
 }
 
-.cn-novo-home .cn-novo-section-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.cn-novo-home .cn-novo-filter-bar {
+.cn-novo-home .cn-novo-portfolio__filters {
   display: flex;
   justify-content: center;
-  gap: 0.25rem;
   flex-wrap: wrap;
-  margin-bottom: 3rem;
+  gap: 0.2rem;
+  padding: 0.35rem;
+  margin: 0 auto clamp(2rem, 4vw, 3rem);
+  max-width: 100%;
+  width: fit-content;
+  background: var(--nv-light);
+  border: 1px solid var(--nv-border);
+  border-radius: 999px;
 }
 
-.cn-novo-home .cn-novo-filter-btn {
-  background: none;
+.cn-novo-home .cn-novo-portfolio__filters .cn-novo-filter-btn {
+  background: transparent;
   border: none;
+  border-radius: 999px;
   cursor: pointer;
   font-family: var(--e-global-typography-accent-font-family);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: var(--e-global-typography-accent-font-weight);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 0.55rem 1.15rem;
+  padding: 0.62rem 1.2rem;
   color: var(--nv-muted);
-  transition: color 0.2s;
-  position: relative;
+  transition: color 0.2s, background 0.2s;
 }
 
-.cn-novo-home .cn-novo-filter-btn::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 1.1rem;
-  right: 1.1rem;
-  height: 1px;
-  background: var(--nv-gold);
-  transform: scaleX(0);
-  transition: transform 0.2s;
+.cn-novo-home .cn-novo-portfolio__filters .cn-novo-filter-btn::after {
+  display: none;
 }
 
-.cn-novo-home .cn-novo-filter-btn.cn-novo-filter-btn--active {
-  color: var(--nv-dark);
-  font-weight: var(--e-global-typography-primary-font-weight);
+.cn-novo-home .cn-novo-portfolio__filters .cn-novo-filter-btn--active {
+  background: var(--nv-dark);
+  color: var(--nv-white);
+  font-weight: var(--e-global-typography-accent-font-weight);
 }
 
-.cn-novo-home .cn-novo-filter-btn.cn-novo-filter-btn--active::after {
-  transform: scaleX(1);
-}
-
-.cn-novo-home .cn-novo-filter-btn:hover:not(.cn-novo-filter-btn--active) {
+.cn-novo-home .cn-novo-portfolio__filters .cn-novo-filter-btn:hover:not(.cn-novo-filter-btn--active) {
   color: var(--nv-gold-deep);
 }
 
-.cn-novo-home .cn-novo-masonry {
-  columns: 6 180px;
-  gap: 6px;
-  max-width: 1400px;
-  margin: 0 auto;
+.cn-novo-home .cn-novo-portfolio__grid {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.cn-novo-home .cn-novo-masonry--portfolio {
+  columns: 5 200px;
+  column-gap: 10px;
 }
 
 .cn-novo-home .cn-novo-masonry-item {
   break-inside: avoid;
   position: relative;
   overflow: hidden;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+  border-radius: 4px;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s, transform 0.5s;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .cn-novo-home .cn-novo-masonry-item.cn-novo-masonry-item--visible {
@@ -760,7 +792,7 @@
   transform: translateY(0);
 }
 
-.cn-novo-home .cn-novo-masonry-item a {
+.cn-novo-home .cn-novo-masonry-link {
   display: block;
   position: relative;
   text-decoration: none;
@@ -772,22 +804,36 @@
   width: 100%;
   height: auto;
   vertical-align: middle;
+  border-radius: 4px;
+  transition: transform 0.45s var(--cn-ease-out, ease);
+}
+
+.cn-novo-home .cn-novo-masonry-item:hover img {
+  transform: scale(1.04);
+}
+
+.cn-novo-home .cn-novo-masonry-placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: rgba(26, 26, 26, 0.06);
+  border-radius: 4px;
 }
 
 .cn-novo-home .cn-novo-masonry-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0);
-  transition: background 0.3s;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 1rem;
+  padding: 1rem 1.05rem;
   pointer-events: none;
+  background: linear-gradient(to top, rgba(26, 26, 26, 0.55) 0%, transparent 52%);
+  transition: background 0.3s ease;
 }
 
 .cn-novo-home .cn-novo-masonry-item:hover .cn-novo-masonry-overlay {
-  background: rgba(0, 0, 0, 0.55);
+  background: linear-gradient(to top, rgba(26, 26, 26, 0.78) 0%, rgba(26, 26, 26, 0.2) 55%, transparent 100%);
 }
 
 .cn-novo-home .cn-novo-masonry-title {
@@ -796,25 +842,7 @@
   font-size: 0.875rem;
   font-weight: var(--e-global-typography-accent-font-weight);
   letter-spacing: 0.04em;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.25s, transform 0.25s;
-}
-
-.cn-novo-home .cn-novo-masonry-item:hover .cn-novo-masonry-title {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.cn-novo-home .cn-novo-load-more-wrap {
-  text-align: center;
-  margin-top: 3rem;
-}
-
-/* “Explore by category” reuses portfolio layout; this tweaks surface + tag line */
-.cn-novo-home .cn-novo-portfolio.cn-novo-categories-explore {
-  background: var(--nv-light);
-  border-top: 1px solid var(--nv-border);
+  line-height: 1.35;
 }
 
 .cn-novo-home .cn-novo-masonry-tag {
@@ -825,6 +853,24 @@
   text-transform: uppercase;
   color: var(--nv-gold-light);
   margin-top: 0.35rem;
+}
+
+.cn-novo-home .cn-novo-portfolio__empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--nv-muted);
+  font-size: 1rem;
+}
+
+.cn-novo-home .cn-novo-portfolio__actions {
+  display: flex;
+  justify-content: center;
+}
+
+@media (hover: none) {
+  .cn-novo-home .cn-novo-masonry-item img {
+    transform: none;
+  }
 }
 
 .cn-novo-home .cn-novo-insta-strip {
@@ -1002,43 +1048,47 @@
   color: var(--nv-gold);
 }
 
-/* Footer gallery: four vertical strips, 2 thumbs visible, 1 image per step */
+/* Footer gallery: 2×3 grid, one cell updates at a time (no slider) */
 .cn-novo-home .cn-novo-footer-col--gallery {
-  align-items: flex-start;
   width: 100%;
   max-width: 100%;
 }
 
-.cn-novo-home .cn-novo-footer-gallery-sliders {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: clamp(6px, 1.1vw, 10px);
+.cn-novo-home .cn-novo-footer-gallery {
   width: 100%;
-  min-height: 158px;
 }
 
-.cn-novo-home .cn-novo-footer-slider {
-  flex: 0 0 auto;
-  overflow: hidden;
+.cn-novo-home .cn-novo-footer-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(6px, 1vw, 10px);
+  width: 100%;
+}
+
+.cn-novo-home .cn-novo-footer-gallery-cell {
   position: relative;
-}
-
-.cn-novo-home .cn-novo-footer-slider-track {
   display: flex;
-  flex-direction: column;
-  will-change: transform;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1.06 / 1;
+  overflow: hidden;
+  background: rgba(232, 232, 232, 0.45);
+  border-radius: 3px;
+  text-decoration: none;
 }
 
-.cn-novo-home .cn-novo-footer-slider-photo {
-  position: relative;
-  flex-shrink: 0;
-  overflow: hidden;
+.cn-novo-home .cn-novo-footer-gallery-img {
+  width: auto;
+  max-width: 100%;
+  height: 92%;
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 
-.cn-novo-home .cn-novo-footer-slider-photo:hover {
-  opacity: 0.88;
+.cn-novo-home .cn-novo-footer-gallery-cell:hover {
+  opacity: 0.92;
 }
 
 .cn-novo-home .cn-novo-footer-bar {
@@ -1172,8 +1222,9 @@
     padding: 1.5rem 2.5rem 3.75rem;
   }
 
-  .cn-novo-home .cn-novo-masonry {
+  .cn-novo-home .cn-novo-masonry--portfolio {
     columns: 3 140px;
+    column-gap: 8px;
   }
 
   .cn-novo-home .cn-novo-footer-grid {
@@ -1209,17 +1260,16 @@
     grid-column: auto;
   }
 
-  .cn-novo-home .cn-novo-footer-gallery-sliders {
-    justify-content: center;
-    flex-wrap: wrap;
+  .cn-novo-home .cn-novo-footer-gallery-grid {
     gap: 8px;
   }
 }
 
 @media (max-width: 600px) {
-  .cn-site .cn-novo-home .cn-novo-masonry,
-  .cn-novo-home .cn-novo-masonry {
+  .cn-site .cn-novo-home .cn-novo-masonry--portfolio,
+  .cn-novo-home .cn-novo-masonry--portfolio {
     columns: 2 130px;
+    column-gap: 8px;
   }
 
   .cn-site .cn-novo-home .cn-novo-hero-title,
@@ -1262,7 +1312,6 @@
     transform: none;
   }
 
-  .cn-novo-home .cn-novo-footer-slider-track,
   .cn-novo-home .cn-novo-insta-inner {
     animation: none;
   }

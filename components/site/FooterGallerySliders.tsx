@@ -1,118 +1,13 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { FooterGalleryImage } from "@/lib/types/site";
 
-const SLIDER_COUNT = 4;
-const VISIBLE_COUNT = 2;
-const THUMB_PX = 76;
-const GAP_PX = 6;
-const STEP_PX = THUMB_PX + GAP_PX;
-const VIEWPORT_H = VISIBLE_COUNT * THUMB_PX + GAP_PX;
-const STEP_MS = 2400;
+const GRID_SLOTS = 6;
+const TICK_MS = 2000;
 
-type SliderDirection = "up" | "down";
-
-function splitIntoColumns(images: FooterGalleryImage[]): FooterGalleryImage[][] {
-  const cols: FooterGalleryImage[][] = Array.from({ length: SLIDER_COUNT }, () => []);
-  images.forEach((img, i) => {
-    cols[i % SLIDER_COUNT]!.push(img);
-  });
-  return cols;
-}
-
-function buildTrackItems(images: FooterGalleryImage[]): FooterGalleryImage[] {
-  if (images.length === 0) return [];
-  if (images.length === 1) {
-    return [images[0]!, images[0]!, images[0]!];
-  }
-  return [...images, ...images.slice(0, VISIBLE_COUNT)];
-}
-
-function FooterGalleryColumn({
-  images,
-  direction,
-  index,
-}: {
-  images: FooterGalleryImage[];
-  direction: SliderDirection;
-  index: number;
-}) {
-  const slideCount = images.length;
-  const trackItems = useMemo(() => buildTrackItems(images), [images]);
-  const [step, setStep] = useState(0);
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => setReduceMotion(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-
-  useEffect(() => {
-    if (slideCount <= 1 || reduceMotion) return;
-
-    const delayMs = index * 550;
-    let intervalId: ReturnType<typeof setInterval> | undefined;
-
-    const timeoutId = setTimeout(() => {
-      intervalId = setInterval(() => {
-        setStep((prev) => {
-          if (direction === "up") {
-            return (prev + 1) % slideCount;
-          }
-          return (prev - 1 + slideCount) % slideCount;
-        });
-      }, STEP_MS);
-    }, delayMs);
-
-    return () => {
-      clearTimeout(timeoutId);
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [slideCount, direction, index, reduceMotion]);
-
-  if (slideCount === 0) return null;
-
-  const translateY = reduceMotion ? 0 : -step * STEP_PX;
-
-  return (
-    <div
-      className={`cn-novo-footer-slider cn-novo-footer-slider--${direction}`}
-      style={{ width: THUMB_PX, height: VIEWPORT_H }}
-    >
-      <div
-        className="cn-novo-footer-slider-track"
-        style={{ transform: `translate3d(0, ${translateY}px, 0)` }}
-      >
-        {trackItems.map((p, i) => (
-          <a
-            key={`${p.id}-${i}`}
-            href={p.link_href || "#"}
-            className="cn-novo-footer-slider-photo"
-            style={{
-              width: THUMB_PX,
-              height: THUMB_PX,
-              marginBottom: i < trackItems.length - 1 ? GAP_PX : 0,
-            }}
-            tabIndex={i < slideCount ? 0 : -1}
-            aria-hidden={i >= slideCount}
-          >
-            <Image
-              src={p.image_url}
-              alt=""
-              width={THUMB_PX}
-              height={THUMB_PX}
-              className="h-full w-full object-cover"
-            />
-          </a>
-        ))}
-      </div>
-    </div>
-  );
+function buildInitialSlots(pool: FooterGalleryImage[]): FooterGalleryImage[] {
+  return Array.from({ length: GRID_SLOTS }, (_, i) => pool[i % pool.length]!);
 }
 
 export function FooterGallerySliders({
@@ -122,24 +17,95 @@ export function FooterGallerySliders({
   images: FooterGalleryImage[];
   label: string;
 }) {
-  const columns = useMemo(() => splitIntoColumns(images), [images]);
-  const directions: SliderDirection[] = ["up", "down", "down", "down"];
-  const hasAny = columns.some((col) => col.length > 0);
+  const pool = useMemo(
+    () => images.filter((p) => Boolean(p.image_url?.trim())),
+    [images]
+  );
 
-  if (!hasAny) {
+  const poolSig = useMemo(
+    () => pool.map((p) => `${p.id}:${p.image_url}`).join("|"),
+    [pool]
+  );
+
+  const poolRef = useRef(pool);
+  poolRef.current = pool;
+
+  const [slots, setSlots] = useState<FooterGalleryImage[]>(() =>
+    pool.length > 0 ? buildInitialSlots(pool) : []
+  );
+
+  const slotIndexRef = useRef(0);
+  const poolIndexRef = useRef(GRID_SLOTS);
+
+  useEffect(() => {
+    if (pool.length === 0) {
+      setSlots([]);
+      return;
+    }
+
+    setSlots(buildInitialSlots(pool));
+    slotIndexRef.current = 0;
+    poolIndexRef.current = GRID_SLOTS;
+
+    const advance = () => {
+      const list = poolRef.current;
+      if (list.length === 0) return;
+
+      const slot = slotIndexRef.current;
+      let ptr = poolIndexRef.current;
+
+      setSlots((prev) => {
+        const row = prev.length === GRID_SLOTS ? [...prev] : buildInitialSlots(list);
+        const current = row[slot];
+        let next = list[ptr % list.length]!;
+
+        if (list.length > 1) {
+          let attempts = 0;
+          while (
+            attempts < list.length &&
+            current &&
+            next.id === current.id &&
+            next.image_url === current.image_url
+          ) {
+            ptr += 1;
+            next = list[ptr % list.length]!;
+            attempts += 1;
+          }
+        }
+
+        poolIndexRef.current = ptr + 1;
+        row[slot] = { ...next };
+        return row;
+      });
+
+      slotIndexRef.current = (slot + 1) % GRID_SLOTS;
+    };
+
+    advance();
+    const timer = window.setInterval(advance, TICK_MS);
+    return () => window.clearInterval(timer);
+  }, [poolSig, pool.length]);
+
+  if (pool.length === 0) {
     return <p className="cn-novo-footer-empty">Add images in Dashboard → Footer → Gallery.</p>;
   }
 
+  const display = slots.length === GRID_SLOTS ? slots : buildInitialSlots(pool);
+
   return (
-    <div className="cn-novo-footer-gallery-sliders" aria-label={label}>
-      {columns.map((col, i) => (
-        <FooterGalleryColumn
-          key={i}
-          images={col}
-          direction={directions[i] ?? "down"}
-          index={i}
-        />
-      ))}
+    <div className="cn-novo-footer-gallery" aria-label={label}>
+      <div className="cn-novo-footer-gallery-grid">
+        {display.map((item, index) => (
+          <a
+            key={`${index}-${item.image_url}`}
+            href={item.link_href || "#"}
+            className="cn-novo-footer-gallery-cell"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={item.image_url} alt="" className="cn-novo-footer-gallery-img" loading="lazy" />
+          </a>
+        ))}
+      </div>
     </div>
   );
 }

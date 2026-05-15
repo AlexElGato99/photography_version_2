@@ -427,41 +427,95 @@ export function NovoHomePage({
 
       {categories.length > 0 && (
         <section
-          className="cn-novo-portfolio cn-novo-categories-explore"
+          className="cn-novo-portfolio cn-novo-portfolio--categories"
           id="categories"
           aria-label="Explore by category"
         >
-          <div className="cn-novo-section-header">
-            {categoriesMeta.eyebrow ? (
-              <span
-                className="cn-novo-section-tag"
-                style={{ display: "block", textAlign: "center", marginBottom: "0.75rem" }}
-              >
-                {categoriesMeta.eyebrow}
-              </span>
-            ) : null}
-            <div className="cn-novo-divider" style={{ margin: "0 auto 1.35rem" }} />
-            <SectionHeading heading={categoriesMeta.title_heading} className="cn-novo-section-heading" />
-            {categoriesMeta.lead ? (
-              <p
-                className="cn-novo-about-text"
-                style={{ margin: "1.25rem auto 0", textAlign: "center", maxWidth: "36rem" }}
-              >
-                {categoriesMeta.lead}
-              </p>
-            ) : null}
-          </div>
+          <div className="cn-novo-portfolio__inner">
+            <header className="cn-novo-section-intro">
+              {categoriesMeta.eyebrow ? (
+                <span className="cn-novo-section-tag cn-novo-section-intro__tag">{categoriesMeta.eyebrow}</span>
+              ) : null}
+              <div className="cn-novo-divider cn-novo-section-intro__divider" />
+              <SectionHeading heading={categoriesMeta.title_heading} className="cn-novo-section-heading" />
+              {categoriesMeta.lead ? (
+                <p className="cn-novo-section-intro__lead">{categoriesMeta.lead}</p>
+              ) : null}
+            </header>
 
-          {categoryTabs.length > 1 ? (
-            <div className="cn-novo-filter-bar" role="tablist" aria-label="Category filters">
-              {categoryTabs.map((tab) => (
+            {categoryTabs.length > 1 ? (
+              <div className="cn-novo-filter-bar cn-novo-portfolio__filters" role="tablist" aria-label="Category filters">
+                {categoryTabs.map((tab) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeCategoryTag === tab}
+                    className={`cn-novo-filter-btn${activeCategoryTag === tab ? " cn-novo-filter-btn--active" : ""}`}
+                    onClick={() => setActiveCategoryTag(tab)}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+
+            <div className="cn-novo-portfolio__grid">
+              <div className="cn-novo-masonry cn-novo-masonry--portfolio">
+                {filteredCategories.map((c, idx) => (
+                  <article
+                    key={c.id}
+                    className={`cn-novo-masonry-item${
+                      visibleCategoryIds.includes(c.id) ? " cn-novo-masonry-item--visible" : ""
+                    }`}
+                    style={{ transitionDelay: `${idx * 35}ms` }}
+                  >
+                    <a href={categoryHref(c)} className="cn-novo-masonry-link">
+                      {c.image_url ? (
+                        <img src={c.image_url} alt={c.name} loading="lazy" decoding="async" />
+                      ) : (
+                        <span className="cn-novo-masonry-placeholder" aria-hidden />
+                      )}
+                      <span className="cn-novo-masonry-overlay">
+                        <span className="cn-novo-masonry-title">{c.name}</span>
+                        {c.tag?.trim() ? <span className="cn-novo-masonry-tag">{c.tag.trim()}</span> : null}
+                      </span>
+                    </a>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <div className="cn-novo-portfolio__actions">
+              <a href={categoryHref(categories[0])} className="cn-novo-btn-gold">
+                Browse a category
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="cn-novo-portfolio cn-novo-portfolio--work" id="portfolio" aria-label="Portfolio">
+        <div className="cn-novo-portfolio__inner">
+          <header className="cn-novo-section-intro">
+            {portfolioMeta.eyebrow ? (
+              <span className="cn-novo-section-tag cn-novo-section-intro__tag">{portfolioMeta.eyebrow}</span>
+            ) : null}
+            <div className="cn-novo-divider cn-novo-section-intro__divider" />
+            <SectionHeading heading={portfolioMeta.title_heading} className="cn-novo-section-heading" />
+            {portfolioMeta.lead ? <p className="cn-novo-section-intro__lead">{portfolioMeta.lead}</p> : null}
+          </header>
+
+          {portfolioMeta.tabs.length > 0 ? (
+            <div className="cn-novo-filter-bar cn-novo-portfolio__filters" role="tablist" aria-label="Portfolio filters">
+              {portfolioMeta.tabs.map((tab) => (
                 <button
                   key={tab}
                   type="button"
                   role="tab"
-                  aria-selected={activeCategoryTag === tab}
-                  className={`cn-novo-filter-btn${activeCategoryTag === tab ? " cn-novo-filter-btn--active" : ""}`}
-                  onClick={() => setActiveCategoryTag(tab)}
+                  aria-selected={activeFilter === tab}
+                  className={`cn-novo-filter-btn${activeFilter === tab ? " cn-novo-filter-btn--active" : ""}`}
+                  onClick={() => setActiveFilter(tab)}
                 >
                   {tab}
                 </button>
@@ -469,90 +523,43 @@ export function NovoHomePage({
             </div>
           ) : null}
 
-          <div className="cn-novo-masonry">
-            {filteredCategories.map((c, idx) => (
-              <div
-                key={c.id}
-                className={`cn-novo-masonry-item${
-                  visibleCategoryIds.includes(c.id) ? " cn-novo-masonry-item--visible" : ""
-                }`}
-                style={{ transitionDelay: `${idx * 35}ms` }}
-              >
-                <a href={categoryHref(c)}>
-                  {c.image_url ? (
-                    <img src={c.image_url} alt={c.name} loading="lazy" decoding="async" />
-                  ) : null}
-                  <div className="cn-novo-masonry-overlay">
-                    <div className="cn-novo-masonry-title">{c.name}</div>
-                    {c.tag?.trim() ? <div className="cn-novo-masonry-tag">{c.tag.trim()}</div> : null}
-                  </div>
-                </a>
+          <div className="cn-novo-portfolio__grid">
+            {filteredPortfolio.length > 0 ? (
+              <div className="cn-novo-masonry cn-novo-masonry--portfolio">
+                {filteredPortfolio.map((item, idx) => (
+                  <article
+                    key={item.id}
+                    className={`cn-novo-masonry-item${
+                      visibleMasonryIds.includes(item.id) ? " cn-novo-masonry-item--visible" : ""
+                    }`}
+                    style={{ transitionDelay: `${idx * 35}ms` }}
+                  >
+                    <a href={item.link_href || "#"} className="cn-novo-masonry-link">
+                      {item.image_url ? (
+                        <img src={item.image_url} alt={item.title} loading="lazy" decoding="async" />
+                      ) : (
+                        <span className="cn-novo-masonry-placeholder" aria-hidden />
+                      )}
+                      <span className="cn-novo-masonry-overlay">
+                        <span className="cn-novo-masonry-title">{item.title}</span>
+                        {item.tab?.trim() && activeFilter === "All" ? (
+                          <span className="cn-novo-masonry-tag">{item.tab.trim()}</span>
+                        ) : null}
+                      </span>
+                    </a>
+                  </article>
+                ))}
               </div>
-            ))}
+            ) : (
+              <p className="cn-novo-portfolio__empty">No work in this category yet.</p>
+            )}
           </div>
 
-          <div className="cn-novo-load-more-wrap">
-            <a href={categoryHref(categories[0])} className="cn-novo-btn-gold" style={{ alignSelf: "center" }}>
-              Browse a category
+          <div className="cn-novo-portfolio__actions">
+            <a href="/#portfolio" className="cn-novo-btn-gold">
+              View all
             </a>
           </div>
-        </section>
-      )}
-
-      <section className="cn-novo-portfolio" id="portfolio" aria-label="Portfolio">
-        <div className="cn-novo-section-header">
-          {portfolioMeta.eyebrow ? (
-            <span className="cn-novo-section-tag" style={{ display: "block", textAlign: "center", marginBottom: "0.75rem" }}>
-              {portfolioMeta.eyebrow}
-            </span>
-          ) : null}
-          <div className="cn-novo-divider" style={{ margin: "0 auto 1.35rem" }} />
-          <SectionHeading heading={portfolioMeta.title_heading} className="cn-novo-section-heading" />
-          {portfolioMeta.lead ? (
-            <p className="cn-novo-about-text" style={{ margin: "1.25rem auto 0", textAlign: "center", maxWidth: "36rem" }}>
-              {portfolioMeta.lead}
-            </p>
-          ) : null}
-        </div>
-
-        <div className="cn-novo-filter-bar" role="tablist" aria-label="Portfolio filters">
-          {portfolioMeta.tabs.map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              role="tab"
-              aria-selected={activeFilter === tab}
-              className={`cn-novo-filter-btn${activeFilter === tab ? " cn-novo-filter-btn--active" : ""}`}
-              onClick={() => setActiveFilter(tab)}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        <div className="cn-novo-masonry">
-          {filteredPortfolio.map((item, idx) => (
-            <div
-              key={item.id}
-              className={`cn-novo-masonry-item${visibleMasonryIds.includes(item.id) ? " cn-novo-masonry-item--visible" : ""}`}
-              style={{ transitionDelay: `${idx * 35}ms` }}
-            >
-              <a href={item.link_href}>
-                {item.image_url ? (
-              <img src={item.image_url} alt={item.title} loading="lazy" decoding="async" />
-            ) : null}
-                <div className="cn-novo-masonry-overlay">
-                  <div className="cn-novo-masonry-title">{item.title}</div>
-                </div>
-              </a>
-            </div>
-          ))}
-        </div>
-
-        <div className="cn-novo-load-more-wrap">
-          <a href="/#portfolio" className="cn-novo-btn-gold" style={{ alignSelf: "center" }}>
-            View all
-          </a>
         </div>
       </section>
 
