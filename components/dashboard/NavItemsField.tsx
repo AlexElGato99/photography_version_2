@@ -39,7 +39,9 @@ export function NavItemsField({ label, value, onChange, help }: NavItemsFieldPro
 
       <div className="space-y-2">
         {items.length === 0 && (
-          <p className="text-xs text-[var(--text-muted)] italic">No links yet. Click "Add link".</p>
+          <p className="text-xs text-[var(--text-muted)] italic">
+            No links yet. Click &quot;Add link&quot;.
+          </p>
         )}
         {items.map((item, i) => (
           <div key={i} className="flex items-center gap-2">

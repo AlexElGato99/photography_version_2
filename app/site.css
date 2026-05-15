@@ -45,15 +45,27 @@
 
   --cn-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Same stack as public UI / hero body copy; lives on :root so it always resolves (Next sets --font-cn-sans on html). */
-  --cn-font-sans: var(--font-cn-sans), -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  /* Next.js injects --font-cn-sans (Roboto) and --font-cn-display (Roboto Slab) on <html>. */
+  --cn-font-sans: var(--font-cn-sans), "Roboto", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --cn-font-display: var(--cn-font-display), "Roboto Slab", "Times New Roman", serif;
+
+  /* Elementor-style typography tokens */
+  --e-global-typography-primary-font-family: var(--cn-font-sans);
+  /* Google Roboto via next/font has no 600; 700 is the closest loaded bold for “primary” */
+  --e-global-typography-primary-font-weight: 700;
+  --e-global-typography-secondary-font-family: var(--cn-font-display);
+  --e-global-typography-secondary-font-weight: 400;
+  --e-global-typography-text-font-family: var(--cn-font-sans);
+  --e-global-typography-text-font-weight: 400;
+  --e-global-typography-accent-font-family: var(--cn-font-sans);
+  --e-global-typography-accent-font-weight: 500;
 }
 
 .cn-site {
   background: var(--cn-paper);
   color: var(--cn-ink);
-  font-family: var(--cn-font-sans);
-  font-weight: 300;
+  font-family: var(--e-global-typography-text-font-family);
+  font-weight: var(--e-global-typography-text-font-weight);
   line-height: 1.65;
   font-size: 15px;
   letter-spacing: -0.005em;
@@ -137,10 +149,10 @@
   display: none;
 }
 .cn-loader-mark {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--e-global-typography-secondary-font-family);
   font-size: 2.6rem;
   font-style: italic;
-  font-weight: 300;
+  font-weight: var(--e-global-typography-secondary-font-weight);
   color: var(--cn-ink);
   letter-spacing: -0.02em;
   overflow: hidden;
@@ -218,8 +230,8 @@
 .cn-site h3,
 .cn-site h4,
 .cn-site h5 {
-  font-family: var(--font-cn-display), "Times New Roman", serif;
-  font-weight: 300;
+  font-family: var(--e-global-typography-secondary-font-family);
+  font-weight: var(--e-global-typography-secondary-font-weight);
   letter-spacing: -0.01em;
 }
 
@@ -285,10 +297,10 @@
 }
 
 .cn-nav-logo {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--e-global-typography-primary-font-family);
   font-size: 1.55rem;
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--cn-ink);
   letter-spacing: -0.015em;
   transition: color 0.4s;
@@ -296,7 +308,7 @@
 }
 
 .cn-nav-logo b {
-  font-weight: 500;
+  font-weight: var(--e-global-typography-primary-font-weight);
   font-style: normal;
 }
 
@@ -306,9 +318,9 @@
 }
 
 .cn-nav-links a {
-  font-family: var(--cn-font-sans);
+  font-family: var(--e-global-typography-text-font-family);
   font-size: 0.78rem;
-  font-weight: 400;
+  font-weight: var(--e-global-typography-text-font-weight);
   letter-spacing: 0.04em;
   color: var(--cn-slate);
   transition: color 0.4s;
@@ -333,9 +345,9 @@
 }
 
 .cn-nav-cta {
-  font-family: var(--cn-font-sans);
+  font-family: var(--e-global-typography-accent-font-family);
   font-size: 0.78rem;
-  font-weight: 500;
+  font-weight: var(--e-global-typography-accent-font-weight);
   padding: 0.85rem 1.7rem;
   background: var(--cn-ink);
   color: #ffffff !important;
@@ -398,9 +410,9 @@
 }
 
 .cn-nav-mobile-link {
-  font-family: var(--cn-font-sans);
+  font-family: var(--e-global-typography-secondary-font-family);
   font-size: 1.8rem;
-  font-weight: 400;
+  font-weight: var(--e-global-typography-secondary-font-weight);
   letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--cn-ink);
@@ -508,9 +520,9 @@
 }
 
 .cn-hero-title {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--e-global-typography-primary-font-family);
   font-size: clamp(2.2rem, 5.5vw, 5rem);
-  font-weight: 300;
+  font-weight: var(--e-global-typography-primary-font-weight);
   line-height: 1.05;
   color: var(--cn-paper);
   letter-spacing: -0.025em;
@@ -523,7 +535,7 @@
 
 .cn-hero-title em {
   font-style: italic;
-  font-weight: 300;
+  font-weight: var(--e-global-typography-primary-font-weight);
   color: var(--cn-accent-l);
 }
 
@@ -683,7 +695,7 @@
 }
 
 .cn-carousel-counter {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-style: italic;
   color: var(--cn-paper);
   font-size: 0.95rem;
@@ -774,7 +786,7 @@
   align-items: center;
   gap: 1.5rem;
   padding: 0 2rem;
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 300;
   font-style: italic;
@@ -821,7 +833,7 @@
 }
 
 .cn-section-title {
-  font-family: var(--font-cn-display), "Times New Roman", serif;
+  font-family: var(--cn-font-display), "Times New Roman", serif;
   font-size: clamp(2.4rem, 5vw, 4.5rem);
   font-weight: 300;
   line-height: 1.05;
@@ -955,7 +967,7 @@
 }
 
 .cn-about-quote {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: clamp(1.6rem, 2.8vw, 2.4rem);
   font-style: italic;
   font-weight: 300;
@@ -984,7 +996,7 @@
 }
 
 .cn-signature-mark {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.9rem;
   font-style: italic;
   color: var(--cn-ink);
@@ -1053,7 +1065,7 @@
 }
 
 .cn-service-num {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 0.9rem;
   font-style: italic;
   color: var(--cn-accent-d);
@@ -1095,7 +1107,7 @@
 }
 
 .cn-service-name {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.55rem;
   font-weight: 400;
   color: var(--cn-ink);
@@ -1205,7 +1217,7 @@
 }
 
 .cn-categories-fallback-text h3 {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.35rem;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -1266,9 +1278,9 @@
 
 /* Match .cn-section-title (roman display); scoped so it wins over .cn-site h3 */
 .cn-site .cn-cat-scroll-title {
-  font-family: var(--font-cn-display), "Times New Roman", serif;
+  font-family: var(--e-global-typography-secondary-font-family);
   font-size: clamp(2.4rem, 5vw, 4.5rem);
-  font-weight: 300;
+  font-weight: var(--e-global-typography-secondary-font-weight);
   font-style: normal;
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -1279,7 +1291,7 @@
 .cn-cat-scroll-desc {
   font-family: var(--cn-font-sans);
   font-size: 1rem;
-  font-weight: 300;
+  font-weight: var(--e-global-typography-text-font-weight);
   line-height: 1.8;
   color: var(--cn-slate);
   width: 100%;
@@ -1611,7 +1623,7 @@
 }
 
 .cn-port-meta h4 {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.4rem;
   font-weight: 400;
 }
@@ -1621,7 +1633,7 @@
   top: 1.2rem;
   left: 1.4rem;
   z-index: 2;
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 0.95rem;
   font-style: italic;
   color: var(--cn-paper);
@@ -1671,7 +1683,7 @@
 }
 
 .cn-stat-num {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: clamp(3rem, 6vw, 5.5rem);
   font-weight: 300;
   line-height: 1;
@@ -1719,7 +1731,7 @@
 }
 
 .cn-process-num {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 4rem;
   font-weight: 300;
   font-style: italic;
@@ -1736,7 +1748,7 @@
 }
 
 .cn-process-step h3 {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.5rem;
   font-weight: 400;
   color: var(--cn-ink);
@@ -1845,7 +1857,7 @@
 }
 
 .cn-team-name {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.3rem;
   font-weight: 400;
   color: var(--cn-ink);
@@ -1900,7 +1912,7 @@
 }
 
 .cn-test-text {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.15rem;
   font-style: italic;
   line-height: 1.55;
@@ -2034,7 +2046,7 @@
 }
 
 .cn-faq-q h4 {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.25rem;
   font-weight: 400;
   color: var(--cn-ink);
@@ -2326,7 +2338,7 @@
 }
 
 .cn-ci-text p {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.25rem;
   font-weight: 300;
   font-style: italic;
@@ -2403,7 +2415,7 @@
 }
 
 .cn-footer-logo {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.9rem;
   font-style: italic;
   font-weight: 300;
@@ -2727,7 +2739,7 @@
 }
 
 .cn-cp-title {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: clamp(2.1rem, 5vw, 3.4rem);
   font-weight: 400;
   line-height: 1.08;
@@ -3000,7 +3012,7 @@
 }
 
 .cn-cp-mov-title {
-  font-family: var(--font-cn-display), "Times New Roman", serif;
+  font-family: var(--cn-font-display), "Times New Roman", serif;
   font-size: clamp(0.98rem, 2.1vw, 1.12rem);
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -3019,7 +3031,7 @@
 }
 
 .cn-cp-mov-type {
-  font-family: var(--font-cn-sans), -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-family: var(--cn-font-sans), -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
   font-size: 0.58rem;
   font-weight: 500;
   letter-spacing: 0.24em;
@@ -3080,7 +3092,7 @@
 
 .cn-cp-related-meta h3 {
   margin-top: 0.35rem;
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: 1.15rem;
   font-weight: 400;
   color: var(--cn-ink);
@@ -3094,7 +3106,7 @@
 }
 
 .cn-cp-cta-lead {
-  font-family: var(--font-cn-display), serif;
+  font-family: var(--cn-font-display), serif;
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: 400;
   margin-bottom: 1.25rem;

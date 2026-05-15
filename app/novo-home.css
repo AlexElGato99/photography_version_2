@@ -1,0 +1,1203 @@
+/* Novo-inspired home — scoped under .cn-novo-home; palette (--nv-*) + typography tokens. */
+
+.cn-novo-home {
+  /* Reference (Novo): warm tan gold + clean neutrals — scoped so dashboard / :root stay unchanged */
+  --nv-gold: #c48f56;
+  --nv-gold-light: #d4a574;
+  --nv-gold-deep: #9d6b3a;
+  --nv-dark: #1a1a1a;
+  --nv-mid: #555555;
+  --nv-muted: #767676;
+  --nv-light: #fafafa;
+  --nv-white: #ffffff;
+  --nv-border: #e8e8e8;
+  --nv-nav-scrolled: rgba(26, 26, 26, 0.96);
+  --nv-dot-dur: 5s;
+  background: var(--nv-white);
+  color: var(--nv-dark);
+  overflow-x: hidden;
+}
+
+.cn-novo-home .cn-novo-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+  height: 72px;
+  transform: translateY(0);
+  transition: background 0.4s, box-shadow 0.4s, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cn-novo-home .cn-novo-nav.cn-novo-nav--hidden {
+  transform: translateY(-110%);
+}
+
+.cn-novo-home .cn-novo-nav.cn-novo-nav--scrolled {
+  background: var(--nv-nav-scrolled);
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.18);
+}
+
+.cn-novo-home .cn-novo-nav.cn-novo-nav--top {
+  background: transparent;
+}
+
+.cn-novo-home .cn-novo-nav-logo {
+  font-family: var(--e-global-typography-primary-font-family);
+  font-weight: var(--e-global-typography-primary-font-weight);
+  font-size: clamp(0.95rem, 2.2vw, 1.2rem);
+  letter-spacing: 0.28em;
+  color: var(--nv-white);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.cn-novo-home .cn-novo-nav-logo em {
+  font-style: italic;
+  font-weight: var(--e-global-typography-text-font-weight);
+  margin-right: 0.35em;
+}
+
+.cn-novo-home .cn-novo-nav-logo b {
+  font-weight: var(--e-global-typography-primary-font-weight);
+  font-style: normal;
+}
+
+.cn-novo-home .cn-novo-nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.cn-novo-home .cn-novo-nav-links a {
+  font-family: var(--e-global-typography-accent-font-family);
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-weight: var(--e-global-typography-accent-font-weight);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.cn-novo-home .cn-novo-nav-links a:hover {
+  color: var(--nv-gold-light);
+}
+
+/* Nav CTA reuses .cn-novo-btn-outline (see NovoHomePage); only bar sizing here */
+.cn-novo-home .cn-novo-btn-outline.cn-novo-nav-cta {
+  padding: 0.65rem 1.35rem;
+  gap: 0.5rem;
+}
+
+.cn-novo-home .cn-novo-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.cn-novo-home .cn-novo-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.cn-novo-home .cn-novo-hamburger span {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--nv-white);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.cn-novo-home .cn-novo-mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(17, 17, 17, 0.98);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cn-novo-home .cn-novo-mobile-menu.cn-novo-mobile-menu--open {
+  transform: translateY(0);
+}
+
+.cn-novo-home .cn-novo-mobile-menu a {
+  color: var(--nv-white);
+  text-decoration: none;
+  font-family: var(--e-global-typography-secondary-font-family);
+  font-size: 2rem;
+  font-weight: var(--e-global-typography-secondary-font-weight);
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+
+.cn-novo-home .cn-novo-mobile-menu a:hover {
+  color: var(--nv-gold-light);
+}
+
+.cn-novo-home .cn-novo-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  background: var(--nv-dark);
+  isolation: isolate;
+}
+
+/* Extra scrims above slides, below copy / dots / social (z-index 3+) */
+.cn-novo-home .cn-novo-hero::before,
+.cn-novo-home .cn-novo-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Uniform light wash — keeps bright photos from blowing out the type */
+.cn-novo-home .cn-novo-hero::before {
+  background: rgba(0, 0, 0, 0.22);
+}
+
+/* Soft edge vignette — subtle depth without heavy banding */
+.cn-novo-home .cn-novo-hero::after {
+  background: radial-gradient(
+    ellipse 120% 90% at 50% 55%,
+    transparent 35%,
+    rgba(0, 0, 0, 0.28) 100%
+  );
+}
+
+.cn-novo-home .cn-novo-hero-slide {
+  position: absolute;
+  inset: 0;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cn-novo-home .cn-novo-hero-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Layered transparent darks: bottom lift for copy + side falloff + mid scrim */
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.42) 38%, rgba(0, 0, 0, 0.12) 62%, transparent 100%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.38) 0%, transparent 32%, transparent 68%, rgba(0, 0, 0, 0.32) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, transparent 42%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.cn-novo-home .cn-novo-hero-slide.cn-novo-hero-slide--active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.cn-novo-home .cn-novo-hero-slide.cn-novo-hero-slide--inactive {
+  opacity: 0;
+  z-index: 0;
+}
+
+.cn-novo-home .cn-novo-hero-content {
+  position: absolute;
+  bottom: clamp(4.15rem, 9.25vw, 6.15rem);
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 0 clamp(1.5rem, 5vw, 3.75rem);
+}
+
+.cn-novo-home .cn-novo-slide-tag {
+  font-family: var(--e-global-typography-primary-font-family);
+  font-size: 0.875rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--nv-gold-light);
+  font-weight: var(--e-global-typography-primary-font-weight);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.cn-novo-home .cn-novo-hero-title {
+  font-family: var(--e-global-typography-primary-font-family);
+  font-size: clamp(3rem, 7.5vw, 6.25rem);
+  font-weight: var(--e-global-typography-primary-font-weight);
+  color: var(--nv-white);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: 50rem;
+  margin-bottom: 1.15rem;
+}
+
+.cn-novo-home .cn-novo-hero-title em {
+  color: var(--nv-gold-light);
+  font-style: italic;
+  font-weight: var(--e-global-typography-primary-font-weight);
+}
+
+.cn-novo-home .cn-novo-hero-subtitle {
+  font-family: var(--e-global-typography-text-font-family);
+  font-weight: var(--e-global-typography-text-font-weight);
+  font-size: 1.0625rem;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.75;
+  max-width: 28rem;
+  margin-bottom: 2.25rem;
+}
+
+.cn-novo-home .cn-novo-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--e-global-typography-primary-font-family);
+  font-weight: var(--e-global-typography-primary-font-weight);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: var(--nv-white);
+  text-decoration: none;
+  padding: 1rem 2.25rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cn-novo-home .cn-novo-btn-outline:hover {
+  background: var(--nv-gold);
+  border-color: var(--nv-gold-light);
+  color: var(--nv-white);
+}
+
+.cn-novo-home .cn-novo-btn-outline::after {
+  content: "→";
+  font-size: 1rem;
+}
+
+.cn-novo-home .cn-novo-slide-dots {
+  position: absolute;
+  bottom: 2.5rem;
+  left: clamp(1.5rem, 5vw, 3.75rem);
+  z-index: 3;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cn-novo-home .cn-novo-dot-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--e-global-typography-text-font-family);
+  font-weight: var(--e-global-typography-text-font-weight);
+  font-size: 0.9375rem;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.62);
+  transition: color 0.3s;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 0.35rem;
+  min-width: 2.75rem;
+  min-height: 2.85rem;
+}
+
+.cn-novo-home .cn-novo-dot-btn.cn-novo-dot-btn--active {
+  color: var(--nv-white);
+}
+
+.cn-novo-home .cn-novo-dot-btn svg {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 36px;
+  height: 36px;
+  transform: rotate(-90deg);
+}
+
+.cn-novo-home .cn-novo-dot-btn circle {
+  fill: none;
+  stroke: var(--nv-gold-light);
+  stroke-width: 1.75;
+  stroke-dasharray: 94;
+  stroke-dashoffset: 94;
+}
+
+.cn-novo-home .cn-novo-dot-btn.cn-novo-dot-btn--active circle {
+  animation: cn-novo-dot-ring var(--nv-dot-dur, 5s) linear forwards;
+}
+
+@keyframes cn-novo-dot-ring {
+  from {
+    stroke-dashoffset: 94;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.cn-novo-home .cn-novo-slide-social {
+  position: absolute;
+  right: 0;
+  left: auto;
+  top: 50%;
+  padding-right: max(0.65rem, env(safe-area-inset-right, 0px));
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center center;
+  z-index: 3;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.cn-novo-home .cn-novo-slide-social a {
+  font-family: var(--e-global-typography-accent-font-family);
+  font-weight: var(--e-global-typography-accent-font-weight);
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.cn-novo-home .cn-novo-slide-social a:hover {
+  color: var(--nv-gold-light);
+}
+
+.cn-novo-home .cn-novo-about {
+  --cn-about-pad-y: clamp(3.5rem, 8vw, 5.5rem);
+  --cn-about-pad-gutter: clamp(2rem, 5vw, 3.75rem);
+  --cn-about-pad-outer: clamp(2rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  align-items: stretch;
+  background: var(--nv-light);
+}
+
+/* Mirror text column spacing: outer edge / gutter */
+.cn-novo-home .cn-novo-about-img-side {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  min-height: 0;
+  padding: var(--cn-about-pad-y) var(--cn-about-pad-gutter) var(--cn-about-pad-y) var(--cn-about-pad-outer);
+  background: var(--nv-light);
+}
+
+.cn-novo-home .cn-novo-about-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+}
+
+.cn-novo-home .cn-novo-about-card-frame {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--nv-white);
+  border-radius: clamp(14px, 2vw, 22px);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 18px 48px rgba(0, 0, 0, 0.1);
+  padding: clamp(0.5rem, 1vw, 0.7rem);
+}
+
+.cn-novo-home .cn-novo-about-card-inner {
+  --cn-about-card-inner-pad: clamp(0.45rem, 1.1vw, 0.7rem);
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  /* Inset photo slightly inside the card */
+  padding: var(--cn-about-card-inner-pad);
+}
+
+.cn-novo-home .cn-novo-about-card-image-slot {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: clamp(8px, 1.25vw, 14px);
+  background: var(--nv-light);
+}
+
+.cn-novo-home .cn-novo-about-card-img {
+  object-position: center;
+}
+
+.cn-novo-home .cn-novo-about-card-placeholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.02) 100%);
+}
+
+/* Top-left of photo, overlapping the outer edge of the image */
+.cn-novo-home .cn-novo-about-badge-wrap {
+  position: absolute;
+  top: var(--cn-about-card-inner-pad);
+  left: var(--cn-about-card-inner-pad);
+  z-index: 4;
+  transform: translate(-20%, -34%);
+  opacity: 0;
+  animation: cn-about-badge-wrap-in 0.78s cubic-bezier(0.22, 1, 0.36, 1) 0.12s forwards;
+  pointer-events: none;
+}
+
+.cn-novo-home .cn-novo-about-rating-badge {
+  max-width: min(100vw, 200px);
+  padding: 0.75rem 1rem 0.85rem;
+  background: var(--nv-white);
+  border-radius: 10px;
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  animation: cn-about-badge-float 2.75s ease-in-out 0.85s infinite;
+}
+
+.cn-novo-home .cn-novo-about-rating-stars {
+  display: flex;
+  gap: 0.18rem;
+  margin-bottom: 0.35rem;
+}
+
+.cn-novo-home .cn-novo-about-star {
+  display: inline-block;
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--nv-gold);
+  opacity: 0;
+  animation: cn-about-star-in 0.35s ease forwards;
+}
+
+.cn-novo-home .cn-novo-about-star:nth-child(1) {
+  animation-delay: 0.35s;
+}
+
+.cn-novo-home .cn-novo-about-star:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.cn-novo-home .cn-novo-about-star:nth-child(3) {
+  animation-delay: 0.45s;
+}
+
+.cn-novo-home .cn-novo-about-star:nth-child(4) {
+  animation-delay: 0.5s;
+}
+
+.cn-novo-home .cn-novo-about-star:nth-child(5) {
+  animation-delay: 0.55s;
+}
+
+.cn-novo-home .cn-novo-about-rating-score {
+  margin: 0;
+  font-family: var(--e-global-typography-secondary-font-family);
+  font-size: clamp(1.65rem, 3.5vw, 2.35rem);
+  font-weight: var(--e-global-typography-secondary-font-weight);
+  color: var(--nv-muted);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.cn-novo-home .cn-novo-about-rating-caption {
+  margin: 0.35rem 0 0;
+  font-family: var(--e-global-typography-accent-font-family);
+  font-size: 0.6rem;
+  font-weight: var(--e-global-typography-accent-font-weight);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nv-muted);
+  line-height: 1.35;
+  opacity: 0.85;
+}
+
+@keyframes cn-about-badge-wrap-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cn-about-badge-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(12px);
+  }
+}
+
+@keyframes cn-about-star-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cn-novo-home .cn-novo-about-text-side {
+  padding: var(--cn-about-pad-y) var(--cn-about-pad-outer) var(--cn-about-pad-y) var(--cn-about-pad-gutter);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cn-novo-home .cn-novo-section-tag {
+  font-family: var(--e-global-typography-primary-font-family);
+  font-size: 0.75rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--nv-gold);
+  font-weight: var(--e-global-typography-primary-font-weight);
+  margin-bottom: 1.1rem;
+}
+
+.cn-novo-home .cn-novo-section-heading,
+.cn-novo-home .cn-novo-about-heading {
+  font-family: var(--e-global-typography-secondary-font-family);
+  font-weight: var(--e-global-typography-secondary-font-weight);
+  font-size: clamp(2.1rem, 3.8vw, 3.5rem);
+  line-height: 1.12;
+  margin-bottom: 0.35rem;
+  color: var(--nv-dark);
+}
+
+.cn-novo-home .cn-novo-about-heading em,
+.cn-novo-home .cn-novo-section-heading em {
+  color: var(--nv-gold);
+  font-style: italic;
+}
+
+.cn-novo-home .cn-novo-divider {
+  width: 40px;
+  height: 2px;
+  background: var(--nv-gold);
+  margin: 1.35rem 0;
+  flex-shrink: 0;
+}
+
+.cn-novo-home .cn-novo-about-text {
+  font-family: var(--e-global-typography-text-font-family);
+  font-weight: var(--e-global-typography-text-font-weight);
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--nv-mid);
+  max-width: 28rem;
+  margin-bottom: 2.5rem;
+}
+
+.cn-novo-home .cn-novo-about-text p {
+  margin: 0 0 0.75em;
+}
+
+.cn-novo-home .cn-novo-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.cn-novo-home .cn-novo-stat-num {
+  font-family: var(--e-global-typography-primary-font-family);
+  font-size: clamp(2.75rem, 5.5vw, 3.75rem);
+  font-weight: var(--e-global-typography-primary-font-weight);
+  color: var(--nv-gold);
+  line-height: 1;
+}
+
+.cn-novo-home .cn-novo-stat-label {
+  font-family: var(--e-global-typography-accent-font-family);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nv-muted);
+  font-weight: var(--e-global-typography-accent-font-weight);
+  margin-top: 0.5rem;
+  line-height: 1.45;
+}
+
+.cn-novo-home .cn-novo-btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--e-global-typography-accent-font-family);
+  font-weight: var(--e-global-typography-accent-font-weight);
+  background: transparent;
+  border: 1px solid var(--nv-dark);
+  color: var(--nv-dark);
+  text-decoration: none;
+  padding: 0.85rem 2rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.cn-novo-home .cn-novo-btn-gold:hover {
+  background: var(--nv-gold);
+  border-color: var(--nv-gold-deep);
+  color: var(--nv-white);
+}
+
+.cn-novo-home .cn-novo-btn-gold::after {
+  content: "→";
+  font-size: 0.9rem;
+}
+
+.cn-novo-home .cn-novo-portfolio {
+  padding: clamp(3.5rem, 8vw, 5.5rem) clamp(1.5rem, 4vw, 2.5rem) 3.75rem;
+  background: var(--nv-white);
+}
+
+.cn-novo-home .cn-novo-portfolio .cn-novo-about-text {
+  font-size: 1.0625rem;
+  color: var(--nv-muted);
+  line-height: 1.8;
+}
+
+.cn-novo-home .cn-novo-section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.cn-novo-home .cn-novo-filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.cn-novo-home .cn-novo-filter-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--e-global-typography-accent-font-family);
+  font-size: 0.75rem;
+  font-weight: var(--e-global-typography-accent-font-weight);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.15rem;
+  color: var(--nv-muted);
+  transition: color 0.2s;
+  position: relative;
+}
+
+.cn-novo-home .cn-novo-filter-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 1.1rem;
+  right: 1.1rem;
+  height: 1px;
+  background: var(--nv-gold);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+
+.cn-novo-home .cn-novo-filter-btn.cn-novo-filter-btn--active {
+  color: var(--nv-dark);
+  font-weight: var(--e-global-typography-primary-font-weight);
+}
+
+.cn-novo-home .cn-novo-filter-btn.cn-novo-filter-btn--active::after {
+  transform: scaleX(1);
+}
+
+.cn-novo-home .cn-novo-filter-btn:hover:not(.cn-novo-filter-btn--active) {
+  color: var(--nv-gold-deep);
+}
+
+.cn-novo-home .cn-novo-masonry {
+  columns: 6 180px;
+  gap: 6px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.cn-novo-home .cn-novo-masonry-item {
+  break-inside: avoid;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 6px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.cn-novo-home .cn-novo-masonry-item.cn-novo-masonry-item--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cn-novo-home .cn-novo-masonry-item a {
+  display: block;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cn-novo-home .cn-novo-masonry-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+.cn-novo-home .cn-novo-masonry-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.cn-novo-home .cn-novo-masonry-item:hover .cn-novo-masonry-overlay {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.cn-novo-home .cn-novo-masonry-title {
+  font-family: var(--e-global-typography-accent-font-family);
+  color: var(--nv-white);
+  font-size: 0.875rem;
+  font-weight: var(--e-global-typography-accent-font-weight);
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.cn-novo-home .cn-novo-masonry-item:hover .cn-novo-masonry-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cn-novo-home .cn-novo-load-more-wrap {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+/* “Explore by category” reuses portfolio layout; this tweaks surface + tag line */
+.cn-novo-home .cn-novo-portfolio.cn-novo-categories-explore {
+  background: var(--nv-light);
+  border-top: 1px solid var(--nv-border);
+}
+
+.cn-novo-home .cn-novo-masonry-tag {
+  font-family: var(--e-global-typography-accent-font-family);
+  font-size: 0.65rem;
+  font-weight: var(--e-global-typography-accent-font-weight);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nv-gold-light);
+  margin-top: 0.35rem;
+}
+
+.cn-novo-home .cn-novo-insta-strip {
+  overflow: hidden;
+  position: relative;
+}
+
+.cn-novo-home .cn-novo-insta-inner {
+  display: flex;
+  gap: 0;
+  animation: cn-novo-strip-scroll 30s linear infinite;
+}
+
+.cn-novo-home .cn-novo-insta-inner:hover {
+  animation-play-state: paused;
+}
+
+@keyframes cn-novo-strip-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.cn-novo-home .cn-novo-insta-photo {
+  flex-shrink: 0;
+  width: 200px;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+.cn-novo-home .cn-novo-insta-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(196, 143, 86, 0);
+  transition: background 0.3s;
+  pointer-events: none;
+}
+
+.cn-novo-home .cn-novo-insta-photo:hover::after {
+  background: rgba(196, 143, 86, 0.38);
+}
+
+.cn-novo-home .cn-novo-insta-btn-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.cn-novo-home .cn-novo-insta-follow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--e-global-typography-accent-font-family);
+  font-weight: var(--e-global-typography-accent-font-weight);
+  background: rgba(17, 17, 17, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  padding: 0.85rem 1.65rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.cn-novo-home .cn-novo-insta-follow:hover {
+  border-color: var(--nv-gold);
+  background: rgba(31, 34, 34, 0.92);
+}
+
+.cn-novo-home .cn-novo-footer-social {
+  background: var(--nv-dark);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vw, 2.5rem);
+  flex-wrap: wrap;
+}
+
+.cn-novo-home .cn-novo-footer-social a {
+  font-family: var(--e-global-typography-accent-font-family);
+  font-weight: var(--e-global-typography-accent-font-weight);
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s;
+}
+
+.cn-novo-home .cn-novo-footer-social a:hover {
+  color: var(--nv-gold-light);
+}
+
+.cn-novo-home .cn-novo-footer {
+  background: var(--nv-light);
+  padding: clamp(2.5rem, 6vw, 3.75rem) clamp(1.5rem, 5vw, 3.75rem) 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2.5rem;
+  border-top: 1px solid var(--nv-border);
+}
+
+.cn-novo-home .cn-novo-footer-logo {
+  font-family: var(--e-global-typography-primary-font-family);
+  font-weight: var(--e-global-typography-primary-font-weight);
+  font-size: 1.35rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: var(--nv-dark);
+}
+
+.cn-novo-home .cn-novo-footer-logo em {
+  font-style: italic;
+  font-weight: var(--e-global-typography-text-font-weight);
+  margin-right: 0.25em;
+}
+
+.cn-novo-home .cn-novo-footer-desc {
+  font-family: var(--e-global-typography-text-font-family);
+  font-size: 0.875rem;
+  line-height: 1.85;
+  color: var(--nv-muted);
+  font-weight: var(--e-global-typography-text-font-weight);
+}
+
+.cn-novo-home .cn-novo-footer-heading {
+  font-family: var(--e-global-typography-primary-font-family);
+  font-size: 0.75rem;
+  font-weight: var(--e-global-typography-primary-font-weight);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  position: relative;
+  padding-bottom: 0.75rem;
+  color: var(--nv-dark);
+}
+
+.cn-novo-home .cn-novo-footer-heading::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  height: 1px;
+  background: var(--nv-gold);
+}
+
+.cn-novo-home .cn-novo-footer-photos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.cn-novo-home .cn-novo-footer-photo {
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: block;
+}
+
+.cn-novo-home .cn-novo-footer-photo:hover {
+  opacity: 0.88;
+}
+
+.cn-novo-home .cn-novo-contact-row {
+  font-family: var(--e-global-typography-text-font-family);
+  font-weight: var(--e-global-typography-text-font-weight);
+  font-size: 0.875rem;
+  color: var(--nv-muted);
+  margin-bottom: 0.75rem;
+}
+
+.cn-novo-home .cn-novo-contact-row strong {
+  color: var(--nv-dark);
+  font-weight: 500;
+}
+
+.cn-novo-home .cn-novo-footer-copy {
+  font-size: 0.75rem;
+  color: var(--nv-muted);
+  margin-top: 1.25rem;
+  letter-spacing: 0.03em;
+}
+
+.cn-novo-home .cn-novo-footer-legal-link {
+  font-size: 0.75rem;
+  color: var(--nv-muted);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+
+.cn-novo-home .cn-novo-footer-legal-link:hover {
+  color: var(--nv-gold);
+}
+
+@media (max-width: 900px) {
+  .cn-novo-home .cn-novo-nav-links {
+    display: none;
+  }
+
+  .cn-novo-home .cn-novo-nav-cta {
+    display: none;
+  }
+
+  .cn-novo-home .cn-novo-hamburger {
+    display: flex;
+  }
+
+  .cn-novo-home .cn-novo-about {
+    grid-template-columns: 1fr;
+  }
+
+  .cn-novo-home .cn-novo-about-img-side {
+    padding: 3.75rem 2.5rem 1.25rem;
+  }
+
+  .cn-novo-home .cn-novo-about-card {
+    flex: 0 1 auto;
+  }
+
+  .cn-novo-home .cn-novo-about-card-inner {
+    min-height: clamp(240px, 58vw, 400px);
+  }
+
+  .cn-novo-home .cn-novo-about-text-side {
+    padding: 1.5rem 2.5rem 3.75rem;
+  }
+
+  .cn-novo-home .cn-novo-masonry {
+    columns: 3 140px;
+  }
+
+  .cn-novo-home .cn-novo-footer {
+    grid-template-columns: 1fr;
+  }
+
+  /* Social rail: flush to right edge (padding keeps text off the rim) */
+  .cn-novo-home .cn-novo-slide-social {
+    right: 0;
+    padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+    gap: 1.1rem;
+  }
+
+  .cn-novo-home .cn-novo-stats {
+    gap: 0.75rem;
+  }
+
+  .cn-novo-home .cn-novo-stat-num {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .cn-site .cn-novo-home .cn-novo-masonry,
+  .cn-novo-home .cn-novo-masonry {
+    columns: 2 130px;
+  }
+
+  .cn-site .cn-novo-home .cn-novo-hero-title,
+  .cn-novo-home .cn-novo-hero-title {
+    font-size: 2.35rem;
+  }
+
+  .cn-site .cn-novo-home .cn-novo-slide-social,
+  .cn-novo-home .cn-novo-slide-social {
+    display: none;
+  }
+
+  .cn-site .cn-novo-home .cn-novo-insta-photo,
+  .cn-novo-home .cn-novo-insta-photo {
+    width: 140px;
+    height: 140px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-novo-home .cn-novo-insta-inner {
+    animation: none;
+  }
+
+  .cn-novo-home .cn-novo-dot-btn.cn-novo-dot-btn--active circle {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .cn-novo-home .cn-novo-about-badge-wrap {
+    animation: none;
+    opacity: 1;
+    transform: translate(-20%, -34%);
+  }
+
+  .cn-novo-home .cn-novo-about-rating-badge,
+  .cn-novo-home .cn-novo-about-star {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * Public home is wrapped in `.cn-site` (see app/(site)/layout.tsx).
+ * These selectors load after root `site.css` and beat `.cn-site h1` / `button { font: inherit }`
+ * so hero type, dots, and the vertical social rail always pick up Novo sizing.
+ */
+.cn-site .cn-novo-home .cn-novo-slide-tag {
+  font-size: 0.9375rem;
+  letter-spacing: 0.24em;
+  margin-bottom: 1.05rem;
+}
+
+.cn-site .cn-novo-home .cn-novo-hero-title {
+  font-family: var(--e-global-typography-primary-font-family);
+  font-weight: var(--e-global-typography-primary-font-weight);
+  letter-spacing: -0.02em;
+  font-size: clamp(3.25rem, 8vw, 6.75rem);
+  line-height: 1.07;
+  max-width: 52rem;
+}
+
+.cn-site .cn-novo-home .cn-novo-hero-subtitle {
+  font-size: 1.125rem;
+  max-width: 32rem;
+  letter-spacing: 0.04em;
+}
+
+.cn-site .cn-novo-home .cn-novo-btn-outline {
+  font-size: 0.875rem;
+  padding: 1.05rem 2.35rem;
+}
+
+.cn-site .cn-novo-home .cn-novo-btn-outline.cn-novo-nav-cta {
+  font-size: 0.8125rem;
+  padding: 0.62rem 1.25rem;
+}
+
+.cn-site .cn-novo-home .cn-novo-slide-dots {
+  gap: 1.15rem;
+  bottom: 2.65rem;
+}
+
+.cn-site .cn-novo-home .cn-novo-dot-btn {
+  font-size: 1.0625rem;
+  min-width: 3rem;
+  min-height: 3.05rem;
+}
+
+.cn-site .cn-novo-home .cn-novo-dot-btn svg {
+  width: 42px;
+  height: 42px;
+}
+
+.cn-site .cn-novo-home .cn-novo-slide-social {
+  right: 0;
+  left: auto;
+  padding-right: max(0.65rem, env(safe-area-inset-right, 0px));
+}
+
+.cn-site .cn-novo-home .cn-novo-slide-social a {
+  font-size: 0.9375rem;
+}

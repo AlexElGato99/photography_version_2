@@ -1,9 +1,6 @@
-import { CategoriesEditor } from "@/components/dashboard/editors/CategoriesEditor";
-import { getCategories, getCategoriesMeta } from "@/lib/site/fetchers";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
-export default async function CategoriesPage() {
-  const [meta, categories] = await Promise.all([getCategoriesMeta(), getCategories()]);
-  return <CategoriesEditor meta={meta} categories={categories} />;
+/** @deprecated Use `/dashboard/sections/explore-by-category` (same CMS data). */
+export default function CategoriesRedirectPage() {
+  redirect("/dashboard/sections/explore-by-category");
 }

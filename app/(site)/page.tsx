@@ -1,46 +1,22 @@
-import { SiteNav } from "@/components/site/SiteNav";
-import { Hero } from "@/components/site/Hero";
-import { Marquee } from "@/components/site/Marquee";
-import { About } from "@/components/site/About";
-import { Services } from "@/components/site/Services";
-import { Categories } from "@/components/site/Categories";
-import { Portfolio } from "@/components/site/Portfolio";
-import { Stats } from "@/components/site/Stats";
-import { Process } from "@/components/site/Process";
-import { Team } from "@/components/site/Team";
-import { Testimonials } from "@/components/site/Testimonials";
-import { Instagram } from "@/components/site/Instagram";
-import { FaqSection } from "@/components/site/Faq";
-import { Contact } from "@/components/site/Contact";
-import { Footer } from "@/components/site/Footer";
 import { BackTop } from "@/components/site/BackTop";
 import { Loader } from "@/components/site/Loader";
-import { SiteAnimations } from "@/components/site/SiteAnimations";
+import { NovoHomeAnimations } from "@/components/site/NovoHomeAnimations";
+import { NovoHomePage } from "@/components/site/NovoHomePage";
 import {
   getAbout,
   getCategories,
   getCategoriesMeta,
   getContactMeta,
-  getFaqMeta,
-  getFaqs,
   getFooter,
   getGeneral,
   getHero,
   getHeroSlides,
   getInstagramMeta,
   getInstagramPosts,
-  getMarquee,
   getNavigation,
   getPortfolioItems,
   getPortfolioMeta,
-  getProcess,
-  getServices,
-  getServicesMeta,
   getStats,
-  getTeam,
-  getTeamMeta,
-  getTestimonials,
-  getTestimonialsMeta,
 } from "@/lib/site/fetchers";
 
 export const dynamic = "force-dynamic";
@@ -50,73 +26,54 @@ export default async function HomePage() {
     general,
     navigation,
     footer,
-    marquee,
     hero,
     heroSlides,
     about,
-    servicesMeta,
-    services,
-    categoriesMeta,
-    categories,
     portfolioMeta,
     portfolioItems,
     stats,
-    processData,
-    teamMeta,
-    team,
-    testimonialsMeta,
-    testimonials,
     instagramMeta,
     instagramPosts,
-    faqMeta,
-    faqs,
-    contactMeta,
+    contact,
+    categoriesMeta,
+    categories,
   ] = await Promise.all([
     getGeneral(),
     getNavigation(),
     getFooter(),
-    getMarquee(),
     getHero(),
     getHeroSlides(),
     getAbout(),
-    getServicesMeta(),
-    getServices(),
-    getCategoriesMeta(),
-    getCategories(),
     getPortfolioMeta(),
     getPortfolioItems(),
     getStats(),
-    getProcess(),
-    getTeamMeta(),
-    getTeam(),
-    getTestimonialsMeta(),
-    getTestimonials(),
     getInstagramMeta(),
     getInstagramPosts(),
-    getFaqMeta(),
-    getFaqs(),
     getContactMeta(),
+    getCategoriesMeta(),
+    getCategories(),
   ]);
 
   return (
     <>
-      <Loader name={general.brand_italic} />
-      <SiteAnimations />
-      <SiteNav general={general} navigation={navigation} />
-      <Hero hero={hero} slides={heroSlides} />
-      <Marquee items={marquee.items} />
-      <About about={about} />
-      <Services meta={servicesMeta} services={services} />
-      <Categories meta={categoriesMeta} categories={categories} />
-      <Portfolio meta={portfolioMeta} items={portfolioItems} />
-      <Stats stats={stats} />
-      <Process process={processData} />
-      <Team meta={teamMeta} members={team} />
-      <Testimonials meta={testimonialsMeta} items={testimonials} />
-      <Instagram meta={instagramMeta} posts={instagramPosts} />
-      <FaqSection meta={faqMeta} items={faqs} />
-      <Contact general={general} meta={contactMeta} />
-      <Footer general={general} footer={footer} />
+      {general.loader_enabled ? <Loader name={general.brand_italic} /> : null}
+      <NovoHomeAnimations />
+      <NovoHomePage
+        general={general}
+        navigation={navigation}
+        footer={footer}
+        hero={hero}
+        heroSlides={heroSlides}
+        about={about}
+        portfolioMeta={portfolioMeta}
+        portfolioItems={portfolioItems}
+        stats={stats}
+        instagramMeta={instagramMeta}
+        instagramPosts={instagramPosts}
+        contact={contact}
+        categoriesMeta={categoriesMeta}
+        categories={categories}
+      />
       <BackTop />
     </>
   );

@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter_Tight } from "next/font/google";
+import { Roboto, Roboto_Slab } from "next/font/google";
 import "./globals.css";
 import "./site.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 
-const cormorant = Cormorant_Garamond({
+const robotoSlab = Roboto_Slab({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "700"],
   variable: "--font-cn-display",
   display: "swap",
 });
 
-const interTight = Inter_Tight({
+const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  /* next/font Roboto: no 600 — use 700 for “semibold” primary headings in CSS tokens */
+  weight: ["400", "500", "700"],
   variable: "--font-cn-sans",
   display: "swap",
 });
@@ -32,7 +32,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${cormorant.variable} ${interTight.variable}`}
+      className={`${roboto.variable} ${robotoSlab.variable}`}
     >
       <body className="font-sans antialiased">
         <ThemeProvider>{children}</ThemeProvider>

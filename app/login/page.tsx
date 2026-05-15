@@ -33,7 +33,7 @@ export default async function LoginPage({
                   Create the first admin
                 </h1>
                 <p className="text-sm text-[var(--text-muted)]">
-                  No admin account exists yet. Set the credentials you'll use to
+                  No admin account exists yet. Set the credentials you will use to
                   manage the site.
                 </p>
               </header>

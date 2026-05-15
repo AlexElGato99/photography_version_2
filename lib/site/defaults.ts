@@ -60,7 +60,7 @@ export const defaultNavigation: SiteNavigation = {
   items: [
     { label: "About", href: "#about" },
     { label: "Services", href: "#services" },
-    { label: "Categories", href: "#categories" },
+    { label: "Explore by category", href: "#categories" },
     { label: "Portfolio", href: "#portfolio" },
     { label: "Contact", href: "#contact" },
   ],
@@ -73,6 +73,7 @@ const footerColumns: FooterColumn[] = [
       { label: "About us", href: "#about" },
       { label: "Services", href: "#services" },
       { label: "Portfolio", href: "#portfolio" },
+      { label: "Explore by category", href: "#categories" },
     ],
   },
   {

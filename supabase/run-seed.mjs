@@ -43,8 +43,8 @@ await upsertSingleton("site_navigation", {
   id: 1, cta_label: "Book a session", cta_href: "#contact",
   items: [
     { label: "About", href: "#about" }, { label: "Services", href: "#services" },
-    { label: "Categories", href: "#categories" }, { label: "Portfolio", href: "#portfolio" },
-    { label: "Pricing", href: "#pricing" }, { label: "Contact", href: "#contact" },
+    { label: "Explore by category", href: "#categories" }, { label: "Portfolio", href: "#portfolio" },
+    { label: "Contact", href: "#contact" },
   ],
 });
 
@@ -53,7 +53,7 @@ await upsertSingleton("site_footer", {
   brand_text: "A premium photography agency based in Murcia, Spain. Crafting timeless visual stories since 2018.",
   copyright: "© 2026 Cristina Navarro Studio · All rights reserved",
   columns: [
-    { title: "Studio", links: [{ label: "About us", href: "#about" }, { label: "Services", href: "#services" }, { label: "Portfolio", href: "#portfolio" }, { label: "Pricing", href: "#pricing" }] },
+    { title: "Studio", links: [{ label: "About us", href: "#about" }, { label: "Services", href: "#services" }, { label: "Portfolio", href: "#portfolio" }, { label: "Explore by category", href: "#categories" }] },
     { title: "Categories", links: [{ label: "Wedding", href: "#" }, { label: "Fashion", href: "#" }, { label: "Commercial", href: "#" }, { label: "Lifestyle", href: "#" }] },
     { title: "Contact", links: [{ label: "hola@cristinanavarro.studio", href: "mailto:hola@cristinanavarro.studio" }, { label: "+34 600 000 000", href: "tel:+34600000000" }, { label: "Calle de la Luna 14, Murcia", href: "#" }, { label: "Instagram", href: "#" }] },
   ],
@@ -168,12 +168,6 @@ await upsertSingleton("section_team_meta", {
   eyebrow: "The team",
   title_heading: { v: 1, line1: "Meet the", mid: "", em: "creators", tail: "", breakAfterLine1: true, line2: "" },
   lead: "A small, passionate team united by craft and an unwavering pursuit of beautiful imagery.",
-});
-await upsertSingleton("section_pricing_meta", {
-  id: 1,
-  eyebrow: "Investment",
-  title_heading: { v: 1, line1: "Transparent ", mid: "", em: "pricing", tail: "", breakAfterLine1: false, line2: "" },
-  lead: "Tailored packages designed for every story. Custom quotes available for unique projects.",
 });
 await upsertSingleton("section_testimonials_meta", {
   id: 1,
@@ -384,12 +378,6 @@ await replaceCollection("team_members", [
   { position: 1, name: "Marco Velez",      role: "Senior Photographer",         image_url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80&auto=format&fit=crop", instagram_url: "#", linkedin_url: "#" },
   { position: 2, name: "Lucia Reyes",      role: "Art Director",                image_url: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&q=80&auto=format&fit=crop", instagram_url: "#", linkedin_url: "#" },
   { position: 3, name: "Diego Ortiz",      role: "Post-Production Lead",        image_url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&q=80&auto=format&fit=crop", instagram_url: "#", linkedin_url: "#" },
-]);
-
-await replaceCollection("pricing_tiers", [
-  { position: 0, name: "Essential", currency: "€", amount: "890",   period: "From / per session",    badge: null,           features: ["Up to 2 hours of coverage","40+ edited high-res photos","Online private gallery","Color grading included","Delivery in 14 days"],                                    cta_label: "Get started",   cta_href: "#contact", featured: false },
-  { position: 1, name: "Signature", currency: "€", amount: "1,890", period: "From / per project",    badge: "Most popular", features: ["Full day coverage (8h)","120+ edited photos","Mood board + planning call","Premium color grading","Print release license","Delivery in 10 days"],                  cta_label: "Book signature",cta_href: "#contact", featured: true  },
-  { position: 2, name: "Atelier",   currency: "€", amount: "3,490", period: "From / custom project", badge: null,           features: ["Multi-day shoots","250+ edited photos","Full creative direction","Location scouting","Team of 2-3 photographers","Commercial usage rights"], cta_label: "Request quote", cta_href: "#contact", featured: false },
 ]);
 
 await replaceCollection("testimonials", [

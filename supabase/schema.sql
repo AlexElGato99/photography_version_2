@@ -344,6 +344,31 @@ create table if not exists public.instagram_posts (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.section_pricing_meta (
+  id smallint primary key default 1,
+  eyebrow text not null default 'Investment',
+  title_heading jsonb not null default '{}'::jsonb,
+  lead text not null default '',
+  updated_at timestamptz not null default now(),
+  constraint section_pricing_meta_singleton check (id = 1)
+);
+
+create table if not exists public.pricing_tiers (
+  id uuid primary key default gen_random_uuid(),
+  position integer not null default 0,
+  name text not null,
+  currency text not null default '€',
+  amount text not null,
+  period text not null default '',
+  badge text,
+  features jsonb not null default '[]'::jsonb,
+  cta_label text not null default 'Get started',
+  cta_href text not null default '#contact',
+  featured boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 -- Contact submissions (public form drops here)
 create table if not exists public.contact_submissions (
   id uuid primary key default gen_random_uuid(),
@@ -366,10 +391,10 @@ begin
   for t in select unnest(array[
     'site_general','site_seo','site_navigation','site_footer','site_marquee',
     'section_hero','section_about','section_services_meta','section_categories_meta',
-    'section_portfolio_meta','section_stats','section_process','section_team_meta',
+    'section_portfolio_meta','section_pricing_meta','section_stats','section_process','section_team_meta',
     'section_testimonials_meta','section_instagram',
     'section_faq_meta','section_contact',
-    'hero_slides','services','categories','portfolio_items','team_members',
+    'hero_slides','services','categories','portfolio_items','pricing_tiers','team_members',
     'testimonials','faqs','instagram_posts'
   ]) loop
     execute format('drop trigger if exists trg_updated_at on public.%I', t);
@@ -397,6 +422,7 @@ insert into public.section_process (id) values (1) on conflict (id) do nothing;
 insert into public.section_team_meta (id) values (1) on conflict (id) do nothing;
 insert into public.section_testimonials_meta (id) values (1) on conflict (id) do nothing;
 insert into public.section_instagram (id) values (1) on conflict (id) do nothing;
+insert into public.section_pricing_meta (id) values (1) on conflict (id) do nothing;
 insert into public.section_faq_meta (id) values (1) on conflict (id) do nothing;
 insert into public.section_contact (id) values (1) on conflict (id) do nothing;
 
@@ -410,10 +436,10 @@ begin
   for t in select unnest(array[
     'site_general','site_seo','site_navigation','site_footer','site_marquee',
     'section_hero','section_about','section_services_meta','section_categories_meta',
-    'section_portfolio_meta','section_stats','section_process','section_team_meta',
+    'section_portfolio_meta','section_pricing_meta','section_stats','section_process','section_team_meta',
     'section_testimonials_meta','section_instagram',
     'section_faq_meta','section_contact',
-    'hero_slides','services','categories','portfolio_items','team_members',
+    'hero_slides','services','categories','portfolio_items','pricing_tiers','team_members',
     'testimonials','faqs','instagram_posts'
   ]) loop
     execute format('alter table public.%I enable row level security', t);

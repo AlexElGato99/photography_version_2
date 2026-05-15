@@ -10,9 +10,12 @@ import type { Category, SectionMeta } from "@/lib/types/site";
 export function CategoriesEditor({
   meta,
   categories,
+  sectionTitle = "Categories",
 }: {
   meta: SectionMeta;
   categories: Category[];
+  /** Shown in form headings (e.g. "Explore by category" on the dedicated dashboard route). */
+  sectionTitle?: string;
 }) {
   return (
     <Tabs
@@ -23,7 +26,7 @@ export function CategoriesEditor({
           render: () => (
             <SectionForm
               table="section_categories_meta"
-              title="Categories · Heading"
+              title={`${sectionTitle} · Heading`}
               initialData={meta}
               fields={[
                 { key: "eyebrow", label: "Eyebrow", type: "text" },
@@ -37,7 +40,7 @@ export function CategoriesEditor({
           render: () => (
             <CollectionEditor<Category>
               table="categories"
-              title="Categories · Cards & detail pages"
+              title={`${sectionTitle} · Cards & detail pages`}
               initialRows={categories}
               getRowLabel={(row) => {
                 const n = String(row.name ?? "").trim();
