@@ -3,11 +3,10 @@
 import Image from "next/image";
 import { useMemo, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import type { Category } from "@/lib/types/site";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP);
 
 function categoryDesc(c: Category): string {
   const lead = (c.page_lead ?? "").trim();
@@ -20,8 +19,9 @@ function categoryDesc(c: Category): string {
   return raw || "Explore this category.";
 }
 
-const NAV_CLEAR_PX = 72;
-const SLIDE_SCROLL_PX = 520; /* vertical scroll per slide — tune feel */
+const SLIDE_DURATION = 0.42;
+/** Time between automatic advances (desktop, motion OK). */
+const AUTO_ADVANCE_MS = 5000;
 
 function useCategoryPinnedKey(categories: Category[]) {
   return useMemo(
@@ -38,7 +38,6 @@ export function NovoCategoriesPinnedShowcase({
   categoryHref: (c: Category) => string;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const catsRef = useRef(categories);
@@ -49,10 +48,9 @@ export function NovoCategoriesPinnedShowcase({
   useGSAP(
     () => {
       const root = rootRef.current;
-      const pinEl = pinRef.current;
       const viewport = viewportRef.current;
       const track = trackRef.current;
-      if (!root || !pinEl || !viewport || !track) return;
+      if (!root || !viewport || !track) return;
 
       const mm = gsap.matchMedia();
 
@@ -89,8 +87,7 @@ export function NovoCategoriesPinnedShowcase({
         }
 
         const wPad = Math.max(2, String(n).length);
-        let lastIdx = -1;
-        let tween: gsap.core.Tween | null = null;
+        let currentCat = 0;
 
         const slideWidth = () => Math.max(1, viewport.clientWidth);
 
@@ -111,85 +108,93 @@ export function NovoCategoriesPinnedShowcase({
           });
         };
 
-        const syncFromProgress = (progress: number) => {
-          if (n <= 1) {
-            if (lastIdx !== 0) {
-              lastIdx = 0;
-              applyTexts(0);
-              setBars(0);
-            }
+        const goTo = (idx: number, animate: boolean) => {
+          if (idx === currentCat || idx < 0 || idx >= n) return;
+          currentCat = idx;
+          const w = slideWidth();
+          const xTarget = -idx * w;
+
+          setBars(idx);
+
+          if (!animate) {
+            gsap.killTweensOf([track, textAnim]);
+            gsap.set(track, { x: xTarget });
+            applyTexts(idx);
+            gsap.set(textAnim, { autoAlpha: 1, y: 0 });
             return;
           }
-          const idx = Math.round(progress * (n - 1));
-          if (idx === lastIdx) return;
-          lastIdx = idx;
-          applyTexts(idx);
-          setBars(idx);
-          gsap.fromTo(
+
+          gsap.killTweensOf([track, textAnim]);
+
+          const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+          tl.to(
             textAnim,
-            { autoAlpha: 0.35, y: 8 },
-            { autoAlpha: 1, y: 0, duration: 0.35, ease: "power2.out" }
+            { autoAlpha: 0, y: 10, duration: Math.min(0.16, SLIDE_DURATION * 0.35) },
+            0
+          );
+          tl.to(track, { x: xTarget, duration: SLIDE_DURATION }, 0);
+          tl.call(() => applyTexts(idx));
+          tl.fromTo(
+            textAnim,
+            { autoAlpha: 0, y: -12 },
+            { autoAlpha: 1, y: 0, duration: Math.min(0.28, SLIDE_DURATION * 0.65) }
           );
         };
-
-        if (n <= 1) {
-          gsap.set(track, { x: 0 });
-          applyTexts(0);
-          setBars(0);
-          gsap.set(textAnim, { autoAlpha: 1, y: 0 });
-          return () => {};
-        }
 
         gsap.set(track, { x: 0 });
         applyTexts(0);
         setBars(0);
-        lastIdx = 0;
         gsap.set(textAnim, { autoAlpha: 1, y: 0 });
 
-        const scrollDistance = (n - 1) * SLIDE_SCROLL_PX;
+        if (n <= 1) {
+          return () => {};
+        }
 
-        tween = gsap.to(track, {
-          x: () => -(n - 1) * slideWidth(),
-          ease: "none",
-          scrollTrigger: {
-            trigger: pinEl,
-            start: `top top+=${NAV_CLEAR_PX}`,
-            end: () => `+=${scrollDistance}`,
-            pin: true,
-            scrub: 0.65,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => syncFromProgress(self.progress),
-          },
-        });
+        let autoTimer: ReturnType<typeof setInterval> | null = null;
 
-        const st = tween.scrollTrigger;
-
-        const seekToIndex = (i: number) => {
-          if (!st || n <= 1) return;
-          const t = i / (n - 1);
-          const y = st.start + t * (st.end - st.start);
-          window.scrollTo({ top: y, behavior: "smooth" });
+        const tickAutoplay = () => {
+          const next = (currentCat + 1) % n;
+          goTo(next, true);
         };
 
-        const barHandlers: Array<() => void> = [];
+        const startAutoplay = () => {
+          if (autoTimer !== null) clearInterval(autoTimer);
+          autoTimer = setInterval(tickAutoplay, AUTO_ADVANCE_MS);
+        };
+
+        const stopAutoplay = () => {
+          if (autoTimer !== null) {
+            clearInterval(autoTimer);
+            autoTimer = null;
+          }
+        };
+
+        const onBarClick = (i: number) => () => {
+          goTo(i, true);
+          startAutoplay();
+        };
         catBars.forEach((bar, i) => {
-          const h = () => seekToIndex(i);
-          bar.addEventListener("click", h);
-          barHandlers.push(() => bar.removeEventListener("click", h));
+          bar.addEventListener("click", onBarClick(i));
         });
 
+        const onVisibility = () => {
+          if (document.hidden) stopAutoplay();
+          else startAutoplay();
+        };
+        document.addEventListener("visibilitychange", onVisibility);
+
         const onResize = () => {
-          gsap.set(track, { x: -lastIdx * slideWidth() });
+          gsap.set(track, { x: -currentCat * slideWidth() });
         };
         window.addEventListener("resize", onResize);
 
-        requestAnimationFrame(() => ScrollTrigger.refresh());
+        startAutoplay();
 
         return () => {
-          barHandlers.forEach((u) => u());
-          tween?.scrollTrigger?.kill();
-          tween?.kill();
+          stopAutoplay();
+          document.removeEventListener("visibilitychange", onVisibility);
+          window.removeEventListener("resize", onResize);
+          catBars.forEach((bar, i) => bar.removeEventListener("click", onBarClick(i)));
         };
       });
 
@@ -230,7 +235,7 @@ export function NovoCategoriesPinnedShowcase({
         ))}
       </div>
 
-      <div ref={pinRef} className="cn-novo-cat-showcase-pin">
+      <div className="cn-novo-cat-showcase-pin">
         <div className="cn-novo-cat-showcase-stage">
           <div className="cn-novo-cat-showcase-copy">
             <div className="cn-novo-cat-showcase-text-anim">
@@ -260,7 +265,9 @@ export function NovoCategoriesPinnedShowcase({
                 ))}
               </div>
             ) : null}
-            <p className="cn-novo-cat-showcase-hint">Scroll to explore categories</p>
+            <p className="cn-novo-cat-showcase-hint">
+              Cycles every 5 seconds · use the indicators to jump
+            </p>
           </div>
 
           <div className="cn-novo-cat-showcase-visual">

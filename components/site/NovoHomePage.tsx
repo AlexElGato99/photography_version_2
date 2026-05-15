@@ -460,12 +460,6 @@ export function NovoHomePage({
             ) : (
               <p className="cn-novo-portfolio__empty">No categories match this filter.</p>
             )}
-
-            <div className="cn-novo-portfolio__actions">
-              <a href={categoryHref(categories[0])} className="cn-novo-btn-gold">
-                Browse a category
-              </a>
-            </div>
           </div>
         </section>
       )}
