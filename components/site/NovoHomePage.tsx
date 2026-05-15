@@ -6,7 +6,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   Category,
   HeroSlide,
+  FooterGalleryImage,
   InstagramPost,
+  NavItem,
   PortfolioItem,
   SectionAbout,
   SectionContact,
@@ -20,6 +22,7 @@ import type {
   SiteNavigation,
   StatItem,
 } from "@/lib/types/site";
+import { FooterGallerySliders } from "@/components/site/FooterGallerySliders";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { slugify } from "@/lib/slug";
 
@@ -40,6 +43,7 @@ export function NovoHomePage({
   stats,
   instagramMeta,
   instagramPosts,
+  footerGalleryImages,
   contact,
   categoriesMeta,
   categories,
@@ -57,6 +61,7 @@ export function NovoHomePage({
   stats: SectionStats;
   instagramMeta: SectionInstagram;
   instagramPosts: InstagramPost[];
+  footerGalleryImages: FooterGalleryImage[];
   contact: SectionContact;
 }) {
   const slides = heroSlides.length ? heroSlides : [];
@@ -180,7 +185,23 @@ export function NovoHomePage({
     [instagramPosts]
   );
   const instaDup = useMemo(() => [...instaUrls, ...instaUrls], [instaUrls]);
-  const footerThumbPosts = instaUrls.slice(0, 4);
+  const footerGalleryUrls = useMemo(
+    () => footerGalleryImages.filter((p) => p.image_url),
+    [footerGalleryImages]
+  );
+
+  const footerCategoryColumns = useMemo(() => {
+    if (categories.length === 0) return [[], []] as [Category[], Category[]];
+    const mid = Math.ceil(categories.length / 2);
+    return [categories.slice(0, mid), categories.slice(mid)] as [Category[], Category[]];
+  }, [categories]);
+
+  const footerManualLinkColumns = useMemo(() => {
+    const links = (footer.pages_links ?? []).filter((l) => l.label.trim());
+    if (links.length === 0) return [[], []] as [NavItem[], NavItem[]];
+    const mid = Math.ceil(links.length / 2);
+    return [links.slice(0, mid), links.slice(mid)] as [NavItem[], NavItem[]];
+  }, [footer.pages_links]);
 
   const heroTitle = current?.label ?? [hero.line_1, hero.line_2_prefix, hero.line_3].filter(Boolean).join(" ");
 
@@ -574,48 +595,93 @@ export function NovoHomePage({
       )}
 
       <footer className="cn-novo-footer">
-        <div>
-          <div className="cn-novo-footer-logo">
-            <em>{general.brand_italic}</em>
-            <b>{general.brand_bold}</b>
+        <div className="cn-novo-footer-grid">
+          <div className="cn-novo-footer-col">
+            <div className="cn-novo-footer-logo">
+              <em>{general.brand_italic}</em>
+              <b>{general.brand_bold}</b>
+            </div>
+            <p className="cn-novo-footer-desc">{footer.brand_text || general.description}</p>
           </div>
-          <p className="cn-novo-footer-desc">{footer.brand_text || general.description}</p>
+
+          <div className="cn-novo-footer-col cn-novo-footer-col--pages">
+            <h5 className="cn-novo-footer-heading">{footer.pages_heading}</h5>
+            {footer.use_category_pages ? (
+              categories.length > 0 ? (
+                <div className="cn-novo-footer-links-grid">
+                  {footerCategoryColumns.map((col, colIndex) => (
+                    <ul key={colIndex} className="cn-novo-footer-links">
+                      {col.map((c) => (
+                        <li key={c.id}>
+                          <a href={categoryHref(c)}>{c.name}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  ))}
+                </div>
+              ) : (
+                <p className="cn-novo-footer-empty">No categories yet.</p>
+              )
+            ) : footer.pages_links.length > 0 ? (
+              <div className="cn-novo-footer-links-grid">
+                {footerManualLinkColumns.map((col, colIndex) => (
+                  <ul key={colIndex} className="cn-novo-footer-links">
+                    {col.map((l) => (
+                      <li key={`${l.label}-${l.href}`}>
+                        <a href={l.href}>{l.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                ))}
+              </div>
+            ) : (
+              <p className="cn-novo-footer-empty">Add page links in Dashboard → Footer → Pages.</p>
+            )}
+          </div>
+
+          <div className="cn-novo-footer-col">
+            <h5 className="cn-novo-footer-heading">{footer.contact_heading}</h5>
+            {footer.show_phone && general.contact_phone ? (
+              <p className="cn-novo-contact-row">
+                <strong>Phone:</strong>{" "}
+                <a href={`tel:${general.contact_phone.replace(/\s/g, "")}`}>{general.contact_phone}</a>
+              </p>
+            ) : null}
+            {footer.show_email && general.contact_email ? (
+              <p className="cn-novo-contact-row">
+                <strong>Email:</strong>{" "}
+                <a href={`mailto:${general.contact_email}`}>{general.contact_email}</a>
+              </p>
+            ) : null}
+            {footer.show_address && (general.address_line || general.address_city) ? (
+              <p className="cn-novo-contact-row">
+                <strong>Address:</strong> {[general.address_line, general.address_city].filter(Boolean).join(", ")}
+              </p>
+            ) : null}
+            {footer.show_hours && general.hours ? (
+              <p className="cn-novo-contact-row">
+                <strong>Hours:</strong> {general.hours}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="cn-novo-footer-col cn-novo-footer-col--gallery">
+            <h5 className="cn-novo-footer-heading">{footer.gallery_heading}</h5>
+            <FooterGallerySliders images={footerGalleryUrls} label={footer.gallery_heading} />
+          </div>
         </div>
 
-        <div>
-          <h5 className="cn-novo-footer-heading">Latest photos</h5>
-          <div className="cn-novo-footer-photos">
-            {footerThumbPosts.map((p) => (
-              <a key={p.id} href={p.link_href || instagramMeta.profile_url} className="cn-novo-footer-photo">
-                <Image src={p.image_url} alt="" fill sizes="120px" className="object-cover" />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <h5 className="cn-novo-footer-heading">Contacts</h5>
-          <p className="cn-novo-contact-row">
-            <strong>Phone:</strong> {general.contact_phone}
-          </p>
-          <p className="cn-novo-contact-row">
-            <strong>Email:</strong> {general.contact_email}
-          </p>
-          {(general.address_line || general.address_city) && (
-            <p className="cn-novo-contact-row">
-              <strong>Address:</strong> {[general.address_line, general.address_city].filter(Boolean).join(", ")}
-            </p>
-          )}
-          <p className="cn-novo-footer-copy">{footer.copyright}</p>
-          {footer.legal.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem 1.25rem", marginTop: "0.75rem" }}>
+        <div className="cn-novo-footer-bar">
+          {footer.legal.length > 0 ? (
+            <nav className="cn-novo-footer-legal" aria-label="Legal">
               {footer.legal.map((l) => (
                 <a key={l.label} href={l.href} className="cn-novo-footer-legal-link">
                   {l.label}
                 </a>
               ))}
-            </div>
-          )}
+            </nav>
+          ) : null}
+          {footer.copyright ? <p className="cn-novo-footer-copy">{footer.copyright}</p> : null}
         </div>
       </footer>
     </div>

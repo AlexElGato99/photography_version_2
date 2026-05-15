@@ -934,11 +934,130 @@
 
 .cn-novo-home .cn-novo-footer {
   background: var(--nv-light);
-  padding: clamp(2.5rem, 6vw, 3.75rem) clamp(1.5rem, 5vw, 3.75rem) 2.5rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2.5rem;
+  padding: clamp(2.25rem, 5vw, 3.25rem) clamp(1rem, 2.75vw, 2rem) 0;
   border-top: 1px solid var(--nv-border);
+}
+
+.cn-novo-home .cn-novo-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  padding-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+  align-items: start;
+}
+
+.cn-novo-home .cn-novo-footer-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+}
+
+.cn-novo-home .cn-novo-footer-col--pages .cn-novo-footer-heading {
+  margin-bottom: 1rem;
+}
+
+.cn-novo-home .cn-novo-footer-links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem clamp(0.75rem, 1.5vw, 1.25rem);
+  align-content: start;
+}
+
+.cn-novo-home .cn-novo-footer-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cn-novo-home .cn-novo-footer-links a {
+  font-family: var(--e-global-typography-text-font-family);
+  font-size: 0.875rem;
+  color: var(--nv-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.cn-novo-home .cn-novo-footer-links a:hover {
+  color: var(--nv-gold);
+}
+
+.cn-novo-home .cn-novo-footer-empty {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--nv-muted);
+  line-height: 1.5;
+}
+
+.cn-novo-home .cn-novo-contact-row a {
+  color: var(--nv-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.cn-novo-home .cn-novo-contact-row a:hover {
+  color: var(--nv-gold);
+}
+
+/* Footer gallery: four vertical strips, 2 thumbs visible, 1 image per step */
+.cn-novo-home .cn-novo-footer-col--gallery {
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
+}
+
+.cn-novo-home .cn-novo-footer-gallery-sliders {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(6px, 1.1vw, 10px);
+  width: 100%;
+  min-height: 158px;
+}
+
+.cn-novo-home .cn-novo-footer-slider {
+  flex: 0 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.cn-novo-home .cn-novo-footer-slider-track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.cn-novo-home .cn-novo-footer-slider-photo {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: block;
+}
+
+.cn-novo-home .cn-novo-footer-slider-photo:hover {
+  opacity: 0.88;
+}
+
+.cn-novo-home .cn-novo-footer-bar {
+  border-top: 1px solid var(--nv-border);
+  padding: 1.25rem clamp(1rem, 2.75vw, 2rem) 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  text-align: center;
+}
+
+.cn-novo-home .cn-novo-footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem 1.35rem;
 }
 
 .cn-novo-home .cn-novo-footer-logo {
@@ -960,9 +1079,10 @@
 .cn-novo-home .cn-novo-footer-desc {
   font-family: var(--e-global-typography-text-font-family);
   font-size: 0.875rem;
-  line-height: 1.85;
+  line-height: 1.75;
   color: var(--nv-muted);
   font-weight: var(--e-global-typography-text-font-weight);
+  max-width: 22rem;
 }
 
 .cn-novo-home .cn-novo-footer-heading {
@@ -987,30 +1107,13 @@
   background: var(--nv-gold);
 }
 
-.cn-novo-home .cn-novo-footer-photos {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-}
-
-.cn-novo-home .cn-novo-footer-photo {
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  display: block;
-}
-
-.cn-novo-home .cn-novo-footer-photo:hover {
-  opacity: 0.88;
-}
 
 .cn-novo-home .cn-novo-contact-row {
   font-family: var(--e-global-typography-text-font-family);
   font-weight: var(--e-global-typography-text-font-weight);
   font-size: 0.875rem;
   color: var(--nv-muted);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.55rem;
 }
 
 .cn-novo-home .cn-novo-contact-row strong {
@@ -1021,7 +1124,7 @@
 .cn-novo-home .cn-novo-footer-copy {
   font-size: 0.75rem;
   color: var(--nv-muted);
-  margin-top: 1.25rem;
+  margin: 0;
   letter-spacing: 0.03em;
 }
 
@@ -1073,8 +1176,12 @@
     columns: 3 140px;
   }
 
-  .cn-novo-home .cn-novo-footer {
-    grid-template-columns: 1fr;
+  .cn-novo-home .cn-novo-footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cn-novo-home .cn-novo-footer-col--gallery {
+    grid-column: 1 / -1;
   }
 
   /* Social rail: flush to right edge (padding keeps text off the rim) */
@@ -1090,6 +1197,22 @@
 
   .cn-novo-home .cn-novo-stat-num {
     font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .cn-novo-home .cn-novo-footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cn-novo-home .cn-novo-footer-col--gallery {
+    grid-column: auto;
+  }
+
+  .cn-novo-home .cn-novo-footer-gallery-sliders {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 }
 
@@ -1137,6 +1260,11 @@
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .cn-novo-home .cn-novo-footer-slider-track,
+  .cn-novo-home .cn-novo-insta-inner {
+    animation: none;
   }
 }
 

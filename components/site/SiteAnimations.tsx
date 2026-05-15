@@ -16,7 +16,6 @@ export function SiteAnimations() {
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
         html.classList.remove("cn-anim-ready");
-        document.querySelector(".cn-loader")?.classList.add("is-done");
         return () => {};
       });
 
@@ -38,58 +37,7 @@ export function SiteAnimations() {
         gsap.set("[data-hero-title-line]", { overflow: "hidden" });
         gsap.set("[data-hero-title-line] > span", { yPercent: 110 });
 
-        const loader = document.querySelector<HTMLElement>(".cn-loader");
-        const loaderBarFill = document.querySelector<HTMLElement>(
-          ".cn-loader-bar-fill"
-        );
-        const loaderMarkChars = gsap.utils.toArray<HTMLElement>(
-          ".cn-loader-mark span"
-        );
-
-        const intro = gsap.timeline({
-          defaults: { ease: "power3.out" },
-          onComplete: () => loader?.classList.add("is-done"),
-        });
-
-        if (loader) {
-          intro
-            .fromTo(
-              loaderMarkChars,
-              { yPercent: 100, opacity: 0 },
-              {
-                yPercent: 0,
-                opacity: 1,
-                duration: 0.6,
-                stagger: 0.04,
-                ease: "expo.out",
-              },
-              0
-            )
-            .to(
-              loaderBarFill,
-              { scaleX: 1, duration: 0.95, ease: "power2.inOut" },
-              0.25
-            )
-            .to(
-              loaderMarkChars,
-              {
-                yPercent: -110,
-                opacity: 0,
-                duration: 0.5,
-                stagger: 0.03,
-                ease: "power3.in",
-              },
-              "+=0.1"
-            )
-            .to(
-              loader,
-              { yPercent: -100, duration: 0.9, ease: "power3.inOut" },
-              "<+0.05"
-            )
-            .set(loader, { display: "none" });
-        }
-
-        const heroStart = loader ? 1.7 : 0.1;
+        const heroStart = 0.1;
 
         const heroIn = gsap.timeline({
           defaults: { ease: "power3.out" },

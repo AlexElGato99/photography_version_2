@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { BackTop } from "@/components/site/BackTop";
 import { CategoryPageView } from "@/components/site/CategoryPageView";
 import { Footer } from "@/components/site/Footer";
-import { Loader } from "@/components/site/Loader";
 import { SiteAnimations } from "@/components/site/SiteAnimations";
 import { SiteNav } from "@/components/site/SiteNav";
 import { portfolioForCategory } from "@/lib/site/category-helpers";
@@ -63,7 +62,6 @@ export default async function CategorySlugPage({
 
   return (
     <>
-      <Loader name={general.brand_italic} />
       <SiteAnimations />
       <SiteNav general={general} navigation={navigation} />
       <CategoryPageView category={category} relatedPortfolio={relatedPortfolio} />

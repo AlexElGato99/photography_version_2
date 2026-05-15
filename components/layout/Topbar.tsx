@@ -39,6 +39,7 @@ const TITLES: Record<string, string> = {
   "/dashboard/sections/process": "Process",
   "/dashboard/sections/team": "Team",
   "/dashboard/sections/testimonials": "Testimonials",
+  "/dashboard/sections/slider": "Slider",
   "/dashboard/sections/instagram": "Instagram",
   "/dashboard/sections/faq": "FAQ",
   "/dashboard/sections/contact": "Contact Section",

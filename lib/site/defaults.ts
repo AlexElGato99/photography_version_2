@@ -2,6 +2,7 @@ import type {
   Category,
   Faq,
   FooterColumn,
+  FooterGalleryImage,
   HeroSlide,
   InstagramPost,
   NavItem,
@@ -39,7 +40,7 @@ export const defaultGeneral: SiteGeneral = {
   address_line: "Calle de la Luna, 14",
   address_city: "Murcia · Spain",
   hours: "Monday – Friday · 9:00 – 18:00",
-  loader_enabled: true,
+  loader_enabled: false,
 };
 
 export const defaultSeo: SiteSeo = {
@@ -107,7 +108,47 @@ export const defaultFooter: SiteFooter = {
     { label: "Terms", href: "#" },
     { label: "Cookies", href: "#" },
   ],
+  pages_heading: "Pages",
+  contact_heading: "Contact",
+  gallery_heading: "Latest photos",
+  use_category_pages: true,
+  pages_links: [],
+  show_phone: true,
+  show_email: true,
+  show_address: true,
+  show_hours: true,
 };
+
+export const defaultFooterGalleryImages: FooterGalleryImage[] = [
+  {
+    id: "fg1",
+    position: 0,
+    image_url:
+      "https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80&auto=format&fit=crop",
+    link_href: "#",
+  },
+  {
+    id: "fg2",
+    position: 1,
+    image_url:
+      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80&auto=format&fit=crop",
+    link_href: "#",
+  },
+  {
+    id: "fg3",
+    position: 2,
+    image_url:
+      "https://images.unsplash.com/photo-1522335789203-aaa455a47f3a?w=400&q=80&auto=format&fit=crop",
+    link_href: "#",
+  },
+  {
+    id: "fg4",
+    position: 3,
+    image_url:
+      "https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=400&q=80&auto=format&fit=crop",
+    link_href: "#",
+  },
+];
 
 export const defaultMarquee: SiteMarquee = {
   id: 1,

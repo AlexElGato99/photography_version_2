@@ -11,8 +11,9 @@ import {
   ArrowDown,
   ChevronDown,
   ChevronRight,
+  Upload,
 } from "lucide-react";
-import { replaceCollection } from "@/app/dashboard/actions";
+import { replaceCollection, uploadImage } from "@/app/dashboard/actions";
 import { ImageUploadField } from "@/components/dashboard/ImageUploadField";
 import { GalleryField } from "@/components/dashboard/GalleryField";
 import { RichTextEditor } from "@/components/dashboard/RichTextEditor";
@@ -72,6 +73,11 @@ interface CollectionEditorProps<T extends { id?: string }> {
   getRowLabel?: (row: T, index: number) => string | null | undefined;
   /** When true, saving zero rows is allowed (delete all). Default false to avoid wiping collections by mistake. */
   allowEmptySave?: boolean;
+  /** Enables a multi-file picker that uploads images and appends one row per file. */
+  bulkImageUpload?: {
+    imageFieldKey?: string;
+    buttonLabel?: string;
+  };
 }
 
 export function CollectionEditor<T extends Record<string, unknown> & { id?: string }>({
@@ -85,6 +91,7 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
   validateRows,
   getRowLabel,
   allowEmptySave = false,
+  bulkImageUpload,
 }: CollectionEditorProps<T>) {
   const router = useRouter();
   const [rows, setRows] = useState<T[]>(() => (Array.isArray(initialRows) ? initialRows : []));
@@ -95,6 +102,12 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
   /** Indices of items whose field grid is visible (all start collapsed). */
   const [expanded, setExpanded] = useState<Set<number>>(() => new Set());
   const initialSig = useRef<string>("");
+  const bulkInputRef = useRef<HTMLInputElement>(null);
+  const [bulkError, setBulkError] = useState<string | null>(null);
+  const [bulkProgress, setBulkProgress] = useState<string | null>(null);
+  const [isBulkUploading, startBulkUpload] = useTransition();
+
+  const bulkImageFieldKey = bulkImageUpload?.imageFieldKey ?? "image_url";
 
   useEffect(() => {
     const next = Array.isArray(initialRows) ? initialRows : [];
@@ -139,6 +152,54 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
     setRows((prev) => [...prev, { ...(blank() as T) }]);
   };
 
+  const handleBulkFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length || !bulkImageUpload) return;
+    const imageFiles = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (!imageFiles.length) {
+      setBulkError("Please select one or more image files.");
+      e.target.value = "";
+      return;
+    }
+    setBulkError(null);
+    startBulkUpload(async () => {
+      const appended: T[] = [];
+      let failed = 0;
+      for (let i = 0; i < imageFiles.length; i++) {
+        setBulkProgress(`Uploading ${i + 1} / ${imageFiles.length}…`);
+        const fd = new FormData();
+        fd.append("file", imageFiles[i]);
+        const res = await uploadImage(fd);
+        if (res.ok) {
+          appended.push({
+            ...(blank() as T),
+            [bulkImageFieldKey]: res.url,
+          } as T);
+        } else {
+          failed += 1;
+        }
+      }
+      setBulkProgress(null);
+      if (appended.length) {
+        setRows((prev) => [...prev, ...appended]);
+      }
+      if (failed > 0) {
+        setBulkError(
+          failed === imageFiles.length
+            ? "Upload failed for all selected files."
+            : `${failed} file(s) failed to upload; others were added.`
+        );
+      } else if (appended.length > 0) {
+        setStatus({
+          kind: "ok",
+          msg: `Added ${appended.length} image${appended.length === 1 ? "" : "s"}. Click Save collection to publish.`,
+        });
+        window.setTimeout(() => setStatus({ kind: "idle" }), 4000);
+      }
+      e.target.value = "";
+    });
+  };
+
   const onSave = () => {
     startTransition(async () => {
       if (validateRows) {
@@ -177,10 +238,50 @@ export function CollectionEditor<T extends Record<string, unknown> & { id?: stri
             <p className="text-sm text-[var(--text-muted)]">{description}</p>
           )}
         </div>
-        <button type="button" onClick={add} className="btn-secondary shrink-0">
-          <Plus size={14} /> Add item
-        </button>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {bulkImageUpload ? (
+            <>
+              <input
+                ref={bulkInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={handleBulkFileChange}
+              />
+              <button
+                type="button"
+                disabled={isBulkUploading || pending}
+                onClick={() => bulkInputRef.current?.click()}
+                className="btn-primary text-xs inline-flex items-center gap-1.5"
+              >
+                {isBulkUploading ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <Upload size={14} />
+                )}
+                {bulkImageUpload.buttonLabel ?? "Upload images"}
+              </button>
+            </>
+          ) : null}
+          <button type="button" onClick={add} className="btn-secondary shrink-0" disabled={isBulkUploading}>
+            <Plus size={14} /> Add item
+          </button>
+        </div>
       </header>
+
+      {bulkImageUpload && bulkProgress ? (
+        <p className="text-xs text-[var(--text-muted)]">{bulkProgress}</p>
+      ) : null}
+      {bulkImageUpload && bulkError ? (
+        <p className="text-xs font-medium text-red-600 dark:text-red-400">{bulkError}</p>
+      ) : null}
+      {bulkImageUpload ? (
+        <p className="text-xs text-[var(--text-muted)]">
+          Select multiple files at once. New images are added to the list below — click{" "}
+          <b className="text-[var(--text-primary)]">Save collection</b> when you are done.
+        </p>
+      ) : null}
 
       <div className="space-y-3">
         {rows.length === 0 && (

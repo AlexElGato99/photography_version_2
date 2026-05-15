@@ -19,7 +19,6 @@ export default async function GeneralPage() {
         { key: "address_line", label: "Address line", type: "text" },
         { key: "address_city", label: "Address city", type: "text" },
         { key: "hours", label: "Studio hours", type: "text" },
-        { key: "loader_enabled", label: "Enable intro loader", type: "switch", help: "Show the animated loader on first visit." },
       ]}
     />
   );

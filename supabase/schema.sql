@@ -82,8 +82,26 @@ create table if not exists public.site_footer (
     {"label":"Terms","href":"#"},
     {"label":"Cookies","href":"#"}
   ]'::jsonb,
+  pages_heading text not null default 'Pages',
+  contact_heading text not null default 'Contact',
+  gallery_heading text not null default 'Latest photos',
+  use_category_pages boolean not null default true,
+  pages_links jsonb not null default '[]'::jsonb,
+  show_phone boolean not null default true,
+  show_email boolean not null default true,
+  show_address boolean not null default true,
+  show_hours boolean not null default true,
   updated_at timestamptz not null default now(),
   constraint site_footer_singleton check (id = 1)
+);
+
+create table if not exists public.footer_gallery_images (
+  id uuid primary key default gen_random_uuid(),
+  position integer not null default 0,
+  image_url text not null,
+  link_href text not null default '#',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
 create table if not exists public.site_marquee (
@@ -395,7 +413,7 @@ begin
     'section_testimonials_meta','section_instagram',
     'section_faq_meta','section_contact',
     'hero_slides','services','categories','portfolio_items','pricing_tiers','team_members',
-    'testimonials','faqs','instagram_posts'
+    'testimonials','faqs','instagram_posts','footer_gallery_images'
   ]) loop
     execute format('drop trigger if exists trg_updated_at on public.%I', t);
     execute format(
@@ -440,7 +458,7 @@ begin
     'section_testimonials_meta','section_instagram',
     'section_faq_meta','section_contact',
     'hero_slides','services','categories','portfolio_items','pricing_tiers','team_members',
-    'testimonials','faqs','instagram_posts'
+    'testimonials','faqs','instagram_posts','footer_gallery_images'
   ]) loop
     execute format('alter table public.%I enable row level security', t);
     execute format('drop policy if exists "public read" on public.%I', t);

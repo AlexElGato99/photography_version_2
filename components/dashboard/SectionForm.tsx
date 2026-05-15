@@ -175,7 +175,7 @@ export function SectionForm<T extends Record<string, unknown>>({
   );
 }
 
-function Field({
+export function Field({
   field,
   value,
   onChange,

@@ -7,6 +7,7 @@ import {
   defaultFaqMeta,
   defaultFaqs,
   defaultFooter,
+  defaultFooterGalleryImages,
   defaultGeneral,
   defaultHero,
   defaultHeroSlides,
@@ -27,6 +28,7 @@ import {
   defaultTestimonialsMeta,
 } from "@/lib/site/defaults";
 import { normalizeCategoryRow } from "@/lib/site/category-helpers";
+import { normalizeFooterRow } from "@/lib/site/normalize-footer";
 import {
   normalizeAboutRow,
   normalizeContactRow,
@@ -42,6 +44,7 @@ import type {
   Category,
   Faq,
   HeroSlide,
+  FooterGalleryImage,
   InstagramPost,
   PortfolioItem,
   Service,
@@ -99,7 +102,26 @@ async function fetchCollection<T>(
 export const getGeneral = () => fetchSingleton<SiteGeneral>("site_general", defaultGeneral);
 export const getSeo = () => fetchSingleton<SiteSeo>("site_seo", defaultSeo);
 export const getNavigation = () => fetchSingleton<SiteNavigation>("site_navigation", defaultNavigation);
-export const getFooter = () => fetchSingleton<SiteFooter>("site_footer", defaultFooter);
+export const getFooter = () =>
+  safeFetch(async (sb) => {
+    const { data } = await sb.from("site_footer").select("*").eq("id", 1).single();
+    return data ? normalizeFooterRow(data as Record<string, unknown>, defaultFooter) : null;
+  }, defaultFooter);
+
+export const getFooterGalleryImages = () =>
+  safeFetch(async (sb) => {
+    const { data, error } = await sb
+      .from("footer_gallery_images")
+      .select("*")
+      .order("position", { ascending: true });
+    if (error) {
+      console.warn("[supabase] footer_gallery_images:", error.message);
+      return null;
+    }
+    const rows = (data ?? []) as FooterGalleryImage[];
+    if (rows.length === 0) return null;
+    return rows;
+  }, defaultFooterGalleryImages);
 export const getMarquee = () => fetchSingleton<SiteMarquee>("site_marquee", defaultMarquee);
 
 export const getHero = () =>

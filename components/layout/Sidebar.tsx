@@ -77,6 +77,7 @@ const navSections: NavSection[] = [
       { label: "Services", href: "/dashboard/sections/services", icon: Briefcase },
       { label: "Explore by category", href: "/dashboard/sections/explore-by-category", icon: Tag },
       { label: "Portfolio", href: "/dashboard/sections/portfolio", icon: Camera },
+      { label: "Slider", href: "/dashboard/sections/slider", icon: Sliders },
       { label: "Stats", href: "/dashboard/sections/stats", icon: TrendingUp },
       { label: "Process", href: "/dashboard/sections/process", icon: Workflow },
       { label: "Team", href: "/dashboard/sections/team", icon: Users2 },

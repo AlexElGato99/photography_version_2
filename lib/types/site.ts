@@ -39,6 +39,22 @@ export type SiteFooter = {
   copyright: string;
   columns: FooterColumn[];
   legal: NavItem[];
+  pages_heading: string;
+  contact_heading: string;
+  gallery_heading: string;
+  use_category_pages: boolean;
+  pages_links: NavItem[];
+  show_phone: boolean;
+  show_email: boolean;
+  show_address: boolean;
+  show_hours: boolean;
+};
+
+export type FooterGalleryImage = {
+  id: string;
+  position: number;
+  image_url: string;
+  link_href: string;
 };
 
 export type SiteMarquee = {

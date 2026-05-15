@@ -1,5 +1,4 @@
 import { BackTop } from "@/components/site/BackTop";
-import { Loader } from "@/components/site/Loader";
 import { NovoHomeAnimations } from "@/components/site/NovoHomeAnimations";
 import { NovoHomePage } from "@/components/site/NovoHomePage";
 import {
@@ -8,6 +7,7 @@ import {
   getCategoriesMeta,
   getContactMeta,
   getFooter,
+  getFooterGalleryImages,
   getGeneral,
   getHero,
   getHeroSlides,
@@ -37,6 +37,7 @@ export default async function HomePage() {
     contact,
     categoriesMeta,
     categories,
+    footerGalleryImages,
   ] = await Promise.all([
     getGeneral(),
     getNavigation(),
@@ -52,11 +53,11 @@ export default async function HomePage() {
     getContactMeta(),
     getCategoriesMeta(),
     getCategories(),
+    getFooterGalleryImages(),
   ]);
 
   return (
     <>
-      {general.loader_enabled ? <Loader name={general.brand_italic} /> : null}
       <NovoHomeAnimations />
       <NovoHomePage
         general={general}
@@ -73,6 +74,7 @@ export default async function HomePage() {
         contact={contact}
         categoriesMeta={categoriesMeta}
         categories={categories}
+        footerGalleryImages={footerGalleryImages}
       />
       <BackTop />
     </>
